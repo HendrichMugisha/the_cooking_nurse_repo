@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Hero Content (Extracted from hero.html) -->
+<div class="min-h-[80vh] flex items-center bg-[#fafaf9]">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            
+            <!-- Left: Image Collage -->
+            <div class="relative w-full aspect-square md:aspect-auto md:h-[600px] flex justify-center items-center">
+                <!-- Abstract Background Shape for Collage Effect -->
+                <div class="absolute inset-0 bg-surface-container-low rounded-[40px] md:rounded-[80px] transform -rotate-3 scale-95 shadow-sm opacity-50 border border-outline-variant"></div>
+                <div class="relative z-10 w-4/5 h-4/5 rounded-full overflow-hidden border-4 border-surface shadow-lg shadow-primary/10">
+                    <img alt="Culinary food collage" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqXnWFOYVMf10YIu_5T9tFTCJOMBpnIVa3FpUTsme6Bx-hhGVSJgQFo1LwOwCVWrn2127PCmpCfuOrwFO9jpXU6JVM9pQweU_a6Y-9oPv5-3K5WW14ntOeV8F2WEunvp568_Syex1H5YhiXz6-_SJekc94qath74rWFu6Mx5gNEHI_WzOkmHAJFPv4dwf_AIC5rLp1RZWCeuYcapXL2aJ0kcKbffANwrEEcEnYtJGiEFOHobaBKZJRo_tbSMFNgKKwZkQbCPOM7DG0"/>
+                </div>
+            </div>
+            
+            <!-- Right: Hero Text & CTA -->
+            <div class="flex flex-col gap-6 md:pl-12">
+                <!-- Nurse's Note Style Accent -->
+                <div class="inline-flex items-center gap-2 pl-4 border-l-2 border-on-error-container bg-error-container/20 py-2 pr-4 rounded-r-lg max-w-max">
+                    <span class="material-symbols-outlined text-on-error-container text-sm">local_dining</span>
+                    <span class="font-label-md text-label-md text-on-error-container uppercase tracking-widest">Culinary Wellness</span>
+                </div>
+                
+                <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary leading-tight">
+                    Turn Everyday Cooking into <span class="text-on-error-container italic">Everyday Magic!</span>
+                </h1>
+                
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
+                    Discover the art of nourishing meals that heal the body and delight the senses. Professional guidance meets rustic, artisanal cooking.
+                </p>
+                
+                <div class="mt-4">
+                    <button class="btn-accent max-w-max">
+                        Explore Classes
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock content %}

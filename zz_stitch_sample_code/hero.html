@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Cooking Nurse</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Work+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-container": "#dfe0df",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#2b6954",
+                        "tertiary-fixed-dim": "#ffba46",
+                        "on-tertiary-container": "#e9a52a",
+                        "secondary-fixed-dim": "#c6c7c6",
+                        "outline": "#707974",
+                        "inverse-surface": "#2e312f",
+                        "on-primary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed-variant": "#0b513d",
+                        "outline-variant": "#bfc9c3",
+                        "on-tertiary-fixed-variant": "#614000",
+                        "surface": "#f8faf6",
+                        "on-surface": "#191c1b",
+                        "primary-fixed-dim": "#95d3ba",
+                        "surface-bright": "#f8faf6",
+                        "surface-container-highest": "#e1e3e0",
+                        "secondary-fixed": "#e2e2e2",
+                        "on-background": "#191c1b",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#454747",
+                        "tertiary-container": "#5e3e00",
+                        "primary-container": "#064e3b",
+                        "primary-fixed": "#b0f0d6",
+                        "surface-container-low": "#f2f4f1",
+                        "on-surface-variant": "#404944",
+                        "on-tertiary-fixed": "#281800",
+                        "background": "#f8faf6",
+                        "secondary": "#5d5f5e",
+                        "primary": "#003527",
+                        "inverse-on-surface": "#eff1ee",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-primary-container": "#80bea6",
+                        "surface-container-high": "#e7e9e5",
+                        "tertiary-fixed": "#ffddb0",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#d8dbd7",
+                        "surface-container": "#eceeeb",
+                        "surface-variant": "#e1e3e0",
+                        "on-secondary-container": "#616362",
+                        "inverse-primary": "#95d3ba",
+                        "on-primary-fixed": "#002117",
+                        "tertiary": "#412900",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["EB Garamond"],
+                        "label-sm": ["Work Sans"],
+                        "display-lg-mobile": ["EB Garamond"],
+                        "label-md": ["Work Sans"],
+                        "headline-sm": ["EB Garamond"],
+                        "headline-md": ["EB Garamond"],
+                        "body-lg": ["Work Sans"],
+                        "body-md": ["Work Sans"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg-mobile": ["36px", { "lineHeight": "42px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "40px", "fontWeight": "500" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #fafaf9; /* Off-White Parchment Base */
+            color: #191c1b;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased">
+<!-- Top Navigation Bar -->
+<nav class="bg-surface dark:bg-surface fixed top-0 left-0 w-full z-50 bg-surface/95 dark:bg-surface/95 backdrop-blur-md shadow-sm shadow-primary/10">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
+<!-- Brand Logo -->
+<div class="flex items-center gap-2">
+<img alt="The Cooking Nurse Logo" class="h-10 w-10 rounded-full object-cover border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBn1KgCHYfaKak5WxIfJS3haWlq5IwBUF1cAKcppB_jMvDou4ruAcc853f9GUdger4TCiFZnECtqWVjZXhcsdKi-EEJU3Vhfv5WVmtvyilAv-q8yN8LvGP3iCfWIDTuBZc-DW6dv71xtYtcztYI_aHfU-eBmc7oTiMluyaa9n3lzKNqxnHsLAPONM9oQI-8urVvAw_Ey_G4CxJxYxlwRRXr2NTKHQC60P8eFd0YWUF8kynU3xp81RC2ch9152TrtMLG63ATrLFGe-ef"/>
+<span class="font-display-lg text-headline-sm md:text-headline-md text-primary dark:text-primary-fixed tracking-tight">The Cooking Nurse</span>
+</div>
+<!-- Navigation Links (Desktop) -->
+<div class="hidden md:flex items-center gap-8 font-display-lg text-display-lg-mobile md:text-display-lg font-body-md text-body-md">
+<a class="text-primary dark:text-primary-fixed border-b-2 border-tertiary-container dark:border-tertiary-fixed pb-1 hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-all" href="#">About</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-all" href="#">Classes</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-all" href="#">Fresh Pickens Shop</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed transition-colors hover:text-tertiary-container dark:hover:text-tertiary-fixed transition-all" href="#">Studio</a>
+</div>
+<!-- Trailing Icons -->
+<div class="flex items-center gap-4 text-primary dark:text-primary-fixed">
+<button class="hover:text-tertiary-container transition-colors active:scale-95 duration-150 transition-transform p-2 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_cart</span>
+</button>
+<button class="hover:text-tertiary-container transition-colors active:scale-95 duration-150 transition-transform p-2 rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-16 min-h-screen flex items-center bg-[#fafaf9]">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<!-- Left: Image Collage -->
+<div class="relative w-full aspect-square md:aspect-auto md:h-[600px] flex justify-center items-center">
+<!-- Abstract Background Shape for Collage Effect -->
+<div class="absolute inset-0 bg-surface-container-low rounded-[40px] md:rounded-[80px] transform -rotate-3 scale-95 shadow-sm opacity-50 border border-outline-variant"></div>
+<div class="relative z-10 w-4/5 h-4/5 rounded-full overflow-hidden border-4 border-surface shadow-lg shadow-primary/10">
+<img alt="Culinary food collage" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqXnWFOYVMf10YIu_5T9tFTCJOMBpnIVa3FpUTsme6Bx-hhGVSJgQFo1LwOwCVWrn2127PCmpCfuOrwFO9jpXU6JVM9pQweU_a6Y-9oPv5-3K5WW14ntOeV8F2WEunvp568_Syex1H5YhiXz6-_SJekc94qath74rWFu6Mx5gNEHI_WzOkmHAJFPv4dwf_AIC5rLp1RZWCeuYcapXL2aJ0kcKbffANwrEEcEnYtJGiEFOHobaBKZJRo_tbSMFNgKKwZkQbCPOM7DG0"/>
+</div>
+</div>
+<!-- Right: Hero Text & CTA -->
+<div class="flex flex-col gap-6 md:pl-12">
+<!-- Nurse's Note Style Accent -->
+<div class="inline-flex items-center gap-2 pl-4 border-l-2 border-on-error-container bg-error-container/20 py-2 pr-4 rounded-r-lg max-w-max">
+<span class="material-symbols-outlined text-on-error-container text-sm">local_dining</span>
+<span class="font-label-md text-label-md text-on-error-container uppercase tracking-widest">Culinary Wellness</span>
+</div>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary leading-tight">
+                        Turn Everyday Cooking into <span class="text-on-error-container italic">Everyday Magic!</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
+                        Discover the art of nourishing meals that heal the body and delight the senses. Professional guidance meets rustic, artisanal cooking.
+                    </p>
+<div class="mt-4">
+<button class="bg-tertiary-fixed-dim text-on-tertiary-fixed font-label-md text-label-md py-4 px-8 rounded-full hover:bg-tertiary-container hover:text-on-tertiary transition-all shadow-sm active:scale-95 flex items-center gap-2 max-w-max">
+                            Explore Classes
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

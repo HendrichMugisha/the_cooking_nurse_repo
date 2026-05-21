@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - The Cooking Nurse{% endblock %}
+
+{% block content %}
+<div class="page-container py-20 min-h-[70vh] flex justify-center items-center">
+    <div class="card p-10 max-w-md w-full">
+        <div class="text-center mb-8">
+            <h1 class="font-display-lg text-primary mb-2">Welcome Back</h1>
+            <p class="text-on-surface-variant">Log in to access your digital downloads and order history.</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="bg-error-container text-on-error-container p-3 rounded mb-4 text-sm">
+                    Invalid email or password.
+                </div>
+            {% endif %}
+
+            <div class="space-y-4 mb-8">
+                <div>
+                    <label class="block font-label-md text-primary mb-1">Email</label>
+                    <input type="text" name="username" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block font-label-md text-primary mb-1">Password</label>
+                    <input type="password" name="password" class="form-input" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary w-full text-lg">
+                Log In
+                <span class="material-symbols-outlined">login</span>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

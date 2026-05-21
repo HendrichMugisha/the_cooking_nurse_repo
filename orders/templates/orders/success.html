@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Successful - The Cooking Nurse{% endblock %}
+
+{% block content %}
+<div class="page-container py-20 min-h-[60vh] flex items-center justify-center">
+    <div class="card p-10 max-w-lg w-full text-center flex flex-col items-center">
+        <span class="material-symbols-outlined text-[80px] text-primary mb-6">task_alt</span>
+        
+        <h1 class="font-display-lg text-primary mb-4">Order Confirmed!</h1>
+        <p class="font-body-lg text-on-surface-variant mb-2">Thank you for your order #{{ order_id }}.</p>
+        <p class="font-body-md text-on-surface-variant mb-8">
+            Your items are being processed. We have sent a confirmation email with your order details.
+        </p>
+        
+        <a href="{% url 'portfolio:home' %}" class="btn-primary w-full justify-center">
+            Return Home
+        </a>
+    </div>
+</div>
+{% endblock %}

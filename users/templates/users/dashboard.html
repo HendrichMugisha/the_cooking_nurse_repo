@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}My Dashboard - The Cooking Nurse{% endblock %}
+
+{% block content %}
+<div class="page-container py-10 min-h-[70vh]">
+    <div class="flex justify-between items-end mb-8 border-b border-outline-variant pb-4">
+        <div>
+            <h1 class="font-display-lg text-primary">My Dashboard</h1>
+            <p class="text-on-surface-variant">Welcome back, {{ request.user.first_name|default:request.user.email }}</p>
+        </div>
+        <a href="{% url 'users:logout' %}" class="btn-accent text-sm py-2 px-4">Logout</a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Order History -->
+        <div class="card p-6">
+            <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined">receipt_long</span> Order History
+            </h2>
+            <div class="space-y-4">
+                {% for order in orders %}
+                <div class="border border-surface-variant rounded p-4 bg-surface-bright">
+                    <div class="flex justify-between mb-2">
+                        <span class="font-bold text-on-surface">Order #{{ order.id }}</span>
+                        <span class="text-tertiary-container font-medium">{{ order.total_amount }} UGX</span>
+                    </div>
+                    <div class="text-sm text-on-surface-variant mb-2">{{ order.created_at|date:"M d, Y" }} - <span class="uppercase font-bold text-primary">{{ order.status }}</span></div>
+                    
+                    <ul class="text-sm space-y-1 pl-4 list-disc text-secondary">
+                        {% for item in order.items.all %}
+                            {% if item.product_variant %}
+                                <li>{{ item.quantity }}x {{ item.product_variant.product.name }} ({{ item.product_variant.name }})</li>
+                            {% elif item.class_session %}
+                                <li>Booking: {{ item.class_session.course.title }} ({{ item.class_session.date }})</li>
+                            {% elif item.online_course %}
+                                <li>Digital: {{ item.online_course.title }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% empty %}
+                <p class="text-on-surface-variant">You have no past orders.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Digital Goods & Access -->
+        <div class="flex flex-col gap-8">
+            <div class="card p-6 bg-primary-fixed/10 border-primary-fixed">
+                <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined">cloud_download</span> Digital Downloads
+                </h2>
+                <div class="space-y-4">
+                    {% for order in orders %}
+                        {% for item in order.items.all %}
+                            {% if item.product_variant and item.product_variant.product.product_type == 'digital' %}
+                            <div class="flex justify-between items-center bg-white p-3 rounded border border-outline-variant/30">
+                                <div>
+                                    <span class="font-bold text-on-surface block">{{ item.product_variant.product.name }}</span>
+                                    <span class="text-xs text-on-surface-variant">PDF Document</span>
+                                </div>
+                                <a href="#" class="text-primary hover:text-tertiary-container" title="Download">
+                                    <span class="material-symbols-outlined text-[28px]">download_for_offline</span>
+                                </a>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="card p-6 bg-error-container/10 border-error-container">
+                <h2 class="font-headline-md text-error mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined">play_circle</span> Online Classes
+                </h2>
+                <p class="text-sm text-on-surface-variant mb-4">Click below to access your secure video portals using your account.</p>
+                <div class="space-y-4">
+                    {% for order in orders %}
+                        {% for item in order.items.all %}
+                            {% if item.online_course %}
+                            <a href="#" class="flex justify-between items-center bg-white p-3 rounded border border-outline-variant/30 hover:border-error transition-colors group">
+                                <span class="font-bold text-on-surface group-hover:text-error">{{ item.online_course.title }}</span>
+                                <span class="material-symbols-outlined text-error">open_in_new</span>
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

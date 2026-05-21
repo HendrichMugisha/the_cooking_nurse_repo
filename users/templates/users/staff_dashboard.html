@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Staff Dashboard - The Cooking Nurse{% endblock %}
+
+{% block content %}
+<div class="page-container py-10 min-h-[80vh]">
+    <div class="flex justify-between items-end mb-8 border-b border-outline-variant pb-4">
+        <div>
+            <h1 class="font-display-lg text-primary">Staff Dashboard</h1>
+            <p class="text-on-surface-variant">Rapid Inventory & Booking Management</p>
+        </div>
+        <div class="flex gap-4">
+            <a href="/admin/" class="btn-accent text-sm py-2 px-4" target="_blank">Full Database Admin</a>
+            <a href="{% url 'users:logout' %}" class="btn-primary text-sm py-2 px-4">Logout</a>
+        </div>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="bg-primary-fixed text-on-primary-fixed p-4 rounded-md mb-8 shadow-sm font-bold">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-12">
+        
+        <!-- Rapid Inventory Manager -->
+        <div>
+            <div class="card p-6">
+                <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined">inventory_2</span> Fresh Pickens Stock
+                </h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="border-b border-outline-variant text-on-surface-variant">
+                                    <th class="pb-2 font-label-md">Product</th>
+                                    <th class="pb-2 font-label-md">Variant</th>
+                                    <th class="pb-2 font-label-md">Current Stock</th>
+                                    <th class="pb-2 font-label-md w-24">Update</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for variant in variants %}
+                                {% if variant.product.product_type == 'physical' %}
+                                <tr class="border-b border-surface-variant hover:bg-surface-bright">
+                                    <td class="py-3 font-bold">{{ variant.product.name }}</td>
+                                    <td class="py-3">{{ variant.name }}</td>
+                                    <td class="py-3">
+                                        {% if variant.stock <= 5 %}
+                                            <span class="text-error font-bold">{{ variant.stock }}</span>
+                                        {% else %}
+                                            <span class="text-primary">{{ variant.stock }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="py-3">
+                                        <input type="number" name="variant_{{ variant.id }}" value="{{ variant.stock }}" min="0" class="form-input py-1 px-2 w-full text-center">
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-6 flex justify-end">
+                        <button type="submit" class="btn-primary py-2 px-6">Save Inventory</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-8">
+            <!-- Upcoming Classes -->
+            <div class="card p-6 bg-surface-bright">
+                <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined">event_seat</span> Upcoming Classes
+                </h2>
+                <div class="space-y-4">
+                    {% for session in sessions %}
+                    <div class="flex justify-between items-center border-b border-outline-variant/30 pb-3">
+                        <div>
+                            <span class="font-bold text-on-surface block">{{ session.course.title }}</span>
+                            <span class="text-sm text-on-surface-variant">{{ session.date }} | {{ session.start_time|time:"H:i" }}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-sm block text-on-surface-variant">Capacity</span>
+                            <span class="font-bold {% if session.is_full %}text-error{% else %}text-primary{% endif %}">
+                                {{ session.attendees_count }} / {{ session.capacity }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="card p-6">
+                <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined">receipt</span> Recent Orders
+                </h2>
+                <div class="space-y-3">
+                    {% for order in recent_orders %}
+                    <div class="flex justify-between items-center text-sm border border-outline-variant/30 p-2 rounded">
+                        <span class="font-bold">#{{ order.id }} - {{ order.user.first_name }}</span>
+                        <span class="uppercase text-tertiary-container font-bold">{{ order.status }}</span>
+                    </div>
+                    {% empty %}
+                    <p class="text-on-surface-variant text-sm">No orders yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Cooking Nurse - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Work+Sans:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#5e3e00",
+                      "secondary-fixed-dim": "#c6c7c6",
+                      "inverse-surface": "#2e312f",
+                      "background": "#f8faf6",
+                      "primary-fixed": "#b0f0d6",
+                      "on-tertiary-container": "#e9a52a",
+                      "on-tertiary": "#ffffff",
+                      "surface-container": "#eceeeb",
+                      "on-surface": "#191c1b",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "on-tertiary-fixed": "#281800",
+                      "surface-bright": "#f8faf6",
+                      "on-primary-fixed": "#002117",
+                      "on-surface-variant": "#404944",
+                      "tertiary": "#412900",
+                      "tertiary-fixed": "#ffddb0",
+                      "on-tertiary-fixed-variant": "#614000",
+                      "surface-tint": "#2b6954",
+                      "error-container": "#ffdad6",
+                      "surface-dim": "#d8dbd7",
+                      "on-primary-fixed-variant": "#0b513d",
+                      "on-background": "#191c1b",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface-container-highest": "#e1e3e0",
+                      "surface-container-high": "#e7e9e5",
+                      "secondary-container": "#dfe0df",
+                      "surface-variant": "#e1e3e0",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed-dim": "#ffba46",
+                      "secondary-fixed": "#e2e2e2",
+                      "error": "#ba1a1a",
+                      "primary": "#003527",
+                      "on-secondary-fixed-variant": "#454747",
+                      "on-secondary-container": "#616362",
+                      "outline": "#707974",
+                      "primary-fixed-dim": "#95d3ba",
+                      "on-error-container": "#93000a",
+                      "inverse-primary": "#95d3ba",
+                      "outline-variant": "#bfc9c3",
+                      "secondary": "#5d5f5e",
+                      "primary-container": "#064e3b",
+                      "surface-container-low": "#f2f4f1",
+                      "surface": "#f8faf6",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#eff1ee",
+                      "on-primary-container": "#80bea6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "margin-desktop": "48px",
+                      "base": "8px",
+                      "margin-mobile": "16px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Work Sans"
+                      ],
+                      "label-sm": [
+                              "Work Sans"
+                      ],
+                      "display-lg-mobile": [
+                              "EB Garamond"
+                      ],
+                      "headline-md": [
+                              "EB Garamond"
+                      ],
+                      "headline-sm": [
+                              "EB Garamond"
+                      ],
+                      "body-md": [
+                              "Work Sans"
+                      ],
+                      "body-lg": [
+                              "Work Sans"
+                      ],
+                      "display-lg": [
+                              "EB Garamond"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "36px",
+                              {
+                                      "lineHeight": "42px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased pb-20">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-background dark:bg-background flat no shadows flex justify-between items-center px-margin-mobile py-base w-full z-40">
+<button aria-label="Menu" class="text-on-surface-variant hover:text-tertiary-container transition-colors active:scale-95 transition-transform flex items-center justify-center p-2 rounded-full">
+<span class="material-symbols-outlined" style="font-size: 24px;">menu</span>
+</button>
+<h1 class="font-headline-sm text-headline-sm-mobile md:text-headline-sm text-primary dark:text-primary-fixed-dim font-bold tracking-tight">The Cooking Nurse</h1>
+<button aria-label="User profile" class="text-on-surface-variant hover:text-tertiary-container transition-colors active:scale-95 transition-transform flex items-center justify-center p-2 rounded-full">
+<span class="material-symbols-outlined" data-weight="fill" style="font-size: 24px;">account_circle</span>
+</button>
+</header>
+<!-- Main Content (Placeholder) -->
+<main class="flex-grow flex flex-col items-center justify-center p-margin-mobile">
+<div class="text-center max-w-md mx-auto">
+<span class="material-symbols-outlined text-primary/20 mb-4" style="font-size: 64px;">restaurant</span>
+<h2 class="font-headline-md text-headline-md text-primary mb-2">Welcome Home</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">The navigation shell is active. Explore the tabs below to navigate the application.</p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin-mobile py-2 bg-surface-container-lowest dark:bg-inverse-surface shadow-[0_-4px_6px_-1px_rgba(0,53,39,0.05)] rounded-t-xl md:hidden pb-safe">
+<!-- Active Tab: Home -->
+<a class="flex flex-col items-center justify-center bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full px-4 py-1 hover:bg-surface-container-high transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<!-- Inactive Tab: Shop -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1">shopping_bag</span>
+<span class="font-label-sm text-label-sm">Shop</span>
+</a>
+<!-- Inactive Tab: Classes -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1">school</span>
+<span class="font-label-sm text-label-sm">Classes</span>
+</a>
+<!-- Inactive Tab: Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+    </style>
+</body></html>

@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    /* Global Buttons */
+    .btn-primary {
+        @apply bg-primary text-on-primary font-label-md px-8 py-3 rounded-full hover:bg-tertiary-container hover:text-on-tertiary transition-colors duration-300 flex items-center justify-center gap-2 active:scale-95 shadow-sm whitespace-nowrap;
+    }
+    
+    .btn-accent {
+        @apply bg-tertiary-fixed-dim text-on-tertiary-fixed font-label-md py-3 px-8 rounded-full hover:bg-tertiary-container hover:text-on-tertiary transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2 whitespace-nowrap;
+    }
+
+    /* Global Navigation Links */
+    .nav-link {
+        @apply text-on-surface-variant hover:text-tertiary-container transition-all border-b-2 border-transparent hover:border-tertiary-container pb-1 font-body-md;
+    }
+
+    .nav-link-active {
+        @apply text-primary border-b-2 border-tertiary-container pb-1 hover:text-tertiary-container transition-all font-body-md;
+    }
+
+    /* Global Cards & Containers */
+    .card {
+        @apply bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant/30 shadow-level-1 hover:shadow-level-2 transition-shadow duration-300;
+    }
+    
+    .page-container {
+        @apply max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full;
+    }
+
+    /* Mobile Tab Bar Elements */
+    .mobile-tab {
+        @apply flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-colors active:scale-90 duration-200 rounded-full;
+    }
+
+    .mobile-tab-active {
+        @apply flex flex-col items-center justify-center bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full px-4 py-1 hover:bg-surface-container-high transition-colors active:scale-90 duration-200;
+    }
+
+    /* Form Elements */
+    .form-input {
+        @apply w-full border border-outline-variant rounded-md px-4 py-3 bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-on-surface font-body-md;
+    }
+}

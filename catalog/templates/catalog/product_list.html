@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="flex-grow flex items-center justify-center py-10 px-4 md:px-margin-desktop bg-surface-container-low">
+    <div class="w-full max-w-container-max mx-auto">
+        <h2 class="font-display-lg text-primary mb-8 text-center md:text-left">Fresh Pickens Market</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+            {% for product in products %}
+            <article class="card group flex flex-col md:flex-row min-h-[400px]">
+                <!-- Product Image -->
+                <div class="relative overflow-hidden w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-bright">
+                    {% if product.image %}
+                        <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" src="{{ product.image.url }}"/>
+                    {% else %}
+                        <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" src="https://lh3.googleusercontent.com/aida/ADBb0uhipnwAI0ENs4U1VZjSckqGn1GFOdTBB6kKkdSot_3Yvkhr5euUwm9fS2OvJvpGc70uzxEKzkFdA4MWiy2tOsP6UsA55HPkSvFVq47ver5uFCGzYNjOFbX42PCW7sY_MoQ63IbCHhliBsyA0hfGSBjnYizl_fy8S8ipgQpR7n8YPBWajxvMNXA_2nYvhbueK8ez7HD-0wlko4YfLEy7LHC090P7ZaCnXQZMihuOIfMKDnw7ZymPK-LPMLDE"/>
+                    {% endif %}
+                    
+                    <div class="absolute top-4 left-4 flex gap-2">
+                        {% if product.category %}
+                        <span class="bg-surface-container-lowest text-primary px-3 py-1 rounded-full font-label-md text-[12px] border border-surface-variant shadow-sm backdrop-blur-sm bg-opacity-90">{{ product.category.name }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Product Details -->
+                <div class="p-8 flex flex-col flex-grow md:w-1/2 justify-center">
+                    <div class="mb-4">
+                        <h2 class="font-headline-md text-display-lg-mobile md:text-headline-lg text-primary">{{ product.name }}</h2>
+                    </div>
+                    <p class="font-body-md text-on-surface-variant mb-8 text-base">
+                        {{ product.description|truncatewords:20 }}
+                    </p>
+                    
+                    <!-- Action Area -->
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mt-auto pt-6 border-t border-surface-variant border-opacity-50">
+                        <div class="flex flex-col">
+                            <span class="font-label-md text-xs text-on-surface-variant uppercase tracking-wider mb-1">Price</span>
+                            <span class="font-headline-md text-2xl text-tertiary-container font-semibold">
+                                {% if product.variants.first %}
+                                    {{ product.variants.first.price }} UGX
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </span>
+                        </div>
+                        
+                        {% if product.variants.first %}
+                        <form action="{% url 'cart:cart_add' 'variant' product.variants.first.id %}" method="POST" class="w-full sm:w-auto">
+                            {% csrf_token %}
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn-primary w-full group/btn">
+                                <span class="material-symbols-outlined text-[20px] group-hover/btn:-translate-y-0.5 transition-transform">add_shopping_cart</span>
+                                Add to Cart
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+                <p class="text-on-surface-variant font-body-lg">No products available at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

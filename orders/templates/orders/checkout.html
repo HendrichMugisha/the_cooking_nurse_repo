@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - The Cooking Nurse{% endblock %}
+
+{% block content %}
+<div class="page-container py-10 min-h-[60vh]">
+    <h1 class="font-display-lg text-primary mb-8 text-center md:text-left">Secure Checkout</h1>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <!-- Checkout Form -->
+        <div class="lg:col-span-8">
+            <div class="card p-8">
+                {% if form.errors %}
+                <div class="bg-error-container text-on-error-container p-4 rounded-md mb-6">
+                    <p class="font-bold">Please correct the following errors:</p>
+                    {{ form.errors }}
+                </div>
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    {% if not request.user.is_authenticated %}
+                    <div class="mb-10">
+                        <h2 class="font-headline-md text-primary mb-4 border-b border-surface-variant pb-2">1. Account Details</h2>
+                        <p class="text-on-surface-variant text-sm mb-6">Create an account to track your orders and access digital downloads.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block font-label-md text-primary mb-1">First Name</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div>
+                                <label class="block font-label-md text-primary mb-1">Last Name</label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block font-label-md text-primary mb-1">Email Address</label>
+                                {{ form.email }}
+                            </div>
+                            <div>
+                                <label class="block font-label-md text-primary mb-1">Password</label>
+                                {{ form.password }}
+                            </div>
+                            <div>
+                                <label class="block font-label-md text-primary mb-1">Phone Number (Momo)</label>
+                                {{ form.phone_number }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div>
+                        <h2 class="font-headline-md text-primary mb-4 border-b border-surface-variant pb-2">{% if not request.user.is_authenticated %}2. {% endif %}Delivery Information</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block font-label-md text-primary mb-1">City</label>
+                                {{ form.city }}
+                            </div>
+                            <div>
+                                <label class="block font-label-md text-primary mb-1">Neighborhood</label>
+                                {{ form.neighborhood }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block font-label-md text-primary mb-1">Street Address</label>
+                            {{ form.street_address }}
+                        </div>
+                        
+                        <div>
+                            <label class="block font-label-md text-primary mb-1">Delivery Notes (Optional)</label>
+                            {{ form.delivery_notes }}
+                        </div>
+                    </div>
+
+                    <div class="mt-10 pt-6 border-t border-surface-variant flex justify-end">
+                        <button type="submit" class="btn-primary w-full md:w-auto text-lg px-12">
+                            Place Order ({{ cart.get_total_price }} UGX)
+                            <span class="material-symbols-outlined">check_circle</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="lg:col-span-4">
+            <div class="card p-6 bg-surface-bright sticky top-28">
+                <h3 class="font-headline-sm text-primary border-b border-outline-variant pb-3 mb-4">Order Summary</h3>
+                <div class="space-y-4 mb-6">
+                    {% for item in cart %}
+                    <div class="flex justify-between items-start text-sm">
+                        <div class="pr-4">
+                            <span class="font-bold text-on-surface">{{ item.quantity }}x</span>
+                            <span class="text-on-surface-variant">
+                                {% if item.type == 'variant' %}
+                                    {{ item.item.product.name }} ({{ item.item.name }})
+                                {% elif item.type == 'session' %}
+                                    Class: {{ item.item.course.title }}
+                                {% elif item.type == 'online' %}
+                                    Online: {{ item.item.title }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="text-on-surface font-medium whitespace-nowrap">{{ item.total_price }} UGX</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="border-t border-outline-variant pt-4 flex justify-between items-center">
+                    <span class="font-headline-sm text-primary">Total</span>
+                    <span class="font-headline-sm text-tertiary-container">{{ cart.get_total_price }} UGX</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
