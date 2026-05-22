@@ -17,6 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Custom User Model
 AUTH_USER_MODEL = 'users.CustomUser'
+LOGIN_URL = 'users:login'
 
 
 # Quick-start development settings - unsuitable for production

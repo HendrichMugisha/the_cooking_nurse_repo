@@ -2,44 +2,94 @@
 {% load static %}
 
 {% block content %}
-<!-- Hero Content (Extracted from hero.html) -->
-<div class="min-h-[80vh] flex items-center bg-[#fafaf9]">
-    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<!-- HERO BENTO BOX SECTION -->
+<div class="relative w-full pt-12 pb-24 md:pt-24 md:pb-32 overflow-hidden">
+    <!-- Ripped paper top background wrapper -->
+    <div class="absolute inset-0 bg-surface/40 -z-10"></div>
+    
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch min-h-[600px]">
             
-            <!-- Left: Image Collage -->
-            <div class="relative w-full aspect-square md:aspect-auto md:h-[600px] flex justify-center items-center">
-                <!-- Abstract Background Shape for Collage Effect -->
-                <div class="absolute inset-0 bg-surface-container-low rounded-[40px] md:rounded-[80px] transform -rotate-3 scale-95 shadow-sm opacity-50 border border-outline-variant"></div>
-                <div class="relative z-10 w-4/5 h-4/5 rounded-full overflow-hidden border-4 border-surface shadow-lg shadow-primary/10">
-                    <img alt="Culinary food collage" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqXnWFOYVMf10YIu_5T9tFTCJOMBpnIVa3FpUTsme6Bx-hhGVSJgQFo1LwOwCVWrn2127PCmpCfuOrwFO9jpXU6JVM9pQweU_a6Y-9oPv5-3K5WW14ntOeV8F2WEunvp568_Syex1H5YhiXz6-_SJekc94qath74rWFu6Mx5gNEHI_WzOkmHAJFPv4dwf_AIC5rLp1RZWCeuYcapXL2aJ0kcKbffANwrEEcEnYtJGiEFOHobaBKZJRo_tbSMFNgKKwZkQbCPOM7DG0"/>
-                </div>
-            </div>
-            
-            <!-- Right: Hero Text & CTA -->
-            <div class="flex flex-col gap-6 md:pl-12">
-                <!-- Nurse's Note Style Accent -->
-                <div class="inline-flex items-center gap-2 pl-4 border-l-2 border-on-error-container bg-error-container/20 py-2 pr-4 rounded-r-lg max-w-max">
-                    <span class="material-symbols-outlined text-on-error-container text-sm">local_dining</span>
-                    <span class="font-label-md text-label-md text-on-error-container uppercase tracking-widest">Culinary Wellness</span>
+            <!-- Left: Hero Text & Call to Action (Spans 5 cols) -->
+            <div class="lg:col-span-5 flex flex-col justify-center gap-6 relative z-20 pt-12">
+                <div class="inline-flex items-center gap-3 pl-4 border-l-4 border-accent bg-surface glass-panel py-2 pr-5 rounded-r-xl max-w-max animate-fade-in-up">
+                    <span class="material-symbols-outlined text-accent text-sm font-bold">local_fire_department</span>
+                    <span class="font-label-md text-primary uppercase tracking-widest font-bold">Sept - Dec Classes Open</span>
                 </div>
                 
-                <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary leading-tight">
-                    Turn Everyday Cooking into <span class="text-on-error-container italic">Everyday Magic!</span>
+                <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg leading-[1.1] text-primary">
+                    Turn Everyday Cooking into <br/>
+                    <span class="text-accent italic font-black drop-shadow-sm">Everyday Magic!</span>
                 </h1>
                 
-                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
-                    Discover the art of nourishing meals that heal the body and delight the senses. Professional guidance meets rustic, artisanal cooking.
+                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-md font-medium mt-4">
+                    Master the art of nourishing meals that heal the body and delight the senses. Professional guidance meets rustic, artisanal culinary arts.
                 </p>
                 
-                <div class="mt-4">
-                    <button class="btn-accent max-w-max">
-                        Explore Classes
+                <div class="mt-8 flex flex-wrap gap-4 items-center">
+                    <a href="{% url 'classes:class_timetable' %}" class="btn-primary">
+                        Book a Class
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                    </button>
+                    </a>
+                    <a href="{% url 'catalog:product_list' %}" class="font-label-md text-primary font-bold hover:text-accent transition-colors py-3 px-4 border-b-2 border-transparent hover:border-accent">
+                        Explore Shop
+                    </a>
                 </div>
             </div>
             
+            <!-- Right: Asymmetric Bento Collage (Spans 7 cols) -->
+            <div class="lg:col-span-7 relative flex justify-center items-center mt-12 lg:mt-0">
+                <!-- Abstract organic shape background -->
+                <div class="absolute w-[120%] h-[120%] bg-tertiary/10 rounded-[100px] transform rotate-12 -z-10 scale-95 opacity-50 blur-3xl"></div>
+                
+                <div class="grid grid-cols-2 gap-4 md:gap-6 w-full h-full relative">
+                    <!-- Main Big Image -->
+                    <div class="col-span-2 md:col-span-1 row-span-2 rounded-3xl overflow-hidden shadow-xl shadow-primary/20 relative group h-64 md:h-auto">
+                        <img alt="Culinary food collage" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqXnWFOYVMf10YIu_5T9tFTCJOMBpnIVa3FpUTsme6Bx-hhGVSJgQFo1LwOwCVWrn2127PCmpCfuOrwFO9jpXU6JVM9pQweU_a6Y-9oPv5-3K5WW14ntOeV8F2WEunvp568_Syex1H5YhiXz6-_SJekc94qath74rWFu6Mx5gNEHI_WzOkmHAJFPv4dwf_AIC5rLp1RZWCeuYcapXL2aJ0kcKbffANwrEEcEnYtJGiEFOHobaBKZJRo_tbSMFNgKKwZkQbCPOM7DG0"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                            <span class="text-white font-headline-sm">Local Food Masterclass</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Right Image -->
+                    <div class="rounded-3xl overflow-hidden shadow-lg relative group h-48 md:h-64">
+                        <img alt="Breakfast Dishes" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1493770348161-369560ae357d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" />
+                    </div>
+                    
+                    <!-- Bottom Right Glass Card -->
+                    <div class="glass-panel rounded-3xl p-6 flex flex-col justify-center shadow-lg relative overflow-hidden h-48 md:h-64 group border-primary/20 hover:border-primary/50 transition-colors">
+                        <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-tertiary/20 rounded-full blur-xl group-hover:bg-tertiary/40 transition-colors"></div>
+                        <span class="font-headline-sm text-primary mb-2">Class Cost</span>
+                        <div class="flex items-baseline gap-2">
+                            <span class="font-display-lg text-accent">150K</span>
+                            <span class="font-label-md text-on-surface-variant font-bold uppercase">UGX</span>
+                        </div>
+                        <span class="text-sm font-medium text-on-surface-variant mt-1">Per Person (8-10 slots)</span>
+                    </div>
+                </div>
+                
+                <!-- Floating Floating Badge (Glassmorphism) -->
+                <div class="absolute -left-4 md:-left-8 top-1/2 -translate-y-1/2 glass-panel px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 z-30 animate-bounce" style="animation-duration: 4s;">
+                    <div class="w-12 h-12 bg-white rounded-full flex justify-center items-center text-primary shadow-sm">
+                        <span class="material-symbols-outlined">restaurant</span>
+                    </div>
+                    <div>
+                        <div class="font-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Limited Slots</div>
+                        <div class="font-headline-sm text-primary">Book Now</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Solid Primary Section with ripped edge overlay at the top -->
+<div class="relative w-full bg-primary text-white ripped-edge-bottom -mt-8 pt-24 pb-32 z-20">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+        <div class="text-center max-w-2xl mx-auto">
+            <h2 class="font-headline-lg mb-6">The Wellness Shop is Open</h2>
+            <p class="font-body-lg text-primary-fixed-dim/90 mb-8">From organic heirloom tomatoes to pure artisanal ghee, bring the magic of our kitchen straight to yours.</p>
+            <a href="{% url 'catalog:product_list' %}" class="btn-accent mx-auto">Shop Groceries</a>
         </div>
     </div>
 </div>

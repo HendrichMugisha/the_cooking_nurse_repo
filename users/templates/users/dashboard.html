@@ -61,7 +61,7 @@
                                     <span class="font-bold text-on-surface block">{{ item.product_variant.product.name }}</span>
                                     <span class="text-xs text-on-surface-variant">PDF Document</span>
                                 </div>
-                                <a href="#" class="text-primary hover:text-tertiary-container" title="Download">
+                                <a href="{% url 'catalog:download_digital_item' item.product_variant.id %}" class="text-primary hover:text-tertiary-container" title="Download">
                                     <span class="material-symbols-outlined text-[28px]">download_for_offline</span>
                                 </a>
                             </div>
@@ -80,7 +80,7 @@
                     {% for order in orders %}
                         {% for item in order.items.all %}
                             {% if item.online_course %}
-                            <a href="#" class="flex justify-between items-center bg-white p-3 rounded border border-outline-variant/30 hover:border-error transition-colors group">
+                            <a href="{% url 'classes:online_class_player' item.online_course.slug %}" class="flex justify-between items-center bg-white p-3 rounded border border-outline-variant/30 hover:border-error transition-colors group">
                                 <span class="font-bold text-on-surface group-hover:text-error">{{ item.online_course.title }}</span>
                                 <span class="material-symbols-outlined text-error">open_in_new</span>
                             </a>

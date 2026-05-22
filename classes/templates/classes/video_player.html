@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }} - Video Player | The Cooking Nurse{% endblock %}
+
+{% block content %}
+<div class="page-container py-10 min-h-[85vh] bg-surface-container-lowest">
+    <div class="max-w-[1200px] mx-auto">
+        <!-- Back navigation link -->
+        <a href="{% url 'users:dashboard' %}" class="inline-flex items-center gap-2 text-primary hover:text-tertiary-container mb-6 font-bold group">
+            <span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+            Back to Dashboard
+        </a>
+
+        <!-- Title block -->
+        <div class="mb-8">
+            <span class="inline-block bg-error-container text-on-error-container text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider mb-2">E-Learning Active</span>
+            <h1 class="font-display-lg text-primary text-3xl md:text-4xl leading-tight">{{ course.title }}</h1>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <!-- Left: HTML5 Video Port and secure wrapper -->
+            <div class="lg:col-span-8">
+                <div class="card overflow-hidden border border-outline-variant bg-black shadow-lg">
+                    <!-- Secure Responsive Video container -->
+                    <div class="relative w-full aspect-video">
+                        <video 
+                            class="w-full h-full object-cover" 
+                            controls 
+                            controlsList="nodownload" 
+                            poster="https://lh3.googleusercontent.com/aida-public/AB6AXuDqXnWFOYVMf10YIu_5T9tFTCJOMBpnIVa3FpUTsme6Bx-hhGVSJgQFo1LwOwCVWrn2127PCmpCfuOrwFO9jpXU6JVM9pQweU_a6Y-9oPv5-3K5WW14ntOeV8F2WEunvp568_Syex1H5YhiXz6-_SJekc94qath74rWFu6Mx5gNEHI_WzOkmHAJFPv4dwf_AIC5rLp1RZWCeuYcapXL2aJ0kcKbffANwrEEcEnYtJGiEFOHobaBKZJRo_tbSMFNgKKwZkQbCPOM7DG0"
+                        >
+                            <source src="https://assets.mixkit.co/videos/preview/mixkit-cooking-in-a-modern-kitchen-40033-large.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Video Description and info -->
+                <div class="card p-6 mt-6">
+                    <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">description</span> Course Overview
+                    </h2>
+                    <p class="font-body-md text-on-surface-variant leading-relaxed text-base">
+                        {{ course.description }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right: Recipe Details & Nurse's Note Sidebar -->
+            <div class="lg:col-span-4 flex flex-col gap-6">
+                <!-- Recipe/Syllabus Card -->
+                <div class="card p-6 bg-surface-bright">
+                    <h3 class="font-headline-sm text-primary mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined">menu_book</span> Culinary Steps
+                    </h3>
+                    <ul class="space-y-4 text-sm text-on-surface-variant">
+                        <li class="flex gap-3 items-start">
+                            <span class="h-6 w-6 rounded-full bg-primary-fixed text-on-primary-fixed font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">1</span>
+                            <div>
+                                <strong class="text-on-surface block mb-0.5">Sourdough Starter Hydration</strong>
+                                Learn correct water-to-flour ratios for Kampalan climate conditions.
+                            </div>
+                        </li>
+                        <li class="flex gap-3 items-start">
+                            <span class="h-6 w-6 rounded-full bg-primary-fixed text-on-primary-fixed font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">2</span>
+                            <div>
+                                <strong class="text-on-surface block mb-0.5">Autolyse & Gluten Stretching</strong>
+                                Master wet hand stretch-and-folds to build elastic dough structures.
+                            </div>
+                        </li>
+                        <li class="flex gap-3 items-start">
+                            <span class="h-6 w-6 rounded-full bg-primary-fixed text-on-primary-fixed font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">3</span>
+                            <div>
+                                <strong class="text-on-surface block mb-0.5">Clinical Baking Science</strong>
+                                Understand how lactic acid bacteria support digestion and bio-accessibility.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Nurse's Note Widget -->
+                <div class="border-l-4 border-error bg-error-container/20 p-6 rounded-r-lg shadow-sm">
+                    <div class="flex items-center gap-2 mb-2 text-error">
+                        <span class="material-symbols-outlined icon-fill">health_and_safety</span>
+                        <h4 class="font-label-md uppercase tracking-wider font-bold">The Clinical Note</h4>
+                    </div>
+                    <p class="font-body-md text-on-surface text-sm leading-relaxed">
+                        Lactic acid fermentation in sourdough partially breaks down gluten proteins and breaks down phytic acid, dramatically improving nutrient absorption and supporting overall gut health.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

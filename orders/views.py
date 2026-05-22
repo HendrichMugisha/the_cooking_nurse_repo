@@ -36,7 +36,9 @@ def checkout(request):
                 city=form.cleaned_data['city'],
                 neighborhood=form.cleaned_data['neighborhood'],
                 street_address=form.cleaned_data['street_address'],
-                delivery_notes=form.cleaned_data['delivery_notes']
+                delivery_notes=form.cleaned_data['delivery_notes'],
+                latitude=form.cleaned_data.get('latitude'),
+                longitude=form.cleaned_data.get('longitude')
             )
 
             # Process Cart Items

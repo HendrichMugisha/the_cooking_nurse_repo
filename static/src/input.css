@@ -2,28 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    /* Subtle noise/paper texture overlay */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+    background-color: #f8f9fa; /* surface-container */
+  }
+}
+
 @layer components {
+    /* Glassmorphism Panel */
+    .glass-panel {
+        @apply bg-surface/70 backdrop-blur-xl border border-white/50 shadow-[0_8px_32px_0_rgba(15,91,48,0.08)];
+    }
+    
+    /* Ripped Edge / Torn Paper Effect for Sections */
+    .ripped-edge-bottom {
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), 98% 100%, 96% calc(100% - 15px), 94% 100%, 92% calc(100% - 18px), 90% 100%, 88% calc(100% - 12px), 86% 100%, 84% calc(100% - 20px), 82% 100%, 80% calc(100% - 15px), 78% 100%, 76% calc(100% - 18px), 74% 100%, 72% calc(100% - 12px), 70% 100%, 68% calc(100% - 20px), 66% 100%, 64% calc(100% - 15px), 62% 100%, 60% calc(100% - 18px), 58% 100%, 56% calc(100% - 12px), 54% 100%, 52% calc(100% - 20px), 50% 100%, 48% calc(100% - 15px), 46% 100%, 44% calc(100% - 18px), 42% 100%, 40% calc(100% - 12px), 38% 100%, 36% calc(100% - 20px), 34% 100%, 32% calc(100% - 15px), 30% 100%, 28% calc(100% - 18px), 26% 100%, 24% calc(100% - 12px), 22% 100%, 20% calc(100% - 20px), 18% 100%, 16% calc(100% - 15px), 14% 100%, 12% calc(100% - 18px), 10% 100%, 8% calc(100% - 12px), 6% 100%, 4% calc(100% - 20px), 2% 100%, 0 calc(100% - 15px));
+        padding-bottom: 40px;
+    }
+    
+    .text-gradient-primary {
+        @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-[#094121];
+    }
+    
     /* Global Buttons */
     .btn-primary {
-        @apply bg-primary text-on-primary font-label-md px-8 py-3 rounded-full hover:bg-tertiary-container hover:text-on-tertiary transition-colors duration-300 flex items-center justify-center gap-2 active:scale-95 shadow-sm whitespace-nowrap;
+        @apply bg-primary text-on-primary font-label-md px-8 py-3 rounded-full hover:bg-opacity-90 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 active:scale-95 shadow-sm whitespace-nowrap;
     }
     
     .btn-accent {
-        @apply bg-tertiary-fixed-dim text-on-tertiary-fixed font-label-md py-3 px-8 rounded-full hover:bg-tertiary-container hover:text-on-tertiary transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2 whitespace-nowrap;
+        @apply bg-accent text-white font-label-md py-3 px-8 rounded-full hover:bg-opacity-90 hover:shadow-lg hover:-translate-y-0.5 transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2 whitespace-nowrap;
     }
 
     /* Global Navigation Links */
     .nav-link {
-        @apply text-on-surface-variant hover:text-tertiary-container transition-all border-b-2 border-transparent hover:border-tertiary-container pb-1 font-body-md;
+        @apply text-on-surface-variant hover:text-primary transition-all border-b-2 border-transparent hover:border-primary pb-1 font-body-md font-medium;
     }
 
     .nav-link-active {
-        @apply text-primary border-b-2 border-tertiary-container pb-1 hover:text-tertiary-container transition-all font-body-md;
+        @apply text-primary border-b-2 border-primary pb-1 hover:text-primary transition-all font-body-md font-bold;
     }
 
     /* Global Cards & Containers */
     .card {
-        @apply bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant/30 shadow-level-1 hover:shadow-level-2 transition-shadow duration-300;
+        @apply bg-surface-container-lowest rounded-2xl overflow-hidden border border-outline-variant/50 shadow-level-1 hover:shadow-level-2 transition-shadow duration-300;
     }
     
     .page-container {
@@ -32,15 +59,15 @@
 
     /* Mobile Tab Bar Elements */
     .mobile-tab {
-        @apply flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container-high transition-colors active:scale-90 duration-200 rounded-full;
+        @apply flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-container transition-colors active:scale-90 duration-200 rounded-full;
     }
 
     .mobile-tab-active {
-        @apply flex flex-col items-center justify-center bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full px-4 py-1 hover:bg-surface-container-high transition-colors active:scale-90 duration-200;
+        @apply flex flex-col items-center justify-center bg-primary/10 text-primary rounded-full px-4 py-1 hover:bg-primary/20 transition-colors active:scale-90 duration-200;
     }
 
     /* Form Elements */
     .form-input {
-        @apply w-full border border-outline-variant rounded-md px-4 py-3 bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-on-surface font-body-md;
+        @apply w-full border border-outline-variant rounded-xl px-4 py-3 bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-on-surface font-body-md shadow-sm;
     }
 }

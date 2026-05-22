@@ -2,6 +2,20 @@
 
 {% block title %}Checkout - The Cooking Nurse{% endblock %}
 
+{% block extra_head %}
+<!-- Leaflet.js Map Picker -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+    #delivery-map {
+        height: 280px;
+        width: 100%;
+        border-radius: 8px;
+        z-index: 10;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="page-container py-10 min-h-[60vh]">
     <h1 class="font-display-lg text-primary mb-8 text-center md:text-left">Secure Checkout</h1>
@@ -75,6 +89,14 @@
                             <label class="block font-label-md text-primary mb-1">Delivery Notes (Optional)</label>
                             {{ form.delivery_notes }}
                         </div>
+                        
+                        {{ form.latitude }}
+                        {{ form.longitude }}
+                        
+                        <div class="mt-6 mb-6">
+                            <label class="block font-label-md text-primary mb-2">Pin Delivery Location (Drag or Click to set precise delivery point in Kampala)</label>
+                            <div id="delivery-map" class="border border-outline-variant/30"></div>
+                        </div>
                     </div>
 
                     <div class="mt-10 pt-6 border-t border-surface-variant flex justify-end">
@@ -119,4 +141,51 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Kampala defaults
+        var defaultLat = 0.3476;
+        var defaultLng = 32.5825;
+        
+        var latInput = document.querySelector('input[name="latitude"]');
+        var lngInput = document.querySelector('input[name="longitude"]');
+        
+        if (latInput && !latInput.value) latInput.value = defaultLat.toFixed(6);
+        if (lngInput && !lngInput.value) lngInput.value = defaultLng.toFixed(6);
+        
+        var currentLat = latInput ? parseFloat(latInput.value) || defaultLat : defaultLat;
+        var currentLng = lngInput ? parseFloat(lngInput.value) || defaultLng : defaultLng;
+
+        // Initialize Leaflet Map
+        var map = L.map('delivery-map').setView([currentLat, currentLng], 13);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // Draggable Marker
+        var marker = L.marker([currentLat, currentLng], {
+            draggable: true
+        }).addTo(map);
+        
+        function updateInputs(lat, lng) {
+            if (latInput) latInput.value = lat.toFixed(6);
+            if (lngInput) lngInput.value = lng.toFixed(6);
+        }
+        
+        marker.on('dragend', function() {
+            var pos = marker.getLatLng();
+            updateInputs(pos.lat, pos.lng);
+        });
+        
+        map.on('click', function(e) {
+            marker.setLatLng(e.latlng);
+            updateInputs(e.latlng.lat, e.latlng.lng);
+        });
+    });
+</script>
 {% endblock %}

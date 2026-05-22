@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 150">
+    <g transform="translate(200, 45) scale(1.2)">
+        <!-- Chef Hat Path -->
+        <path d="M-25,10 C-35,10 -40,-2 -35,-12 C-38,-25 -25,-32 -18,-25 C-15,-38 0,-45 15,-35 C25,-42 40,-35 40,-22 C48,-15 45,0 35,5 C40,15 30,22 25,20 C18,28 0,30 -5,22 C-15,30 -30,25 -25,10 Z" fill="#ffffff" stroke="#0F5B30" stroke-width="3" />
+        <!-- Red Cross -->
+        <rect x="-6" y="-12" width="12" height="24" fill="#E31818" rx="2" />
+        <rect x="-12" y="-6" width="24" height="12" fill="#E31818" rx="2" />
+        <!-- Hat Band -->
+        <path d="M-28,18 Q0,28 28,18" fill="none" stroke="#E31818" stroke-width="6" stroke-linecap="round"/>
+    </g>
+    <!-- Text -->
+    <text x="200" y="105" font-family="sans-serif" font-weight="800" font-size="34" fill="#0F5B30" text-anchor="middle" letter-spacing="1">THE COOKING</text>
+    <text x="200" y="140" font-family="sans-serif" font-weight="900" font-size="42" fill="#E31818" text-anchor="middle" letter-spacing="2">NURSE</text>
+</svg>
