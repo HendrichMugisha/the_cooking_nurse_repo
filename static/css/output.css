@@ -2101,10 +2101,6 @@ body {
   background-color: rgb(241 245 249 / var(--tw-bg-opacity, 1));
 }
 
-.bg-slate-100\/60 {
-  background-color: rgb(241 245 249 / 0.6);
-}
-
 .bg-slate-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(226 232 240 / var(--tw-bg-opacity, 1));
@@ -2126,11 +2122,6 @@ body {
 .bg-slate-800 {
   --tw-bg-opacity: 1;
   background-color: rgb(30 41 59 / var(--tw-bg-opacity, 1));
-}
-
-.bg-slate-900 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1));
 }
 
 .bg-slate-900\/40 {
@@ -2761,19 +2752,9 @@ body {
   color: rgb(222 226 230 / var(--tw-text-opacity, 1));
 }
 
-.text-pink-600 {
-  --tw-text-opacity: 1;
-  color: rgb(219 39 119 / var(--tw-text-opacity, 1));
-}
-
 .text-primary {
   --tw-text-opacity: 1;
   color: rgb(15 91 48 / var(--tw-text-opacity, 1));
-}
-
-.text-red-600 {
-  --tw-text-opacity: 1;
-  color: rgb(220 38 38 / var(--tw-text-opacity, 1));
 }
 
 .text-rose-600 {
@@ -3188,11 +3169,6 @@ input::-ms-clear {
   background-color: rgb(222 226 230 / 0.3);
 }
 
-.hover\:bg-pink-600:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(219 39 119 / var(--tw-bg-opacity, 1));
-}
-
 .hover\:bg-primary\/10:hover {
   background-color: rgb(15 91 48 / 0.1);
 }
@@ -3209,16 +3185,6 @@ input::-ms-clear {
   background-color: rgb(15 91 48 / 0.95);
 }
 
-.hover\:bg-red-600:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(220 38 38 / var(--tw-bg-opacity, 1));
-}
-
-.hover\:bg-slate-800:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(30 41 59 / var(--tw-bg-opacity, 1));
-}
-
 .hover\:bg-slate-900:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(15 23 42 / var(--tw-bg-opacity, 1));
@@ -3231,6 +3197,11 @@ input::-ms-clear {
 
 .hover\:bg-surface-container\/80:hover {
   background-color: rgb(248 249 250 / 0.8);
+}
+
+.hover\:bg-tertiary:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(198 156 8 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-tertiary\/20:hover {
@@ -3351,11 +3322,6 @@ input::-ms-clear {
 
 .focus\:ring-primary\/20:focus {
   --tw-ring-color: rgb(15 91 48 / 0.2);
-}
-
-.focus\:ring-slate-400:focus {
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(148 163 184 / var(--tw-ring-opacity, 1));
 }
 
 .focus\:ring-tertiary:focus {

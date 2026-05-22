@@ -70,7 +70,7 @@
 
         <!-- High-Contrast Subtitle -->
         <p class="font-body-lg text-lg md:text-xl text-slate-100 max-w-2xl hero-sub-shadow font-medium mt-2">
-            Master the art of nourishing, healing meals that delight the senses. Where professional healthcare meets warm, rustic culinary science.
+            Master the art of wholesome, farm-to-table nourishment. Where community cooking meets everyday magic.
         </p>
 
         <!-- CTA Action Buttons -->
@@ -101,7 +101,7 @@
             <span class="font-label-md text-primary uppercase tracking-widest font-extrabold text-xs">Four Pillars of Wholesome Living</span>
             <h2 class="font-display-md text-3xl md:text-5xl font-bold mt-2 text-slate-900">Experience The Cooking Nurse</h2>
             <p class="font-body-lg text-slate-600 mt-4 leading-relaxed">
-                Step into a sensory ecosystem designed to feed your soul, strengthen your body, and inspire your kitchen creations.
+                Step into a sensory kitchen designed to feed your soul, strengthen your body, and inspire your everyday meals.
             </p>
         </div>
 
@@ -176,7 +176,7 @@
                         </div>
                     </div>
                     <p class="text-slate-600 text-sm mb-6 leading-relaxed">
-                        Join our hands-on workshops exploring clinical nutrition, healing food combinations, and sensory culinary arts.
+                        Join our hands-on workshops exploring wholesome ingredients, healing food combinations, and sensory culinary joy.
                     </p>
 
                     {% if next_session %}
@@ -299,9 +299,9 @@
                     </div>
 
                     <!-- Right: Dynamic Price Calculator & Intake Form -->
-                    <div class="lg:col-span-7 bg-slate-50/60 rounded-2xl p-6 border border-slate-100 relative">
-                        <h4 class="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-lg text-slate-800">calculate</span>
+                    <div class="lg:col-span-7 bg-slate-50/60 rounded-2xl p-6 border-2 border-tertiary relative">
+                        <h4 class="font-bold text-primary text-sm mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg text-primary">calculate</span>
                             <span>Instant Booking Calculator</span>
                         </h4>
 
@@ -311,46 +311,46 @@
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <div>
                                     <label class="block text-[10px] uppercase font-bold text-slate-600 mb-1.5">Booking Date</label>
-                                    <input type="date" required id="rental-date" name="date" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-slate-400">
+                                    <input type="date" required id="rental-date" name="date" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-primary">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] uppercase font-bold text-slate-600 mb-1.5">Start Time</label>
-                                    <input type="time" required id="rental-start" name="start_time" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-slate-400">
+                                    <input type="time" required id="rental-start" name="start_time" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-primary">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] uppercase font-bold text-slate-600 mb-1.5">End Time</label>
-                                    <input type="time" required id="rental-end" name="end_time" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-slate-400">
+                                    <input type="time" required id="rental-end" name="end_time" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-primary">
                                 </div>
                             </div>
 
                             <div>
                                 <label class="block text-[10px] uppercase font-bold text-slate-600 mb-1.5">Purpose of Booking</label>
-                                <textarea required name="purpose" rows="2" placeholder="Describe your activity (e.g. video shoot, dinner event)" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-slate-400"></textarea>
+                                <textarea required name="purpose" rows="2" placeholder="Describe your activity (e.g. video shoot, dinner event)" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-primary"></textarea>
                             </div>
 
                             <!-- Live Calculator Display -->
-                            <div class="bg-slate-100/60 rounded-xl p-4 border border-slate-200 flex items-center justify-between">
+                            <div class="bg-primary/5 rounded-xl p-4 border border-primary/20 flex items-center justify-between">
                                 <div>
-                                    <span class="text-[10px] uppercase font-extrabold text-slate-700">Estimated Total Cost</span>
+                                    <span class="text-[10px] uppercase font-extrabold text-primary">Estimated Total Cost</span>
                                     <div id="rental-cost-breakdown" class="text-[10px] text-slate-500 mt-0.5"></div>
                                 </div>
-                                <div id="rental-total-cost" class="text-xl font-bold text-slate-900">0 UGX</div>
+                                <div id="rental-total-cost" class="text-xl font-bold text-primary">0 UGX</div>
                             </div>
                             <div id="rental-error" class="text-xs text-rose-600 font-bold"></div>
 
-                            <button type="submit" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition-colors shadow-md">
+                            <button type="submit" class="w-full py-3 bg-tertiary hover:bg-tertiary/90 text-primary font-bold rounded-xl text-xs transition-colors shadow-md">
                                 Submit Provisional Request
                             </button>
                         </form>
                         {% else %}
                         <!-- Unauthenticated state: Login CTA inside card -->
                         <div class="text-center py-8">
-                            <span class="material-symbols-outlined text-slate-400 text-4xl mb-2">lock</span>
-                            <h5 class="font-bold text-slate-800 text-sm">Secure Booking Portal</h5>
+                            <span class="material-symbols-outlined text-primary text-4xl mb-2">lock</span>
+                            <h5 class="font-bold text-primary text-sm">Secure Booking Portal</h5>
                             <p class="text-xs text-slate-500 max-w-xs mx-auto mt-1 mb-6">
                                 Please login or create an account to use the instant booking calculator and submit requests.
                             </p>
-                            <a href="{% url 'users:login' %}?next={{ request.path }}" class="inline-flex items-center gap-2 px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all shadow-sm">
+                            <a href="{% url 'users:login' %}?next={{ request.path }}" class="inline-flex items-center gap-2 px-6 py-2.5 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-xl transition-all shadow-sm">
                                 <span>Sign In to Request</span>
                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
                             </a>
@@ -376,7 +376,7 @@
             
             <!-- Left: Portrait & Short Bio -->
             <div class="lg:col-span-5 flex flex-col gap-6 scroll-reveal">
-                <span class="font-label-md text-primary uppercase tracking-widest font-extrabold text-xs">Meet The Visionary</span>
+                <span class="font-label-md text-primary uppercase tracking-widest font-extrabold text-xs">Our Story</span>
                 
                 <div class="flex items-center gap-4">
                     <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-tertiary/50 flex-shrink-0 shadow-sm">
@@ -387,34 +387,28 @@
                         {% endif %}
                     </div>
                     <div>
-                        <h3 class="text-2xl font-bold">{{ settings.nurse_name|default:"The Cooking Nurse" }}</h3>
-                        <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Clinical Culinary Architect</p>
+                        <h3 class="text-2xl font-bold">{{ settings.nurse_name|default:"Ritah Tumuhimbise" }}</h3>
+                        <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">The Cooking Nurse</p>
                     </div>
                 </div>
 
                 <p class="text-slate-600 text-sm leading-relaxed">
-                    {{ settings.nurse_bio|default:"Bridging clinical nursing care with rustic culinary sciences. Food isn't just fuel—it is the body's foundational code for regeneration, clarity, and life-long vitality." }}
+                    {{ settings.nurse_bio|default:"A popular Ugandan food content creator, chef, and registered nurse. Ritah creates and shares simple, everyday, home-cooked recipes to inspire people to find happiness through home-cooking." }}
                 </p>
 
                 <!-- Social media link pills -->
                 <div class="flex items-center gap-3 mt-4">
-                    {% if settings.youtube_url %}
-                    <a href="{{ settings.youtube_url }}" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 text-red-600 hover:bg-red-600 hover:text-white transition-colors flex justify-center items-center" aria-label="YouTube">
+                    <a href="{{ settings.youtube_url|default:'https://youtube.com/@TheCookingNurse' }}" target="_blank" class="w-10 h-10 rounded-full bg-primary text-white hover:bg-tertiary hover:text-primary transition-colors flex justify-center items-center" aria-label="YouTube">
                         <span class="material-symbols-outlined text-lg">play_circle</span>
                     </a>
-                    {% endif %}
                     
-                    {% if settings.instagram_url %}
-                    <a href="{{ settings.instagram_url }}" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 text-pink-600 hover:bg-pink-600 hover:text-white transition-colors flex justify-center items-center" aria-label="Instagram">
+                    <a href="{{ settings.instagram_url|default:'#' }}" target="_blank" class="w-10 h-10 rounded-full bg-primary text-white hover:bg-tertiary hover:text-primary transition-colors flex justify-center items-center" aria-label="Instagram">
                         <span class="material-symbols-outlined text-lg">photo_camera</span>
                     </a>
-                    {% endif %}
                     
-                    {% if settings.tiktok_url %}
-                    <a href="{{ settings.tiktok_url }}" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 text-slate-800 hover:bg-slate-900 hover:text-white transition-colors flex justify-center items-center" aria-label="TikTok">
+                    <a href="{{ settings.tiktok_url|default:'#' }}" target="_blank" class="w-10 h-10 rounded-full bg-primary text-white hover:bg-tertiary hover:text-primary transition-colors flex justify-center items-center" aria-label="TikTok">
                         <span class="material-symbols-outlined text-lg">movie</span>
                     </a>
-                    {% endif %}
                 </div>
             </div>
 
@@ -464,7 +458,7 @@
                 </p>
                 {% else %}
                 <p class="text-slate-100 text-sm md:text-base leading-relaxed max-w-lg">
-                    Stay inspired in the kitchen. Subscribe for weekly nutritional frameworks, local market guides, and priority booking codes.
+                    Stay inspired in the kitchen. Subscribe for weekly wholesome recipes, local market guides, and priority booking codes.
                 </p>
                 {% endif %}
 

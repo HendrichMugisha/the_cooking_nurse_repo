@@ -587,6 +587,11 @@
                             <label class="font-label-md text-primary font-bold">Hero Text</label>
                             {{ settings_form.hero_text }}
                         </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">Hero Loop Words (Comma separated)</label>
+                            {{ settings_form.hero_loop_words }}
+                        </div>
                         
                         <div class="flex flex-col gap-1.5">
                             <label class="font-label-md text-primary font-bold">Hero Video (.mp4)</label>
@@ -605,13 +610,74 @@
                         </div>
                     </div>
 
-                    <!-- Other Settings -->
+                    <!-- Nurse Profile Settings -->
                     <div class="space-y-4">
-                        <h3 class="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Global Content</h3>
+                        <h3 class="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Meet the Nurse</h3>
                         
                         <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">The Cooking Nurse's Note</label>
+                            <label class="font-label-md text-primary font-bold">Nurse Name</label>
+                            {{ settings_form.nurse_name }}
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">Nurse Bio</label>
+                            {{ settings_form.nurse_bio }}
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">Nurse Portrait</label>
+                            {{ settings_form.nurse_portrait }}
+                            {% if settings.nurse_portrait %}
+                            <p class="text-xs text-on-surface-variant">Current: <a href="{{ settings.nurse_portrait.url }}" class="text-primary hover:underline" target="_blank">{{ settings.nurse_portrait.name }}</a></p>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">The Cooking Nurse's Note (Store/Downloads)</label>
                             {{ settings_form.nurses_note }}
+                        </div>
+                    </div>
+
+                    <!-- Social Media Settings -->
+                    <div class="space-y-4 md:col-span-2 lg:col-span-1">
+                        <h3 class="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Social Links & Media</h3>
+                        
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">YouTube URL</label>
+                            {{ settings_form.youtube_url }}
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">Instagram URL</label>
+                            {{ settings_form.instagram_url }}
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">TikTok URL</label>
+                            {{ settings_form.tiktok_url }}
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">Featured YouTube Embed URL</label>
+                            {{ settings_form.featured_youtube_embed_url }}
+                        </div>
+                    </div>
+
+                    <!-- Newsletter Settings -->
+                    <div class="space-y-4 md:col-span-2 lg:col-span-1">
+                        <h3 class="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Newsletter Integration</h3>
+                        
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">Lead Magnet Title (e.g. Free Recipe Guide)</label>
+                            {{ settings_form.newsletter_lead_magnet_title }}
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">Lead Magnet File (PDF)</label>
+                            {{ settings_form.newsletter_lead_magnet }}
+                            {% if settings.newsletter_lead_magnet %}
+                            <p class="text-xs text-on-surface-variant">Current: <a href="{{ settings.newsletter_lead_magnet.url }}" class="text-primary hover:underline" target="_blank">{{ settings.newsletter_lead_magnet.name }}</a></p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
