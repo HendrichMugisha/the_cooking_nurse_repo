@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if course %}Edit Course: {{ course.title }}{% else %}Add Course{% endif %} - The Cooking Nurse{% endblock %}
+
+{% block content %}
+<div class="page-container py-10 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop min-h-[80vh]">
+    <!-- BREADCRUMB -->
+    <div class="mb-6">
+        <a href="/users/staff-dashboard/?tab=tab-classes" class="text-primary hover:text-accent transition-colors flex items-center gap-1.5 text-sm font-semibold">
+            <span class="material-symbols-outlined text-sm">arrow_back</span> Back to Timetable
+        </a>
+    </div>
+
+    <!-- HEADER -->
+    <div class="mb-8 border-b border-outline-variant/30 pb-4">
+        <h1 class="font-display-lg text-primary">{% if course %}Edit Cooking Course "{{ course.title }}"{% else %}Host New Cooking Course{% endif %}</h1>
+        <p class="text-on-surface-variant font-medium">Add physical cooking seminars or publish online lecture series.</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-8" id="course-form">
+        {% csrf_token %}
+
+        <!-- COURSE CORE INFO -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/20">
+            <h2 class="font-headline-sm text-primary mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined">school</span> Core Course Parameters
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Title -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-primary mb-2">Course / Seminar Title <span class="text-error">*</span></label>
+                    {{ form.title }}
+                    {% if form.title.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.title.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Course Type -->
+                <div>
+                    <label class="block text-sm font-bold text-primary mb-2">Class Format <span class="text-error">*</span></label>
+                    {{ form.course_type }}
+                    {% if form.course_type.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.course_type.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Price -->
+                <div>
+                    <label class="block text-sm font-bold text-primary mb-2">Base Ticket Price (UGX) <span class="text-error">*</span></label>
+                    {{ form.price }}
+                    {% if form.price.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.price.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Description -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-primary mb-2">Course Syllabus & Description <span class="text-error">*</span></label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.description.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Image -->
+                <div>
+                    <label class="block text-sm font-bold text-primary mb-2">Course Banner Image</label>
+                    {{ form.image }}
+                    {% if course.image %}
+                        <p class="text-xs text-on-surface-variant mt-2 font-medium">Current: <a href="{{ course.image.url }}" target="_blank" class="text-primary underline">{{ course.image.name }}</a></p>
+                    {% endif %}
+                    {% if form.image.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.image.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Video File -->
+                <div id="video-url-block" class="{% if form.course_type.value != 'online' %}hidden{% endif %}">
+                    <label class="block text-sm font-bold text-primary mb-2">Pre-recorded Video File (.mp4)</label>
+                    {{ form.video }}
+                    {% if form.video.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.video.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Active -->
+                <div class="md:col-span-2 flex items-center gap-3">
+                    {{ form.is_active }}
+                    <label for="id_is_active" class="text-sm font-bold text-primary cursor-pointer select-none">Make this course active and visible on the website</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIMETABLE SESSIONS FOR PHYSICAL FORMAT -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/20" id="sessions-section">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-headline-sm text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined">event_note</span> Timetable & Seat Capacity
+                </h2>
+                <button type="button" id="add-session-btn" class="btn-primary py-1.5 px-4 rounded-full text-xs font-bold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">add</span> Schedule Date
+                </button>
+            </div>
+            
+            <p class="text-xs text-on-surface-variant font-medium mb-4">Set the specific dates, times, and maximum seats available for in-person kitchen registrations.</p>
+
+            {{ formset.management_form }}
+            <div class="space-y-4" id="sessions-container">
+                {% for session_form in formset %}
+                <div class="session-row p-4 rounded-xl bg-surface-container/50 border border-outline-variant/30 flex flex-wrap gap-4 items-end">
+                    {{ session_form.id }}
+                    
+                    <div class="w-48">
+                        <label class="block text-xs font-bold text-primary mb-1">Session Date</label>
+                        {{ session_form.date }}
+                        {{ session_form.date.errors }}
+                    </div>
+
+                    <div class="w-32">
+                        <label class="block text-xs font-bold text-primary mb-1">Start Time</label>
+                        {{ session_form.start_time }}
+                        {{ session_form.start_time.errors }}
+                    </div>
+
+                    <div class="w-32">
+                        <label class="block text-xs font-bold text-primary mb-1">End Time</label>
+                        {{ session_form.end_time }}
+                        {{ session_form.end_time.errors }}
+                    </div>
+
+                    <div class="w-28">
+                        <label class="block text-xs font-bold text-primary mb-1">Seats Capacity</label>
+                        {{ session_form.capacity }}
+                        {{ session_form.capacity.errors }}
+                    </div>
+
+                    {% if formset.can_delete %}
+                    <div class="flex items-center pb-2 pl-2">
+                        {{ session_form.DELETE }}
+                        <label for="{{ session_form.DELETE.id_for_label }}" class="text-xs text-error font-bold ml-1.5 cursor-pointer select-none">Delete</label>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="flex justify-end gap-4 border-t border-outline-variant/30 pt-6">
+            <a href="/users/staff-dashboard/?tab=tab-classes" class="btn-primary py-3 px-8 rounded-full text-sm font-semibold transition-all bg-outline-variant/20 text-on-surface hover:bg-outline-variant/30">
+                Cancel
+            </a>
+            <button type="submit" class="btn-accent py-3 px-10 rounded-full text-sm font-bold transition-all shadow-level-1 hover:shadow-level-2 border border-tertiary">
+                Save Course & Schedule
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- EMPTY FORM TEMPLATE FOR JAVASCRIPT -->
+<div id="empty-session-template" class="hidden">
+    <div class="session-row p-4 rounded-xl bg-surface-container/50 border border-outline-variant/30 flex flex-wrap gap-4 items-end">
+        <div class="w-48">
+            <label class="block text-xs font-bold text-primary mb-1">Session Date</label>
+            {{ formset.empty_form.date }}
+        </div>
+
+        <div class="w-32">
+            <label class="block text-xs font-bold text-primary mb-1">Start Time</label>
+            {{ formset.empty_form.start_time }}
+        </div>
+
+        <div class="w-32">
+            <label class="block text-xs font-bold text-primary mb-1">End Time</label>
+            {{ formset.empty_form.end_time }}
+        </div>
+
+        <div class="w-28">
+            <label class="block text-xs font-bold text-primary mb-1">Seats Capacity</label>
+            {{ formset.empty_form.capacity }}
+        </div>
+        
+        <div class="flex items-center pb-2 pl-2">
+            <button type="button" class="text-xs text-error font-bold cursor-pointer hover:underline" onclick="removeSessionRow(this)">Remove</button>
+        </div>
+    </div>
+</div>
+
+{% block extra_scripts %}
+<script>
+    // Format selections toggle
+    const formatSelect = document.getElementById('id_course_type');
+    const videoUrlBlock = document.getElementById('video-url-block');
+    const sessionsSection = document.getElementById('sessions-section');
+
+    function toggleCourseFormat() {
+        const selectedFormat = formatSelect.value;
+        if (selectedFormat === 'online') {
+            videoUrlBlock.classList.remove('hidden');
+            sessionsSection.classList.add('hidden');
+        } else {
+            videoUrlBlock.classList.add('hidden');
+            sessionsSection.classList.remove('hidden');
+        }
+    }
+
+    formatSelect.addEventListener('change', toggleCourseFormat);
+    document.addEventListener("DOMContentLoaded", toggleCourseFormat);
+
+    // Dynamic Sessions additions
+    const addSessionBtn = document.getElementById('add-session-btn');
+    const sessionsContainer = document.getElementById('sessions-container');
+    const totalSessionsForms = document.getElementById('id_sessions-TOTAL_FORMS');
+
+    addSessionBtn.addEventListener('click', () => {
+        const formNum = parseInt(totalSessionsForms.value);
+        const templateHtml = document.getElementById('empty-session-template').innerHTML;
+        
+        // Replace form prefix with number
+        const newFormHtml = templateHtml.replace(/__prefix__/g, formNum);
+        
+        // Append row
+        const newRow = document.createElement('div');
+        newRow.innerHTML = newFormHtml;
+        sessionsContainer.appendChild(newRow.firstElementChild);
+        
+        // Increment forms count
+        totalSessionsForms.value = formNum + 1;
+    });
+
+    function removeSessionRow(button) {
+        button.closest('.session-row').remove();
+    }
+</script>
+{% endblock %}
+{% endblock %}

@@ -27,9 +27,11 @@
                             class="w-full h-full object-cover" 
                             controls 
                             controlsList="nodownload" 
-                            poster="https://lh3.googleusercontent.com/aida-public/AB6AXuDqXnWFOYVMf10YIu_5T9tFTCJOMBpnIVa3FpUTsme6Bx-hhGVSJgQFo1LwOwCVWrn2127PCmpCfuOrwFO9jpXU6JVM9pQweU_a6Y-9oPv5-3K5WW14ntOeV8F2WEunvp568_Syex1H5YhiXz6-_SJekc94qath74rWFu6Mx5gNEHI_WzOkmHAJFPv4dwf_AIC5rLp1RZWCeuYcapXL2aJ0kcKbffANwrEEcEnYtJGiEFOHobaBKZJRo_tbSMFNgKKwZkQbCPOM7DG0"
+                            {% if course.image %}poster="{{ course.image.url }}"{% endif %}
                         >
-                            <source src="https://assets.mixkit.co/videos/preview/mixkit-cooking-in-a-modern-kitchen-40033-large.mp4" type="video/mp4">
+                            {% if course.video %}
+                            <source src="{{ course.video.url }}" type="video/mp4">
+                            {% endif %}
                             Your browser does not support the video tag.
                         </video>
                     </div>
@@ -71,7 +73,7 @@
                         <li class="flex gap-3 items-start">
                             <span class="h-6 w-6 rounded-full bg-primary-fixed text-on-primary-fixed font-bold flex items-center justify-center text-xs shrink-0 mt-0.5">3</span>
                             <div>
-                                <strong class="text-on-surface block mb-0.5">Clinical Baking Science</strong>
+                                <strong class="text-on-surface block mb-0.5">Advanced Baking Science</strong>
                                 Understand how lactic acid bacteria support digestion and bio-accessibility.
                             </div>
                         </li>
@@ -82,7 +84,7 @@
                 <div class="border-l-4 border-error bg-error-container/20 p-6 rounded-r-lg shadow-sm">
                     <div class="flex items-center gap-2 mb-2 text-error">
                         <span class="material-symbols-outlined icon-fill">health_and_safety</span>
-                        <h4 class="font-label-md uppercase tracking-wider font-bold">The Clinical Note</h4>
+                        <h4 class="font-label-md uppercase tracking-wider font-bold">The Chef's Note</h4>
                     </div>
                     <p class="font-body-md text-on-surface text-sm leading-relaxed">
                         Lactic acid fermentation in sourdough partially breaks down gluten proteins and breaks down phytic acid, dramatically improving nutrient absorption and supporting overall gut health.

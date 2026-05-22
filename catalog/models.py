@@ -11,7 +11,13 @@ class Category(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            base_slug = slugify(self.name) or "category"
+            slug = base_slug
+            counter = 1
+            while Category.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -23,7 +29,7 @@ class Product(models.Model):
         ('digital', 'Digital Product (Cookbook/Recipe)'),
     )
 
-    category = models.ForeignKey(Category, related_name='products', on_delete=models.SET_NULL, null=True)
+    categories = models.ManyToManyField(Category, related_name='products', blank=True)
     name = models.CharField(max_length=200)
     slug = models.SlugField(unique=True, blank=True)
     product_type = models.CharField(max_length=10, choices=PRODUCT_TYPES, default='physical')
@@ -38,7 +44,13 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            base_slug = slugify(self.name) or "product"
+            slug = base_slug
+            counter = 1
+            while Product.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):

@@ -14,7 +14,7 @@ class CheckoutForm(forms.Form):
     # Shipping fields
     city = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-input'}))
     neighborhood = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-input'}))
-    street_address = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-input'}))
+    landmark_or_building = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-input'}))
     delivery_notes = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-input', 'rows': 3}), required=False)
     latitude = forms.DecimalField(max_digits=9, decimal_places=6, required=False, widget=forms.HiddenInput())
     longitude = forms.DecimalField(max_digits=9, decimal_places=6, required=False, widget=forms.HiddenInput())

@@ -6,63 +6,163 @@
     <div class="w-full max-w-container-max mx-auto">
         <h2 class="font-display-lg text-primary mb-8 text-center md:text-left">Fresh Pickens Market</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {% for product in products %}
-            <article class="card group flex flex-col md:flex-row min-h-[400px]">
-                <!-- Product Image -->
-                <div class="relative overflow-hidden w-full md:w-1/2 aspect-square md:aspect-auto bg-surface-bright">
-                    {% if product.image %}
-                        <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" src="{{ product.image.url }}"/>
-                    {% else %}
-                        <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" src="https://lh3.googleusercontent.com/aida/ADBb0uhipnwAI0ENs4U1VZjSckqGn1GFOdTBB6kKkdSot_3Yvkhr5euUwm9fS2OvJvpGc70uzxEKzkFdA4MWiy2tOsP6UsA55HPkSvFVq47ver5uFCGzYNjOFbX42PCW7sY_MoQ63IbCHhliBsyA0hfGSBjnYizl_fy8S8ipgQpR7n8YPBWajxvMNXA_2nYvhbueK8ez7HD-0wlko4YfLEy7LHC090P7ZaCnXQZMihuOIfMKDnw7ZymPK-LPMLDE"/>
-                    {% endif %}
-                    
-                    <div class="absolute top-4 left-4 flex gap-2">
-                        {% if product.category %}
-                        <span class="bg-surface-container-lowest text-primary px-3 py-1 rounded-full font-label-md text-[12px] border border-surface-variant shadow-sm backdrop-blur-sm bg-opacity-90">{{ product.category.name }}</span>
-                        {% endif %}
-                    </div>
+<div class="flex flex-col lg:flex-row gap-8 items-start mt-8">
+            <!-- Sidebar Navigation -->
+            <aside class="w-full lg:w-64 shrink-0 glass-panel p-6 rounded-2xl shadow-sm lg:sticky lg:top-24 border border-outline-variant/30">
+                <h3 class="font-headline-sm text-primary mb-4 border-b border-outline-variant/30 pb-2 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">filter_list</span> Categories
+                </h3>
+                <ul class="space-y-3 font-medium text-on-surface-variant text-sm">
+                    <li>
+                        <a href="{% url 'catalog:product_list' %}" class="hover:text-primary transition-colors flex justify-between items-center {% if not active_category %}text-primary font-bold{% endif %}">
+                            All Products 
+                            <span class="bg-primary/10 text-primary px-2 rounded-full text-[10px] py-0.5">All</span>
+                        </a>
+                    </li>
+                    {% for cat in categories %}
+                        <li>
+                            {% if cat.product_count > 0 %}
+                                <a href="{% url 'catalog:product_list' %}?category={{ cat.slug }}" class="hover:text-primary transition-colors flex justify-between items-center {% if active_category == cat.slug %}text-primary font-bold border-l-4 border-primary pl-2{% endif %}">
+                                    {{ cat.name }}
+                                    <span class="bg-primary/10 text-primary px-2 rounded-full text-[10px] py-0.5">{{ cat.product_count }}</span>
+                                </a>
+                            {% else %}
+                                <button onclick="showComingSoonModal('{{ cat.name|escapejs }}')" class="w-full text-left hover:text-primary transition-colors flex justify-between items-center opacity-60">
+                                    {{ cat.name }}
+                                    <span class="bg-surface-container text-on-surface-variant/40 px-2 rounded-full text-[10px] py-0.5">0</span>
+                                </button>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </aside>
+
+            <!-- Product Grid -->
+            <div class="flex-grow w-full">
+                <!-- Sorting/Filters Bar (Mobile) -->
+                <div class="flex justify-between items-center mb-6 lg:hidden">
+                    <button class="btn-secondary py-1.5 px-4 text-xs font-bold flex items-center gap-1 border border-outline-variant">
+                        <span class="material-symbols-outlined text-[16px]">filter_list</span> Filter
+                    </button>
+                    <span class="text-sm font-medium text-on-surface-variant">{{ products|length }} Products</span>
                 </div>
-                
-                <!-- Product Details -->
-                <div class="p-8 flex flex-col flex-grow md:w-1/2 justify-center">
-                    <div class="mb-4">
-                        <h2 class="font-headline-md text-display-lg-mobile md:text-headline-lg text-primary">{{ product.name }}</h2>
-                    </div>
-                    <p class="font-body-md text-on-surface-variant mb-8 text-base">
-                        {{ product.description|truncatewords:20 }}
-                    </p>
-                    
-                    <!-- Action Area -->
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mt-auto pt-6 border-t border-surface-variant border-opacity-50">
-                        <div class="flex flex-col">
-                            <span class="font-label-md text-xs text-on-surface-variant uppercase tracking-wider mb-1">Price</span>
-                            <span class="font-headline-md text-2xl text-tertiary-container font-semibold">
-                                {% if product.variants.first %}
-                                    {{ product.variants.first.price }} UGX
-                                {% else %}
-                                    N/A
-                                {% endif %}
-                            </span>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for product in products %}
+                    <article class="glass-panel group flex flex-col rounded-2xl overflow-hidden border border-outline-variant/30 hover:shadow-level-1 transition-all">
+                        <!-- Product Image -->
+                        <div class="relative overflow-hidden w-full aspect-[4/3] bg-surface-bright">
+                            {% if product.image %}
+                                <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" src="{{ product.image.url }}"/>
+                            {% else %}
+                                <img alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" src="https://lh3.googleusercontent.com/aida/ADBb0uhipnwAI0ENs4U1VZjSckqGn1GFOdTBB6kKkdSot_3Yvkhr5euUwm9fS2OvJvpGc70uzxEKzkFdA4MWiy2tOsP6UsA55HPkSvFVq47ver5uFCGzYNjOFbX42PCW7sY_MoQ63IbCHhliBsyA0hfGSBjnYizl_fy8S8ipgQpR7n8YPBWajxvMNXA_2nYvhbueK8ez7HD-0wlko4YfLEy7LHC090P7ZaCnXQZMihuOIfMKDnw7ZymPK-LPMLDE"/>
+                            {% endif %}
+                            
+                            <div class="absolute top-3 left-3 flex gap-2 flex-wrap max-w-full">
+                                {% for cat in product.categories.all %}
+                                <span class="bg-surface-container-lowest text-primary px-3 py-1 rounded-full font-label-md text-[10px] font-bold border border-surface-variant shadow-sm backdrop-blur-sm bg-opacity-90">{{ cat.name }}</span>
+                                {% endfor %}
+                            </div>
                         </div>
                         
-                        {% if product.variants.first %}
-                        <form action="{% url 'cart:cart_add' 'variant' product.variants.first.id %}" method="POST" class="w-full sm:w-auto">
-                            {% csrf_token %}
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn-primary w-full group/btn">
-                                <span class="material-symbols-outlined text-[20px] group-hover/btn:-translate-y-0.5 transition-transform">add_shopping_cart</span>
-                                Add to Cart
-                            </button>
-                        </form>
-                        {% endif %}
-                    </div>
+                        <!-- Product Details -->
+                        <div class="p-5 flex flex-col flex-grow justify-between">
+                            <div>
+                                <h2 class="font-headline-sm text-primary mb-1 line-clamp-1">{{ product.name }}</h2>
+                                <p class="font-body-sm text-on-surface-variant mb-4 line-clamp-2 text-xs">
+                                    {{ product.description }}
+                                </p>
+                            </div>
+                            
+                            <!-- Action Area -->
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-outline-variant/30">
+                                <div class="flex flex-col">
+                                    <span class="font-headline-sm text-tertiary-container font-bold">
+                                        {% if product.variants.first %}
+                                            UGX {{ product.variants.first.price }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                
+                                {% if product.variants.first %}
+                                <form action="{% url 'cart:cart_add' 'variant' product.variants.first.id %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all shadow-md group/btn" title="Add to Cart">
+                                        <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                    </button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                    {% empty %}
+                        <div class="col-span-full py-12 text-center">
+                            <span class="material-symbols-outlined text-4xl text-outline-variant mb-2">inventory_2</span>
+                            <p class="text-on-surface-variant font-body-lg">No products available at the moment.</p>
+                        </div>
+                    {% endfor %}
                 </div>
-            </article>
-            {% empty %}
-                <p class="text-on-surface-variant font-body-lg">No products available at the moment.</p>
-            {% endfor %}
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Coming Soon Newsletter Modal -->
+<div id="coming-soon-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-all duration-300">
+    <div class="glass-panel max-w-md w-full p-8 rounded-3xl border border-white/40 bg-surface/95 shadow-2xl relative mx-4 transform scale-95 transition-transform duration-300" id="coming-soon-card">
+        <!-- Close Button -->
+        <button onclick="hideComingSoonModal()" class="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors focus:outline-none">
+            <span class="material-symbols-outlined text-[20px] font-bold">close</span>
+        </button>
+        
+        <div class="text-center">
+            <div class="w-16 h-16 bg-[#C69C08]/15 rounded-full flex items-center justify-center mx-auto mb-4 text-[#C69C08] animate-bounce">
+                <span class="material-symbols-outlined text-3xl">notifications_active</span>
+            </div>
+            
+            <h3 class="font-display-md text-primary mb-2 text-xl font-bold">Category Coming Soon!</h3>
+            <p class="text-on-surface-variant text-sm mb-6 leading-relaxed">
+                We are currently handcrafting our premium wholesome selection for <span id="coming-soon-cat-name" class="font-bold text-primary"></span>. Subscribe to our Wholesome Culinary Newsletter below to get notified the second it launches!
+            </p>
+            
+            <form action="{% url 'portfolio:newsletter_subscribe' %}" method="POST" class="space-y-4">
+                {% csrf_token %}
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-3 text-on-surface-variant text-[20px]">mail</span>
+                    <input type="email" name="email" required placeholder="Enter your email" class="form-input pl-10 w-full rounded-xl border border-outline-variant py-2.5 px-4 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
+                </div>
+                
+                <button type="submit" class="btn-mustard w-full py-3 rounded-full font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] text-sm">
+                    Notify Me When Available
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function showComingSoonModal(catName) {
+    const modal = document.getElementById('coming-soon-modal');
+    const card = document.getElementById('coming-soon-card');
+    document.getElementById('coming-soon-cat-name').innerText = catName;
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+    }, 10);
+}
+
+function hideComingSoonModal() {
+    const modal = document.getElementById('coming-soon-modal');
+    const card = document.getElementById('coming-soon-card');
+    card.classList.remove('scale-100');
+    card.classList.add('scale-95');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 150);
+}
+</script>
 {% endblock %}

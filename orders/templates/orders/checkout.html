@@ -6,9 +6,12 @@
 <!-- Leaflet.js Map Picker -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Leaflet GeoSearch -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.11.1/dist/geosearch.css" />
+<script src="https://unpkg.com/leaflet-geosearch@3.11.1/dist/bundle.min.js"></script>
 <style>
     #delivery-map {
-        height: 280px;
+        height: 350px;
         width: 100%;
         border-radius: 8px;
         z-index: 10;
@@ -37,7 +40,28 @@
                     {% if not request.user.is_authenticated %}
                     <div class="mb-10">
                         <h2 class="font-headline-md text-primary mb-4 border-b border-surface-variant pb-2">1. Account Details</h2>
-                        <p class="text-on-surface-variant text-sm mb-6">Create an account to track your orders and access digital downloads.</p>
+                        <p class="text-on-surface-variant text-sm mb-4">Create an account to track your orders and access digital downloads.</p>
+                        
+                        <div class="bg-primary/10 border border-primary/20 rounded-xl p-4 mb-6 flex gap-3 text-sm">
+                            <span class="material-symbols-outlined text-primary shrink-0">info</span>
+                            <p class="text-on-surface-variant">
+                                <strong class="text-primary block mb-1">Important: No Email Verification Required</strong>
+                                Please ensure you enter a valid email address. We will not ask you to verify it right now, but your email will be required to access any digital downloads or online class portals in the future.
+                            </p>
+                        </div>
+                        
+                        <div class="mb-6 flex items-center gap-4">
+                            {% load socialaccount %}
+                            <a href="{% provider_login_url 'google' %}" class="flex-1 flex items-center justify-center gap-3 py-2 px-4 border border-outline-variant rounded-md hover:bg-surface-variant transition-colors text-on-surface font-bold text-sm">
+                                <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
+                                Quick Checkout with Google
+                            </a>
+                        </div>
+                        
+                        <div class="relative flex items-center justify-center mb-6">
+                            <span class="absolute bg-surface px-3 text-on-surface-variant font-label-sm uppercase tracking-wider">Or enter details</span>
+                            <div class="w-full h-px bg-outline-variant/50"></div>
+                        </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
@@ -81,14 +105,24 @@
                         </div>
                         
                         <div class="mb-6">
-                            <label class="block font-label-md text-primary mb-1">Street Address</label>
-                            {{ form.street_address }}
+                            <label class="block font-label-md text-primary mb-1">Landmark or Building Name</label>
+                            {{ form.landmark_or_building }}
                         </div>
                         
                         <div>
                             <label class="block font-label-md text-primary mb-1">Delivery Notes (Optional)</label>
                             {{ form.delivery_notes }}
                         </div>
+
+                        {% if cart.has_physical_items %}
+                        <div class="mt-6 bg-error-container/20 border border-error-container/30 rounded-xl p-4 flex gap-3 text-sm">
+                            <span class="material-symbols-outlined text-error shrink-0">local_shipping</span>
+                            <p class="text-on-surface-variant">
+                                <strong class="text-error block mb-1">Delivery Charges Paid on Arrival</strong>
+                                The delivery of physical goods will be handled by a courier. Please note that the delivery fee is <strong>not</strong> included in your checkout total and must be paid directly to the courier upon arrival.
+                            </p>
+                        </div>
+                        {% endif %}
                         
                         {{ form.latitude }}
                         {{ form.longitude }}
@@ -99,7 +133,15 @@
                         </div>
                     </div>
 
-                    <div class="mt-10 pt-6 border-t border-surface-variant flex justify-end">
+                    <div class="mb-6 flex items-start gap-3 bg-surface-bright p-4 rounded-md border border-outline-variant/50">
+                        <input type="checkbox" name="newsletter_opt_in" id="newsletter_opt_in" class="mt-1 form-checkbox h-5 w-5 text-primary rounded border-outline-variant focus:ring-primary">
+                        <label for="newsletter_opt_in" class="font-body-md text-on-surface">
+                            <span class="font-bold block">Subscribe to our Culinary Newsletter</span>
+                            <span class="text-on-surface-variant text-sm">Receive exclusive artisanal recipes, health tips from the nurse, and early access to classes.</span>
+                        </label>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-surface-variant flex justify-end">
                         <button type="submit" class="btn-primary w-full md:w-auto text-lg px-12">
                             Place Order ({{ cart.get_total_price }} UGX)
                             <span class="material-symbols-outlined">check_circle</span>
@@ -186,6 +228,47 @@
             marker.setLatLng(e.latlng);
             updateInputs(e.latlng.lat, e.latlng.lng);
         });
+
+        // GeoSearch Nominatim Autocomplete Provider
+        const provider = new window.GeoSearch.OpenStreetMapProvider({
+            params: {
+                viewbox: '32.5,-0.1,32.7,0.4', // Restrict roughly to Kampala
+                bounded: 1,
+            }
+        });
+        
+        const searchControl = new window.GeoSearch.GeoSearchControl({
+            provider: provider,
+            style: 'bar',
+            showMarker: false,
+            retainZoomLevel: false,
+            animateZoom: true,
+            autoClose: true,
+            searchLabel: 'Enter address or area (e.g., Kololo)',
+            keepResult: true,
+            updateMap: true
+        });
+
+        map.addControl(searchControl);
+        
+        // Listen to search result and move our custom draggable marker
+        map.on('geosearch/showlocation', function (result) {
+            if (result && result.location) {
+                var pos = { lat: result.location.y, lng: result.location.x };
+                marker.setLatLng(pos);
+                updateInputs(pos.lat, pos.lng);
+            }
+        });
+
+        // Prevent Enter key in the search bar from submitting the main form
+        var searchInput = document.querySelector('.glass');
+        if(searchInput) {
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                }
+            });
+        }
     });
 </script>
 {% endblock %}

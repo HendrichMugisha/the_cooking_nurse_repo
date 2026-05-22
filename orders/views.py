@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, get_user_model
+
 from cart.cart import Cart
-from .forms import CheckoutForm
-from .models import Order, OrderItem
 from catalog.models import ProductVariant
 from classes.models import Course, ClassSession
+from portfolio.models import NewsletterSubscriber
+
+from .forms import CheckoutForm
+from .models import Order, OrderItem
 
 User = get_user_model()
 
@@ -27,7 +30,7 @@ def checkout(request):
                     last_name=form.cleaned_data['last_name'],
                     phone_number=form.cleaned_data['phone_number']
                 )
-                login(request, user) # Automatically log them in
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend') # Automatically log them in
             
             # Create the Order
             order = Order.objects.create(
@@ -35,11 +38,15 @@ def checkout(request):
                 total_amount=cart.get_total_price(),
                 city=form.cleaned_data['city'],
                 neighborhood=form.cleaned_data['neighborhood'],
-                street_address=form.cleaned_data['street_address'],
+                landmark_or_building=form.cleaned_data['landmark_or_building'],
                 delivery_notes=form.cleaned_data['delivery_notes'],
                 latitude=form.cleaned_data.get('latitude'),
                 longitude=form.cleaned_data.get('longitude')
             )
+
+            # Handle Newsletter Opt-in
+            if request.POST.get('newsletter_opt_in') == 'on':
+                NewsletterSubscriber.objects.get_or_create(email=user.email)
 
             # Process Cart Items
             for item in cart:

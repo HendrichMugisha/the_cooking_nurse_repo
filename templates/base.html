@@ -9,8 +9,8 @@
     <!-- Tailwind Compiled CSS -->
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     
-    <!-- Favicon to prevent 404 -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🩺</text></svg>">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/brand_logo.svg' %}">
 
     
     <!-- Google Fonts: Outfit, Inter -->
@@ -42,7 +42,7 @@
 <body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col relative pb-20 md:pb-0">
 
     <!-- DESKTOP TOP NAV BAR -->
-    <div class="fixed top-4 left-0 w-full z-50 hidden md:block">
+    <div id="desktop-navbar" class="fixed top-4 left-0 w-full z-50 hidden md:block transition-transform duration-300 ease-in-out transform">
         <nav class="max-w-container-max mx-auto px-margin-desktop">
             <div class="glass-panel rounded-full flex justify-between items-center px-6 py-3">
                 <!-- Brand Logo -->
@@ -56,6 +56,9 @@
                     <a class="{% if request.resolver_match.url_name == 'home' %}nav-link-active{% else %}nav-link{% endif %}" href="{% url 'portfolio:home' %}">Home</a>
                     <a class="{% if request.resolver_match.url_name == 'class_timetable' %}nav-link-active{% else %}nav-link{% endif %}" href="{% url 'classes:class_timetable' %}">Classes</a>
                     <a class="{% if request.resolver_match.url_name == 'product_list' %}nav-link-active{% else %}nav-link{% endif %}" href="{% url 'catalog:product_list' %}">Fresh Pickens</a>
+                    {% if user.is_staff %}
+                    <a class="{% if request.resolver_match.url_name == 'staff_dashboard' %}nav-link-active{% else %}nav-link font-bold text-accent{% endif %}" href="{% url 'users:staff_dashboard' %}">Staff Dashboard</a>
+                    {% endif %}
                 </div>
                 
                 <!-- Trailing Icons -->
@@ -112,7 +115,7 @@
         <div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop py-8 max-w-container-max mx-auto gap-8">
             <div class="flex flex-col gap-2">
                 <span class="font-headline-md text-headline-md text-primary">The Cooking Nurse</span>
-                <span class="text-xs text-on-surface-variant max-w-xs">Integrating clinical nutritional science with delicious, rustic culinary arts.</span>
+                <span class="text-xs text-on-surface-variant max-w-xs">Integrating culinary science with delicious, rustic cooking arts.</span>
             </div>
             
             <nav class="flex flex-wrap justify-center gap-x-8 gap-y-4">
@@ -122,7 +125,7 @@
             </nav>
             
             <div class="flex flex-col gap-2 w-full md:w-auto md:min-w-[280px]">
-                <span class="font-label-md text-primary uppercase tracking-wider text-xs font-bold">Wellness Newsletter</span>
+                <span class="font-label-md text-primary uppercase tracking-wider text-xs font-bold">Culinary Newsletter</span>
                 <form action="{% url 'portfolio:newsletter_subscribe' %}" method="POST" class="flex gap-2">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}">
@@ -131,13 +134,14 @@
                 </form>
             </div>
         </div>
-        <div class="border-t border-outline-variant/30 py-4 px-margin-desktop text-center text-xs text-on-surface-variant max-w-container-max mx-auto">
-            © 2026 The Cooking Nurse. All rights reserved.
+        <div class="border-t border-outline-variant/30 py-4 px-margin-desktop text-center text-xs text-on-surface-variant max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+            <span>© 2026 The Cooking Nurse. All rights reserved.</span>
+            <a href="{% url 'users:login' %}" class="text-on-surface-variant/50 hover:text-primary transition-colors">Admin / Staff Login</a>
         </div>
     </footer>
 
     <!-- MOBILE APP-STYLE BOTTOM TAB BAR -->
-    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-margin-mobile py-2 bg-surface-container-lowest shadow-[0_-4px_6px_-1px_rgba(0,53,39,0.05)] rounded-t-xl md:hidden pb-safe">
+    <nav class="fixed bottom-0 left-0 right-0 w-full z-[100] flex justify-around items-center px-2 py-3 pb-[calc(12px+env(safe-area-inset-bottom))] glass-panel shadow-[0_-10px_40px_rgba(0,0,0,0.1)] rounded-t-3xl border-t border-white/20 md:hidden bg-surface/90 backdrop-blur-xl">
         
         <a class="{% if request.resolver_match.url_name == 'home' %}mobile-tab-active{% else %}mobile-tab{% endif %}" href="{% url 'portfolio:home' %}">
             <span class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'home' %}icon-fill{% endif %}">home</span>
@@ -155,10 +159,30 @@
         </a>
         
         <a class="{% if request.resolver_match.url_name == 'dashboard' %}mobile-tab-active{% else %}mobile-tab{% endif %}" href="{% url 'users:dashboard' %}">
-            <span class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'dashboard' %}icon-fill{% endif %}">person</span>
-            <span class="font-label-sm">Profile</span>
+            <span class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'dashboard' %}icon-fill{% endif %}">account_circle</span>
+            <span class="font-label-sm">You</span>
         </a>
     </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.getElementById('desktop-navbar');
+            if (navbar) {
+                let lastScrollY = window.scrollY;
+                window.addEventListener('scroll', () => {
+                    const currentScrollY = window.scrollY;
+                    if (currentScrollY > lastScrollY && currentScrollY > 80) {
+                        // Scrolling down: slide up to hide
+                        navbar.style.transform = 'translateY(-150%)';
+                    } else {
+                        // Scrolling up: slide down to show
+                        navbar.style.transform = 'translateY(0)';
+                    }
+                    lastScrollY = currentScrollY;
+                }, { passive: true });
+            }
+        });
+    </script>
 
     {% block extra_scripts %}{% endblock %}
 </body>

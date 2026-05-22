@@ -79,8 +79,7 @@ def populate():
         title="Artisanal Sourdough & Gut Health",
         course_type="online",
         description="An extensive 2-hour pre-recorded masterclass on advanced fermentation techniques.",
-        price=85000,
-        video_url="https://vimeo.com/placeholder"
+        price=85000
     )
 
     print("Dummy data successfully populated!")

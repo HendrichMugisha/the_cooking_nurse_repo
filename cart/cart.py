@@ -77,6 +77,10 @@ class Cart:
     def get_total_price(self):
         return sum(Decimal(item['price']) * item['quantity'] for item in self.cart.values())
 
+    def has_physical_items(self):
+        """Returns True if cart has any physical items (ProductVariant)."""
+        return any(item['type'] == 'variant' for item in self.cart.values())
+
     def clear(self):
         del self.session[settings.CART_SESSION_ID]
         self.save()

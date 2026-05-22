@@ -1,96 +1,670 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_head %}
+<style>
+    /* Premium modern styling for the cinema landing page */
+    
+    /* Soft, diffuse text shadow for modern hero elements */
+    .hero-text-shadow {
+        text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    }
+    .hero-sub-shadow {
+        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Glassmorphic elements */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    
+    .glass-card-dark {
+        background: rgba(15, 23, 42, 0.5);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- HERO BENTO BOX SECTION -->
-<div class="relative w-full pt-12 pb-24 md:pt-24 md:pb-32 overflow-hidden">
-    <!-- Ripped paper top background wrapper -->
-    <div class="absolute inset-0 bg-surface/40 -z-10"></div>
+<!-- CINEMATIC HERO SECTION (Full Screen) -->
+<div class="relative w-full min-h-screen overflow-hidden flex flex-col justify-center items-center">
+    
+    <!-- Background Cinematic Video or Fallback Image -->
+    <div class="absolute inset-0 -z-20 bg-slate-950">
+        {% if settings.hero_video %}
+        <video autoplay loop muted playsinline class="w-full h-full object-cover opacity-90">
+            <source src="{{ settings.hero_video.url }}" type="video/mp4">
+        </video>
+        {% elif settings.hero_image %}
+        <img src="{{ settings.hero_image.url }}" alt="Atmospheric kitchen fallback" class="w-full h-full object-cover opacity-90" />
+        {% else %}
+        <!-- Premium default visual if neither is loaded -->
+        <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Atmospheric kitchen" class="w-full h-full object-cover opacity-90" />
+        {% endif %}
+        <!-- Clean, uniform dark gradient overlay -->
+        <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-[#f8f9fa]/90"></div>
+    </div>
+
+    <!-- Centered Hero Typography & Actions -->
+    <div class="relative z-10 max-w-4xl px-6 text-center flex flex-col items-center gap-6 mt-12 md:mt-0">
+        
+        <!-- Next Class availability pill badge -->
+        {% if has_classes and next_session %}
+        <a href="{% url 'classes:class_timetable' %}" class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-card text-white text-xs font-bold uppercase tracking-widest hover:scale-105 transition-transform duration-300 shadow-lg">
+            <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-ping"></span>
+            <span>Next Live Class: {{ next_session.date|date:"F d" }} - {{ next_session.course.title }}</span>
+            <span class="material-symbols-outlined text-xs">chevron_right</span>
+        </a>
+        {% endif %}
+
+        <!-- Two-Phase Typewriter Title -->
+        <h1 class="font-display-lg text-4xl md:text-6xl lg:text-7xl leading-[1.1] font-black text-white hero-text-shadow tracking-tight min-h-[140px] md:min-h-[160px] flex flex-col justify-center items-center">
+            <span id="static-title-part" class="block">Turn Everyday Cooking into</span>
+            <span id="typewriter-hook" class="text-tertiary font-extrabold inline-block border-r-4 border-tertiary pr-1 select-none"></span>
+        </h1>
+
+        <!-- High-Contrast Subtitle -->
+        <p class="font-body-lg text-lg md:text-xl text-slate-100 max-w-2xl hero-sub-shadow font-medium mt-2">
+            Master the art of nourishing, healing meals that delight the senses. Where professional healthcare meets warm, rustic culinary science.
+        </p>
+
+        <!-- CTA Action Buttons -->
+        <div class="mt-8 flex flex-wrap gap-4 justify-center items-center">
+            <a href="#our-world" class="bg-tertiary text-primary font-bold px-8 py-3 rounded-full shadow-lg hover:bg-tertiary/90 hover:scale-105 transition-all duration-300">
+                Explore Our World
+                <span class="material-symbols-outlined text-sm align-middle ml-1">arrow_downward</span>
+            </a>
+            <a href="{% url 'catalog:product_list' %}" class="px-8 py-3 rounded-full font-bold text-white bg-white/20 backdrop-blur-md border border-white/40 hover:bg-white hover:text-slate-900 active:scale-95 transition-all duration-300">
+                Shop Fresh Pickens
+            </a>
+        </div>
+    </div>
+
+    <!-- Bouncing Chevron Scroll Indicator -->
+    <div id="scroll-indicator" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 cursor-pointer text-slate-200 hover:text-white transition-colors z-20 animate-bounce-slow" onclick="document.getElementById('our-world').scrollIntoView({behavior: 'smooth'})">
+        <span class="text-[10px] font-bold uppercase tracking-widest opacity-80">Scroll Down</span>
+        <span class="material-symbols-outlined text-2xl" style="font-size: 28px;">keyboard_double_arrow_down</span>
+    </div>
+</div>
+
+<!-- "OUR WORLD" BENTO GRID AREA -->
+<div id="our-world" class="relative w-full bg-[#f8f9fa] pt-16 pb-24 z-20">
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+        
+        <!-- Section Header -->
+        <div class="text-center max-w-2xl mx-auto mb-16 scroll-reveal">
+            <span class="font-label-md text-primary uppercase tracking-widest font-extrabold text-xs">Four Pillars of Wholesome Living</span>
+            <h2 class="font-display-md text-3xl md:text-5xl font-bold mt-2 text-slate-900">Experience The Cooking Nurse</h2>
+            <p class="font-body-lg text-slate-600 mt-4 leading-relaxed">
+                Step into a sensory ecosystem designed to feed your soul, strengthen your body, and inspire your kitchen creations.
+            </p>
+        </div>
+
+        <!-- Bento Grid Asymmetric Layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+            
+            <!-- 1. FRESH PICKENS: Double Wide (Groceries & Marketplace) -->
+            <div class="col-span-1 md:col-span-2 lg:col-span-2 bento-card p-8 flex flex-col justify-between group scroll-reveal relative bg-white overflow-hidden">
+                <!-- Glowing corner accent -->
+                <div class="absolute -right-16 -bottom-16 w-48 h-48 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-500"></div>
+                
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary p-2 bg-primary/10 rounded-xl">shopping_bag</span>
+                            <span class="text-2xl font-bold text-slate-900">Fresh Pickens Shop</span>
+                        </div>
+                        <span class="text-xs bg-primary/10 text-primary font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Live Catalog</span>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                        Pure artisanal ghee, fresh organic produce, and nutritional pantry essentials sourced directly from wholesome Ugandan growers.
+                    </p>
+
+                    <!-- DB Products Glimpse -->
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        {% for product in featured_products %}
+                        <div class="bg-slate-50/80 rounded-xl p-3 border border-slate-100 group/item transition-all duration-300 hover:bg-white hover:shadow-md">
+                            <div class="w-full h-24 rounded-lg overflow-hidden mb-2 bg-slate-100 relative">
+                                {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-105">
+                                {% else %}
+                                <div class="w-full h-full flex items-center justify-center bg-slate-100 text-slate-400">
+                                    <span class="material-symbols-outlined text-2xl">eco</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-xs truncate">{{ product.name }}</h4>
+                            <div class="flex items-center justify-between mt-1">
+                                <span class="text-[11px] text-primary font-bold">
+                                    {% with v=product.variants.first %}
+                                        {{ v.price|default:"Inquire" }} UGX
+                                    {% endwith %}
+                                </span>
+                                <span class="text-[9px] bg-slate-200 text-slate-700 px-1.5 py-0.5 rounded">Active</span>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <!-- Fallbacks if catalog is empty -->
+                        <div class="bg-slate-50 rounded-xl p-3 text-center col-span-2">
+                            <span class="material-symbols-outlined text-slate-400 text-3xl mb-1">eco</span>
+                            <p class="text-xs text-slate-500">Premium groceries catalog is updating</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <a href="{% url 'catalog:product_list' %}" class="inline-flex items-center justify-between w-full p-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold transition-all duration-300 group/btn mt-2 shadow-sm">
+                    <span>Browse All Fresh Pickens</span>
+                    <span class="material-symbols-outlined transition-transform group-hover/btn:translate-x-1.5">arrow_forward</span>
+                </a>
+            </div>
+
+            <!-- 2. CLASSES: Tall (Live Cooking Workshops & Booking) -->
+            <div class="col-span-1 md:col-span-1 lg:col-span-1 bento-card p-8 flex flex-col justify-between group scroll-reveal bg-white overflow-hidden">
+                <div class="absolute -right-16 -top-16 w-36 h-36 bg-tertiary/5 rounded-full blur-2xl"></div>
+                
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-tertiary p-2 bg-tertiary/10 rounded-xl">school</span>
+                            <span class="text-2xl font-bold text-slate-900">Cooking Classes</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                        Join our hands-on workshops exploring clinical nutrition, healing food combinations, and sensory culinary arts.
+                    </p>
+
+                    {% if next_session %}
+                    <!-- Next Active Class Details -->
+                    <div class="bg-tertiary/5 rounded-xl p-5 border border-tertiary/20 flex flex-col gap-3">
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-tertiary text-sm">calendar_month</span>
+                            <span class="text-xs font-bold text-slate-700">{{ next_session.date|date:"l, F d" }}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-900 text-sm leading-snug">{{ next_session.course.title }}</h4>
+                        <div class="flex items-center gap-2 mt-1.5">
+                            <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+                            <span class="text-xs text-slate-600 font-semibold">
+                                Slots Filled: {{ next_session.attendees_count }} / {{ next_session.capacity }}
+                            </span>
+                        </div>
+                        <div class="text-xs text-tertiary font-bold bg-tertiary/10 py-1 px-3 rounded-lg mt-2 text-center">
+                            Only {{ next_session.capacity|add:"-1"|add:next_session.attendees_count }} seats left!
+                        </div>
+                    </div>
+                    {% else %}
+                    <!-- Waitlist signup if no classes active -->
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 flex flex-col gap-3">
+                        <span class="text-xs font-bold text-tertiary flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-sm">notifications_active</span> Priority Waitlist
+                        </span>
+                        <p class="text-[11px] text-slate-500 leading-normal">
+                            No physical classes scheduled right now. Join the waitlist to receive priority access to the next session release!
+                        </p>
+                        <form action="{% url 'portfolio:newsletter_subscribe' %}" method="POST" class="flex flex-col gap-2 mt-1">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="email" name="email" required placeholder="Your email address" class="w-full text-xs p-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-tertiary">
+                            <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 rounded-lg text-xs transition-colors">Join Priority Waitlist</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if next_session %}
+                <a href="{% url 'classes:class_timetable' %}" class="inline-flex items-center justify-center gap-2 w-full p-4 bg-tertiary hover:bg-tertiary/90 text-primary rounded-xl font-bold transition-all duration-300 mt-6 shadow-sm">
+                    <span>Book Workshop Slot</span>
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- 3. COOKBOOKS: Single Wide (Digital Books Gateway) -->
+            <div class="col-span-1 md:col-span-1 lg:col-span-1 bento-card p-8 flex flex-col justify-between group scroll-reveal bg-white overflow-hidden">
+                <div class="absolute -right-16 -bottom-16 w-36 h-36 bg-accent/5 rounded-full blur-2xl"></div>
+                
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-accent p-2 bg-accent/10 rounded-xl">menu_book</span>
+                            <span class="text-2xl font-bold text-slate-900">Digital Library</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                        Gain immediate digital access to wholesome recipes, healing broth frameworks, and complete dietary manuals.
+                    </p>
+
+                    <!-- Ebook visual styling layout -->
+                    <div class="bg-accent/5 rounded-xl p-4 border border-accent/20 flex items-center gap-4 relative overflow-hidden group/ebook mb-6">
+                        <div class="w-16 h-22 rounded-md shadow-md bg-accent flex-shrink-0 flex items-center justify-center text-white border-l-4 border-white/20 transition-transform group-hover/ebook:-rotate-3 duration-300">
+                            <span class="material-symbols-outlined text-lg">restaurant_menu</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-xs">Recipe Guidebook</h4>
+                            <p class="text-[10px] text-slate-500 mt-1">Instant high-res PDF downloads</p>
+                            <span class="inline-block mt-2 text-[10px] bg-accent/10 text-accent font-bold px-2 py-0.5 rounded">
+                                {{ digital_count }} Books Available
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="{% url 'catalog:product_list' %}?type=digital" class="inline-flex items-center justify-center gap-2 w-full p-4 bg-accent hover:bg-accent/90 text-white rounded-xl font-bold transition-all duration-300 shadow-sm">
+                    <span>Browse Cookbooks</span>
+                    <span class="material-symbols-outlined text-sm">download</span>
+                </a>
+            </div>
+
+            <!-- 4. STUDIO RENTAL: Single Wide (Intake & Live Estimator) -->
+            <div class="col-span-1 md:col-span-2 lg:col-span-4 bento-card p-8 group scroll-reveal bg-white overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- Left: Description & Stats -->
+                    <div class="lg:col-span-5 flex flex-col justify-between h-full">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="material-symbols-outlined text-slate-800 p-2 bg-slate-100 rounded-xl">camera</span>
+                                <span class="text-2xl font-bold text-slate-900">Rent our Kitchen Studio</span>
+                            </div>
+                            <p class="text-slate-600 text-sm mb-6 leading-relaxed">
+                                Book Uganda's ultimate sensory kitchen space. Beautiful natural lighting, pro equipment, prep tables, and dynamic backdrops. Perfect for food photography, masterclasses, and cooking events.
+                            </p>
+                            
+                            <div class="flex items-center gap-4 bg-slate-50 rounded-xl p-4 border border-slate-100 mb-6">
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] uppercase font-extrabold tracking-wider text-slate-500">Hourly Rate</span>
+                                    <span class="font-serif-display text-2xl font-bold text-slate-900">
+                                        {{ studio_pricing.hourly_rate|default:50000 }} UGX
+                                    </span>
+                                </div>
+                                <div class="border-l border-slate-200 h-8"></div>
+                                <div class="flex flex-col">
+                                    <span class="text-[10px] uppercase font-extrabold tracking-wider text-slate-500">Requirements</span>
+                                    <span class="text-sm font-semibold text-slate-700">
+                                        Min {{ studio_pricing.min_hours|default:2 }} Hours
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-xs text-slate-500 flex items-start gap-1.5">
+                            <span class="material-symbols-outlined text-slate-400 text-sm">info</span>
+                            <span>All studio requests are provisional until reviewed by the culinary operations team.</span>
+                        </div>
+                    </div>
+
+                    <!-- Right: Dynamic Price Calculator & Intake Form -->
+                    <div class="lg:col-span-7 bg-slate-50/60 rounded-2xl p-6 border border-slate-100 relative">
+                        <h4 class="font-bold text-slate-800 text-sm mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg text-slate-800">calculate</span>
+                            <span>Instant Booking Calculator</span>
+                        </h4>
+
+                        {% if request.user.is_authenticated %}
+                        <form action="{% url 'classes:studio_rental_request' %}" method="POST" class="flex flex-col gap-4">
+                            {% csrf_token %}
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold text-slate-600 mb-1.5">Booking Date</label>
+                                    <input type="date" required id="rental-date" name="date" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-slate-400">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold text-slate-600 mb-1.5">Start Time</label>
+                                    <input type="time" required id="rental-start" name="start_time" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-slate-400">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] uppercase font-bold text-slate-600 mb-1.5">End Time</label>
+                                    <input type="time" required id="rental-end" name="end_time" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-slate-400">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] uppercase font-bold text-slate-600 mb-1.5">Purpose of Booking</label>
+                                <textarea required name="purpose" rows="2" placeholder="Describe your activity (e.g. video shoot, dinner event)" class="w-full text-xs p-2.5 border border-slate-200 rounded-lg bg-white focus:ring-1 focus:ring-slate-400"></textarea>
+                            </div>
+
+                            <!-- Live Calculator Display -->
+                            <div class="bg-slate-100/60 rounded-xl p-4 border border-slate-200 flex items-center justify-between">
+                                <div>
+                                    <span class="text-[10px] uppercase font-extrabold text-slate-700">Estimated Total Cost</span>
+                                    <div id="rental-cost-breakdown" class="text-[10px] text-slate-500 mt-0.5"></div>
+                                </div>
+                                <div id="rental-total-cost" class="text-xl font-bold text-slate-900">0 UGX</div>
+                            </div>
+                            <div id="rental-error" class="text-xs text-rose-600 font-bold"></div>
+
+                            <button type="submit" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition-colors shadow-md">
+                                Submit Provisional Request
+                            </button>
+                        </form>
+                        {% else %}
+                        <!-- Unauthenticated state: Login CTA inside card -->
+                        <div class="text-center py-8">
+                            <span class="material-symbols-outlined text-slate-400 text-4xl mb-2">lock</span>
+                            <h5 class="font-bold text-slate-800 text-sm">Secure Booking Portal</h5>
+                            <p class="text-xs text-slate-500 max-w-xs mx-auto mt-1 mb-6">
+                                Please login or create an account to use the instant booking calculator and submit requests.
+                            </p>
+                            <a href="{% url 'users:login' %}?next={{ request.path }}" class="inline-flex items-center gap-2 px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-all shadow-sm">
+                                <span>Sign In to Request</span>
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- MEET THE NURSE & SOCIAL SHOWCASE SECTION -->
+<div class="relative w-full bg-slate-50 text-slate-900 py-24 overflow-hidden z-20">
+    <div class="absolute -right-32 -top-32 w-96 h-96 bg-tertiary/20 rounded-full blur-3xl opacity-50"></div>
+    <div class="absolute -left-32 -bottom-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-50"></div>
     
     <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch min-h-[600px]">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            <!-- Left: Hero Text & Call to Action (Spans 5 cols) -->
-            <div class="lg:col-span-5 flex flex-col justify-center gap-6 relative z-20 pt-12">
-                <div class="inline-flex items-center gap-3 pl-4 border-l-4 border-accent bg-surface glass-panel py-2 pr-5 rounded-r-xl max-w-max animate-fade-in-up">
-                    <span class="material-symbols-outlined text-accent text-sm font-bold">local_fire_department</span>
-                    <span class="font-label-md text-primary uppercase tracking-widest font-bold">Sept - Dec Classes Open</span>
-                </div>
+            <!-- Left: Portrait & Short Bio -->
+            <div class="lg:col-span-5 flex flex-col gap-6 scroll-reveal">
+                <span class="font-label-md text-primary uppercase tracking-widest font-extrabold text-xs">Meet The Visionary</span>
                 
-                <h1 class="font-display-lg text-display-lg-mobile md:text-display-lg leading-[1.1] text-primary">
-                    Turn Everyday Cooking into <br/>
-                    <span class="text-accent italic font-black drop-shadow-sm">Everyday Magic!</span>
-                </h1>
-                
-                <p class="font-body-lg text-body-lg text-on-surface-variant max-w-md font-medium mt-4">
-                    Master the art of nourishing meals that heal the body and delight the senses. Professional guidance meets rustic, artisanal culinary arts.
-                </p>
-                
-                <div class="mt-8 flex flex-wrap gap-4 items-center">
-                    <a href="{% url 'classes:class_timetable' %}" class="btn-primary">
-                        Book a Class
-                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                    </a>
-                    <a href="{% url 'catalog:product_list' %}" class="font-label-md text-primary font-bold hover:text-accent transition-colors py-3 px-4 border-b-2 border-transparent hover:border-accent">
-                        Explore Shop
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Right: Asymmetric Bento Collage (Spans 7 cols) -->
-            <div class="lg:col-span-7 relative flex justify-center items-center mt-12 lg:mt-0">
-                <!-- Abstract organic shape background -->
-                <div class="absolute w-[120%] h-[120%] bg-tertiary/10 rounded-[100px] transform rotate-12 -z-10 scale-95 opacity-50 blur-3xl"></div>
-                
-                <div class="grid grid-cols-2 gap-4 md:gap-6 w-full h-full relative">
-                    <!-- Main Big Image -->
-                    <div class="col-span-2 md:col-span-1 row-span-2 rounded-3xl overflow-hidden shadow-xl shadow-primary/20 relative group h-64 md:h-auto">
-                        <img alt="Culinary food collage" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqXnWFOYVMf10YIu_5T9tFTCJOMBpnIVa3FpUTsme6Bx-hhGVSJgQFo1LwOwCVWrn2127PCmpCfuOrwFO9jpXU6JVM9pQweU_a6Y-9oPv5-3K5WW14ntOeV8F2WEunvp568_Syex1H5YhiXz6-_SJekc94qath74rWFu6Mx5gNEHI_WzOkmHAJFPv4dwf_AIC5rLp1RZWCeuYcapXL2aJ0kcKbffANwrEEcEnYtJGiEFOHobaBKZJRo_tbSMFNgKKwZkQbCPOM7DG0"/>
-                        <div class="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                            <span class="text-white font-headline-sm">Local Food Masterclass</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Top Right Image -->
-                    <div class="rounded-3xl overflow-hidden shadow-lg relative group h-48 md:h-64">
-                        <img alt="Breakfast Dishes" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1493770348161-369560ae357d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" />
-                    </div>
-                    
-                    <!-- Bottom Right Glass Card -->
-                    <div class="glass-panel rounded-3xl p-6 flex flex-col justify-center shadow-lg relative overflow-hidden h-48 md:h-64 group border-primary/20 hover:border-primary/50 transition-colors">
-                        <div class="absolute -right-4 -bottom-4 w-32 h-32 bg-tertiary/20 rounded-full blur-xl group-hover:bg-tertiary/40 transition-colors"></div>
-                        <span class="font-headline-sm text-primary mb-2">Class Cost</span>
-                        <div class="flex items-baseline gap-2">
-                            <span class="font-display-lg text-accent">150K</span>
-                            <span class="font-label-md text-on-surface-variant font-bold uppercase">UGX</span>
-                        </div>
-                        <span class="text-sm font-medium text-on-surface-variant mt-1">Per Person (8-10 slots)</span>
-                    </div>
-                </div>
-                
-                <!-- Floating Floating Badge (Glassmorphism) -->
-                <div class="absolute -left-4 md:-left-8 top-1/2 -translate-y-1/2 glass-panel px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 z-30 animate-bounce" style="animation-duration: 4s;">
-                    <div class="w-12 h-12 bg-white rounded-full flex justify-center items-center text-primary shadow-sm">
-                        <span class="material-symbols-outlined">restaurant</span>
+                <div class="flex items-center gap-4">
+                    <div class="w-20 h-20 rounded-full overflow-hidden border-2 border-tertiary/50 flex-shrink-0 shadow-sm">
+                        {% if settings.nurse_portrait %}
+                        <img src="{{ settings.nurse_portrait.url }}" alt="{{ settings.nurse_name }}" class="w-full h-full object-cover">
+                        {% else %}
+                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="The Cooking Nurse" class="w-full h-full object-cover">
+                        {% endif %}
                     </div>
                     <div>
-                        <div class="font-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Limited Slots</div>
-                        <div class="font-headline-sm text-primary">Book Now</div>
+                        <h3 class="text-2xl font-bold">{{ settings.nurse_name|default:"The Cooking Nurse" }}</h3>
+                        <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider mt-0.5">Clinical Culinary Architect</p>
                     </div>
                 </div>
+
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    {{ settings.nurse_bio|default:"Bridging clinical nursing care with rustic culinary sciences. Food isn't just fuel—it is the body's foundational code for regeneration, clarity, and life-long vitality." }}
+                </p>
+
+                <!-- Social media link pills -->
+                <div class="flex items-center gap-3 mt-4">
+                    {% if settings.youtube_url %}
+                    <a href="{{ settings.youtube_url }}" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 text-red-600 hover:bg-red-600 hover:text-white transition-colors flex justify-center items-center" aria-label="YouTube">
+                        <span class="material-symbols-outlined text-lg">play_circle</span>
+                    </a>
+                    {% endif %}
+                    
+                    {% if settings.instagram_url %}
+                    <a href="{{ settings.instagram_url }}" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 text-pink-600 hover:bg-pink-600 hover:text-white transition-colors flex justify-center items-center" aria-label="Instagram">
+                        <span class="material-symbols-outlined text-lg">photo_camera</span>
+                    </a>
+                    {% endif %}
+                    
+                    {% if settings.tiktok_url %}
+                    <a href="{{ settings.tiktok_url }}" target="_blank" class="w-10 h-10 rounded-full bg-slate-100 text-slate-800 hover:bg-slate-900 hover:text-white transition-colors flex justify-center items-center" aria-label="TikTok">
+                        <span class="material-symbols-outlined text-lg">movie</span>
+                    </a>
+                    {% endif %}
+                </div>
             </div>
+
+            <!-- Right: Dynamic YouTube Video Embed -->
+            <div class="lg:col-span-7 scroll-reveal">
+                {% if settings.featured_youtube_embed_url %}
+                <div id="youtube-container" class="w-full relative rounded-3xl overflow-hidden aspect-video shadow-xl border border-slate-200/50">
+                    <!-- Loaded dynamically via JavaScript watch URL parser to preserve premium frontend speed -->
+                    <div class="absolute inset-0 bg-slate-100 flex items-center justify-center">
+                        <span class="w-12 h-12 rounded-full border-4 border-slate-300 border-t-primary animate-spin"></span>
+                    </div>
+                </div>
+                {% else %}
+                <!-- Aesthetic visual overlay fallback if no YouTube featured video is set -->
+                <div class="relative w-full aspect-video bg-white rounded-3xl overflow-hidden shadow-xl border border-slate-200/50 flex items-center justify-center">
+                    <img src="https://images.unsplash.com/photo-1543353071-10c8ba85a904?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Culinary showcase" class="absolute inset-0 w-full h-full object-cover opacity-80" />
+                    <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px]"></div>
+                    <div class="relative z-10 text-center max-w-sm px-4 text-white">
+                        <span class="material-symbols-outlined text-tertiary text-4xl mb-2">restaurant</span>
+                        <h4 class="font-bold text-sm">Culinary Wellness Insights</h4>
+                        <p class="text-xs text-slate-200 mt-2 leading-relaxed">Follow us on our socials to see behind-the-scenes pantry guides and recipe walk-throughs.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- PREMIUM NEWSLETTER CTA (WITH LEAD MAGNET) -->
+<div class="relative w-full bg-slate-50 py-24 z-20 overflow-hidden">
+    <div class="max-w-4xl mx-auto px-6 relative z-10 scroll-reveal">
+        <div class="bg-primary text-white rounded-[2rem] p-8 md:p-14 shadow-2xl relative overflow-hidden group">
+            
+            <!-- Graphic background circles -->
+            <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-tertiary/10 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700"></div>
+            
+            <div class="text-center max-w-2xl mx-auto flex flex-col items-center gap-5 relative z-10">
+                <span class="material-symbols-outlined text-tertiary text-4xl">mail</span>
+                <h3 class="text-3xl md:text-4xl font-bold mt-2 tracking-tight">Subscribe to our Wholesome Kitchen</h3>
+                
+                {% if settings.newsletter_lead_magnet %}
+                <p class="text-slate-100 text-sm md:text-base leading-relaxed max-w-lg">
+                    Join our newsletter today and receive an immediate digital download of our <strong class="text-tertiary font-semibold">{{ settings.newsletter_lead_magnet_title }}</strong> PDF guide.
+                </p>
+                {% else %}
+                <p class="text-slate-100 text-sm md:text-base leading-relaxed max-w-lg">
+                    Stay inspired in the kitchen. Subscribe for weekly nutritional frameworks, local market guides, and priority booking codes.
+                </p>
+                {% endif %}
+
+                <!-- Inline Subscription Form -->
+                <form action="{% url 'portfolio:newsletter_subscribe' %}" method="POST" class="w-full max-w-md mt-6 flex flex-col sm:flex-row gap-3">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <input type="email" name="email" required placeholder="Enter your email address" class="w-full px-5 py-3.5 text-sm bg-white/10 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-tertiary focus:bg-white/15 text-white placeholder-slate-200 transition-all">
+                    <button type="submit" class="sm:shrink-0 bg-tertiary hover:bg-tertiary/90 text-primary font-bold px-6 py-3.5 rounded-xl text-sm transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                        <span>Subscribe & Get Guide</span>
+                        <span class="material-symbols-outlined text-sm">download</span>
+                    </button>
+                </form>
+            </div>
+
         </div>
     </div>
 </div>
 
-<!-- Solid Primary Section with ripped edge overlay at the top -->
-<div class="relative w-full bg-primary text-white ripped-edge-bottom -mt-8 pt-24 pb-32 z-20">
-    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
-        <div class="text-center max-w-2xl mx-auto">
-            <h2 class="font-headline-lg mb-6">The Wellness Shop is Open</h2>
-            <p class="font-body-lg text-primary-fixed-dim/90 mb-8">From organic heirloom tomatoes to pure artisanal ghee, bring the magic of our kitchen straight to yours.</p>
-            <a href="{% url 'catalog:product_list' %}" class="btn-accent mx-auto">Shop Groceries</a>
-        </div>
-    </div>
-</div>
+<!-- Hidden Lead Magnet Downloader -->
+{% if download_lead_magnet and settings.newsletter_lead_magnet %}
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        // Automatically start the lead magnet file download
+        const link = document.createElement('a');
+        link.href = "{{ settings.newsletter_lead_magnet.url }}";
+        link.download = "{{ settings.newsletter_lead_magnet_title|default:'Recipe_Guide' }}.pdf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+</script>
+{% endif %}
 {% endblock content %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- TWO-PHASE TYPEWRITER EFFECT ---
+        const typewriterHook = document.getElementById('typewriter-hook');
+        const loopWords = JSON.parse('{{ loop_words_json|safe|default:"[]" }}');
+        const fullTitleText = "{{ settings.hero_text|default:'Everyday Cooking into Everyday Magic!' }}";
+        
+        // Clean out any duplicate "Turn Everyday Cooking into" prefix from fullTitleText
+        let typedTargetText = fullTitleText.trim();
+        const prefixToRemove = "Turn Everyday Cooking into";
+        if (typedTargetText.toLowerCase().startsWith(prefixToRemove.toLowerCase())) {
+            typedTargetText = typedTargetText.substring(prefixToRemove.length).trim();
+        }
+
+        let isPhase1 = true;
+        let charIndex = 0;
+        let wordIndex = 0;
+        let isDeleting = false;
+        
+        function type() {
+            if (isPhase1) {
+                // Phase 1: Type the main target sentence
+                if (charIndex < typedTargetText.length) {
+                    typewriterHook.textContent += typedTargetText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(type, 80);
+                } else {
+                    // Completed typing Phase 1
+                    // Remove typing blinking cursor after a small pause or transition to Phase 2
+                    setTimeout(() => {
+                        if (loopWords.length > 0) {
+                            isPhase1 = false;
+                            isDeleting = true;
+                            type();
+                        } else {
+                            // No loop keywords, keep static and solid cursor style
+                            typewriterHook.style.borderRight = "none";
+                        }
+                    }, 2500);
+                }
+            } else {
+                // Phase 2: Rotating keyword loop (Erase -> Type word -> Pause -> repeat)
+                const currentWord = loopWords[wordIndex];
+                
+                if (isDeleting) {
+                    // Erasing
+                    if (typewriterHook.textContent.length > 0) {
+                        typewriterHook.textContent = typewriterHook.textContent.slice(0, -1);
+                        setTimeout(type, 50);
+                    } else {
+                        isDeleting = false;
+                        wordIndex = (wordIndex + 1) % loopWords.length;
+                        setTimeout(type, 300);
+                    }
+                } else {
+                    // Typing next word
+                    if (typewriterHook.textContent.length < currentWord.length) {
+                        typewriterHook.textContent += currentWord.charAt(typewriterHook.textContent.length);
+                        setTimeout(type, 100);
+                    } else {
+                        // Fully typed word, pause before erasing
+                        setTimeout(() => {
+                            isDeleting = true;
+                            type();
+                        }, 2500);
+                    }
+                }
+            }
+        }
+        
+        // Start typing
+        if (typewriterHook) {
+            setTimeout(type, 500);
+        }
+
+        // --- HIDE BOUNCING CHEVRON ON SCROLL ---
+        const chevron = document.getElementById('scroll-indicator');
+        if (chevron) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 80) {
+                    chevron.style.opacity = '0';
+                    chevron.style.pointerEvents = 'none';
+                } else {
+                    chevron.style.opacity = '1';
+                    chevron.style.pointerEvents = 'auto';
+                }
+            }, { passive: true });
+        }
+
+        // --- INTERSECTION OBSERVER FOR SCROLL REVEALS ---
+        const revealElements = document.querySelectorAll('.scroll-reveal');
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            revealElements.forEach(el => observer.observe(el));
+        } else {
+            // Fallback for older browsers
+            revealElements.forEach(el => el.classList.add('visible'));
+        }
+
+        // --- INSTANT BOOKING CALCULATOR ---
+        const hourlyRate = parseInt("{{ studio_pricing.hourly_rate|default:50000 }}");
+        const minHours = parseInt("{{ studio_pricing.min_hours|default:2 }}");
+        const startInput = document.getElementById('rental-start');
+        const endInput = document.getElementById('rental-end');
+        const totalCostEl = document.getElementById('rental-total-cost');
+        const costBreakdownEl = document.getElementById('rental-cost-breakdown');
+        const errorEl = document.getElementById('rental-error');
+
+        function calculateCost() {
+            if (startInput && endInput && startInput.value && endInput.value) {
+                const [sh, sm] = startInput.value.split(':').map(Number);
+                const [eh, em] = endInput.value.split(':').map(Number);
+                
+                let diff = (eh + em/60) - (sh + sm/60);
+                if (diff < 0) {
+                    errorEl.textContent = "End time must be after start time";
+                    totalCostEl.textContent = "0 UGX";
+                    costBreakdownEl.textContent = "";
+                    return;
+                }
+                
+                if (diff < minHours) {
+                    errorEl.textContent = `Minimum booking is ${minHours} hours`;
+                    totalCostEl.textContent = "0 UGX";
+                    costBreakdownEl.textContent = "";
+                    return;
+                }
+                
+                errorEl.textContent = "";
+                const cost = Math.round(diff * hourlyRate);
+                totalCostEl.textContent = cost.toLocaleString() + " UGX";
+                costBreakdownEl.textContent = `${diff.toFixed(1)} hrs × ${hourlyRate.toLocaleString()} UGX/hr`;
+            }
+        }
+        
+        if (startInput && endInput) {
+            startInput.addEventListener('change', calculateCost);
+            endInput.addEventListener('change', calculateCost);
+        }
+
+        // --- YOUTUBE URL PARSER ---
+        const youtubeContainer = document.getElementById('youtube-container');
+        const rawUrl = "{{ settings.featured_youtube_embed_url }}";
+        if (youtubeContainer && rawUrl) {
+            let videoId = '';
+            if (rawUrl.includes('v=')) {
+                videoId = rawUrl.split('v=')[1].split('&')[0];
+            } else if (rawUrl.includes('youtu.be/')) {
+                videoId = rawUrl.split('youtu.be/')[1].split('?')[0];
+            } else if (rawUrl.includes('embed/')) {
+                videoId = rawUrl.split('embed/')[1].split('?')[0];
+            }
+            if (videoId) {
+                youtubeContainer.innerHTML = `<iframe class="w-full aspect-video rounded-2xl shadow-lg border border-white/10" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            }
+        }
+    });
+</script>
+{% endblock %}

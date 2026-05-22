@@ -1,13 +1,29 @@
 import io
+
 from django.shortcuts import render, get_object_or_404
 from django.http import FileResponse, Http404
 from django.contrib.auth.decorators import login_required
+
 from orders.models import OrderItem
-from .models import Product, ProductVariant
+from django.db.models import Count, Q
+from .models import Product, ProductVariant, Category
 
 def product_list(request):
-    products = Product.objects.filter(is_active=True).prefetch_related('variants', 'category')
-    return render(request, 'catalog/product_list.html', {'products': products})
+    active_category_slug = request.GET.get('category')
+    products = Product.objects.filter(is_active=True, product_type='physical').prefetch_related('variants', 'categories')
+    if active_category_slug:
+        products = products.filter(categories__slug=active_category_slug)
+        
+    categories = Category.objects.annotate(
+        product_count=Count('products', filter=Q(products__is_active=True, products__product_type='physical'))
+    ).order_by('name')
+    
+    context = {
+        'products': products,
+        'categories': categories,
+        'active_category': active_category_slug,
+    }
+    return render(request, 'catalog/product_list.html', context)
 
 @login_required
 def download_digital_item(request, variant_id):
@@ -31,7 +47,7 @@ def download_digital_item(request, variant_id):
     if product.digital_file:
         try:
             return FileResponse(product.digital_file.open(), as_attachment=True, filename=f"{product.slug}.pdf")
-        except Exception:
+        except Exception as e:
             pass
             
     # Fallback Mode: Generate a beautiful, dynamic, text-based recipe guide & welcoming culinary letter
@@ -41,8 +57,8 @@ def download_digital_item(request, variant_id):
         "                THE COOKING NURSE - DIGITAL DOWNLOAD\n"
         "========================================================================\n\n"
         f"Thank you for purchasing '{product.name}'!\n\n"
-        "This is your official secure digital download recipe and wellness guide.\n"
-        "We are thrilled to accompany you on your culinary health journey!\n\n"
+        "This is your official secure digital download recipe and culinary guide.\n"
+        "We are thrilled to accompany you on your wholesome culinary journey!\n\n"
         "------------------------------------------------------------------------\n"
         "                    THE EVERYDAY MAGIC COOKBOOK RECIPE\n"
         "------------------------------------------------------------------------\n"
@@ -58,10 +74,10 @@ def download_digital_item(request, variant_id):
         " 4. Toss in crushed garlic cloves and fresh rosemary sprigs.\n"
         " 5. Transfer to oven, bake at 200°C for 15 minutes. Serve alongside sourdough!\n\n"
         "------------------------------------------------------------------------\n"
-        "                    NURSE'S CLINICAL WELLNESS NOTE\n"
+        "                    NURSE'S KITCHEN NOTE\n"
         "------------------------------------------------------------------------\n"
-        "Tomatoes are rich in Lycopene, a highly potent antioxidant supporting cardiovascular\n"
-        "and cellular health. Cooking tomatoes releases more bioavailable Lycopene, and the\n"
+        "Tomatoes are rich in Lycopene, a highly potent antioxidant supporting overall vitality\n"
+        "and natural well-being. Cooking tomatoes releases more bioavailable Lycopene, and the\n"
         "healthy fat-soluble vitamins present in Pure Ghee enhance its absorption by up to 300%!\n\n"
         "------------------------------------------------------------------------\n"
         "© 2026 The Cooking Nurse. All rights reserved. www.thecookingnurse.com\n"

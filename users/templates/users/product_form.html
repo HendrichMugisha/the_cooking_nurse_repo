@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if product %}Edit Product: {{ product.name }}{% else %}Add Product{% endif %} - The Cooking Nurse{% endblock %}
+
+{% block content %}
+<div class="page-container py-10 max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop min-h-[80vh]">
+    <!-- BREADCRUMB -->
+    <div class="mb-6">
+        <a href="/users/staff-dashboard/?tab=tab-inventory" class="text-primary hover:text-accent transition-colors flex items-center gap-1.5 text-sm font-semibold">
+            <span class="material-symbols-outlined text-sm">arrow_back</span> Back to Inventory
+        </a>
+    </div>
+
+    <!-- HEADER -->
+    <div class="mb-8 border-b border-outline-variant/30 pb-4">
+        <h1 class="font-display-lg text-primary">{% if product %}Modify "{{ product.name }}"{% else %}Launch New Product{% endif %}</h1>
+        <p class="text-on-surface-variant font-medium">Add physical groceries, recipe ebooks, or nutrition assets to the store front.</p>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-8" id="product-form">
+        {% csrf_token %}
+
+        <!-- PRODUCT DETAILS -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/20">
+            <h2 class="font-headline-sm text-primary mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined">info</span> Core Product Information
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Name -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-primary mb-2">Product Name <span class="text-error">*</span></label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.name.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Category -->
+                <div>
+                    <label class="block text-sm font-bold text-primary mb-2">Category <span class="text-error">*</span></label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.category.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Product Type -->
+                <div>
+                    <label class="block text-sm font-bold text-primary mb-2">Product Type <span class="text-error">*</span></label>
+                    {{ form.product_type }}
+                    {% if form.product_type.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.product_type.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Description -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-bold text-primary mb-2">Description / Nutrition Info <span class="text-error">*</span></label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.description.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Image Upload -->
+                <div>
+                    <label class="block text-sm font-bold text-primary mb-2">Product Cover Image</label>
+                    {{ form.image }}
+                    {% if product.image %}
+                        <p class="text-xs text-on-surface-variant mt-2 font-medium">Current: <a href="{{ product.image.url }}" target="_blank" class="text-primary underline">{{ product.image.name }}</a></p>
+                    {% endif %}
+                    {% if form.image.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.image.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Digital File -->
+                <div id="digital-file-block" class="{% if form.product_type.value != 'digital' %}hidden{% endif %}">
+                    <label class="block text-sm font-bold text-primary mb-2">Digital Cookbook / Asset File (.pdf, etc.)</label>
+                    {{ form.digital_file }}
+                    {% if product.digital_file %}
+                        <p class="text-xs text-on-surface-variant mt-2 font-medium">Current: <a href="{{ product.digital_file.url }}" target="_blank" class="text-primary underline">{{ product.digital_file.name }}</a></p>
+                    {% endif %}
+                    {% if form.digital_file.errors %}
+                        <p class="text-xs text-error font-semibold mt-1">{{ form.digital_file.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Active -->
+                <div class="md:col-span-2 flex items-center gap-3">
+                    {{ form.is_active }}
+                    <label for="id_is_active" class="text-sm font-bold text-primary cursor-pointer select-none">List this product publicly in the catalog</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- VARIANTS SECTION -->
+        <div class="glass-panel p-6 rounded-2xl border border-white/20">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-headline-sm text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined">sell</span> Pricing & Inventory Variants
+                </h2>
+                <button type="button" id="add-variant-btn" class="btn-primary py-1.5 px-4 rounded-full text-xs font-bold flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">add</span> Add Variant Choice
+                </button>
+            </div>
+            
+            <p class="text-xs text-on-surface-variant font-medium mb-4">Every product needs at least one variant (e.g. name "Default", price "15000", stock "50"). Add more to support multiple sizes or weights.</p>
+
+            {{ formset.management_form }}
+            <div class="space-y-4" id="variants-container">
+                {% for variant_form in formset %}
+                <div class="variant-row p-4 rounded-xl bg-surface-container/50 border border-outline-variant/30 relative flex flex-wrap gap-4 items-end">
+                    {{ variant_form.id }}
+                    
+                    <div class="flex-grow min-w-[150px]">
+                        <label class="block text-xs font-bold text-primary mb-1">Variant Name (e.g. 500g, 1Kg, Default)</label>
+                        {{ variant_form.name }}
+                        {{ variant_form.name.errors }}
+                    </div>
+
+                    <div class="w-36">
+                        <label class="block text-xs font-bold text-primary mb-1">SKU Code</label>
+                        {{ variant_form.sku }}
+                        {{ variant_form.sku.errors }}
+                    </div>
+
+                    <div class="w-36">
+                        <label class="block text-xs font-bold text-primary mb-1">Price (UGX)</label>
+                        {{ variant_form.price }}
+                        {{ variant_form.price.errors }}
+                    </div>
+
+                    <div class="w-28 physical-stock-block">
+                        <label class="block text-xs font-bold text-primary mb-1">Stock Level</label>
+                        {{ variant_form.stock }}
+                        {{ variant_form.stock.errors }}
+                    </div>
+
+                    {% if formset.can_delete %}
+                    <div class="flex items-center pb-2 pl-2">
+                        {{ variant_form.DELETE }}
+                        <label for="{{ variant_form.DELETE.id_for_label }}" class="text-xs text-error font-bold ml-1.5 cursor-pointer select-none">Delete</label>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="flex justify-end gap-4 border-t border-outline-variant/30 pt-6">
+            <a href="/users/staff-dashboard/?tab=tab-inventory" class="btn-primary py-3 px-8 rounded-full text-sm font-semibold transition-all bg-outline-variant/20 text-on-surface hover:bg-outline-variant/30">
+                Cancel
+            </a>
+            <button type="submit" class="btn-accent py-3 px-10 rounded-full text-sm font-bold transition-all shadow-level-1 hover:shadow-level-2 border border-tertiary">
+                Save Product & Variants
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- EMPTY FORM TEMPLATE FOR JAVASCRIPT -->
+<div id="empty-variant-template" class="hidden">
+    <div class="variant-row p-4 rounded-xl bg-surface-container/50 border border-outline-variant/30 relative flex flex-wrap gap-4 items-end">
+        <div class="flex-grow min-w-[150px]">
+            <label class="block text-xs font-bold text-primary mb-1">Variant Name (e.g. 500g, 1Kg, Default)</label>
+            {{ formset.empty_form.name }}
+        </div>
+
+        <div class="w-36">
+            <label class="block text-xs font-bold text-primary mb-1">SKU Code</label>
+            {{ formset.empty_form.sku }}
+        </div>
+
+        <div class="w-36">
+            <label class="block text-xs font-bold text-primary mb-1">Price (UGX)</label>
+            {{ formset.empty_form.price }}
+        </div>
+
+        <div class="w-28 physical-stock-block">
+            <label class="block text-xs font-bold text-primary mb-1">Stock Level</label>
+            {{ formset.empty_form.stock }}
+        </div>
+        
+        <div class="flex items-center pb-2 pl-2">
+            <button type="button" class="text-xs text-error font-bold cursor-pointer hover:underline remove-row-btn" onclick="removeVariantRow(this)">Remove</button>
+        </div>
+    </div>
+</div>
+
+{% block extra_scripts %}
+<script>
+    // Product type reactive blocks (Hide/Show digital fields and stock inputs)
+    const productTypeSelect = document.getElementById('id_product_type');
+    const digitalFileBlock = document.getElementById('digital-file-block');
+
+    function toggleProductTypeFields() {
+        const selectedType = productTypeSelect.value;
+        if (selectedType === 'digital') {
+            digitalFileBlock.classList.remove('hidden');
+            document.querySelectorAll('.physical-stock-block').forEach(el => {
+                el.classList.add('opacity-40');
+                el.querySelector('input').value = 0;
+                el.querySelector('input').setAttribute('readonly', 'true');
+            });
+        } else {
+            digitalFileBlock.classList.add('hidden');
+            document.querySelectorAll('.physical-stock-block').forEach(el => {
+                el.classList.remove('opacity-40');
+                el.querySelector('input').removeAttribute('readonly');
+            });
+        }
+    }
+
+    productTypeSelect.addEventListener('change', toggleProductTypeFields);
+    document.addEventListener("DOMContentLoaded", toggleProductTypeFields);
+
+    // Dynamic Variant addition
+    const addBtn = document.getElementById('add-variant-btn');
+    const container = document.getElementById('variants-container');
+    const totalForms = document.getElementById('id_variants-TOTAL_FORMS');
+
+    addBtn.addEventListener('click', () => {
+        const formNum = parseInt(totalForms.value);
+        const templateHtml = document.getElementById('empty-variant-template').innerHTML;
+        
+        // Replace form prefix with number
+        const newFormHtml = templateHtml.replace(/__prefix__/g, formNum);
+        
+        // Append row
+        const newRow = document.createElement('div');
+        newRow.innerHTML = newFormHtml;
+        container.appendChild(newRow.firstElementChild);
+        
+        // Increment forms count
+        totalForms.value = formNum + 1;
+        
+        // Re-apply product type field toggles
+        toggleProductTypeFields();
+    });
+
+    function removeVariantRow(button) {
+        const row = button.closest('.variant-row');
+        row.remove();
+        // Note: For existing forms (with IDs) Django wants us to check the DELETE checkbox.
+        // But for newly added JavaScript forms, we can just remove them and they won't submit.
+        // Django formset validation is relaxed on missing dynamic indices as long as TOTAL_FORMS is correct.
+        // However, to keep it simple, we don't decrement TOTAL_FORMS because indices must be clean. 
+        // We will let the user delete new rows easily.
+    }
+</script>
+{% endblock %}
+{% endblock %}

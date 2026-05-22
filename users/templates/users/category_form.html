@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if category %}Edit Category{% else %}Add Category{% endif %} - The Cooking Nurse{% endblock %}
+
+{% block content %}
+<div class="page-container py-10 max-w-3xl mx-auto px-margin-mobile md:px-margin-desktop min-h-[70vh]">
+    <div class="flex items-center gap-2 text-sm text-on-surface-variant font-medium mb-6">
+        <a href="{% url 'users:staff_dashboard' %}?tab=tab-inventory" class="hover:text-primary transition-colors flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span> Staff Dashboard
+        </a>
+        <span>/</span>
+        <span class="text-on-surface">{% if category %}Edit Category{% else %}New Category{% endif %}</span>
+    </div>
+
+    <div class="glass-panel p-8 rounded-3xl border border-outline-variant/30 shadow-level-2 bg-surface/60 backdrop-blur-xl">
+        <h1 class="font-display-md text-primary mb-2">{% if category %}Edit "{{ category.name }}"{% else %}Create New Category{% endif %}</h1>
+        <p class="text-on-surface-variant mb-8 text-sm">Categories help organize products in the Fresh Pickens shop.</p>
+        
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="bg-error-container text-on-error-container p-4 rounded-xl text-sm mb-6">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+            
+            {% for field in form %}
+            <div class="flex flex-col gap-1.5">
+                <label for="{{ field.id_for_label }}" class="font-label-md text-primary font-bold">
+                    {{ field.label }} {% if field.field.required %}<span class="text-error">*</span>{% endif %}
+                </label>
+                {{ field }}
+                {% if field.help_text %}
+                <p class="text-xs text-on-surface-variant">{{ field.help_text }}</p>
+                {% endif %}
+                {% if field.errors %}
+                <p class="text-xs text-error font-medium">{{ field.errors.0 }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <div class="pt-6 flex justify-end gap-4 border-t border-outline-variant/30 mt-8">
+                <a href="{% url 'users:staff_dashboard' %}?tab=tab-inventory" class="btn-secondary py-2.5 px-6 rounded-full font-bold">Cancel</a>
+                <button type="submit" class="btn-primary py-2.5 px-8 rounded-full font-bold shadow-level-1 hover:shadow-level-2 transition-all">Save Category</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

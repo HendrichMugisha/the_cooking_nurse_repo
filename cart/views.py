@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
-from .cart import Cart
+from django.contrib import messages
+
 from catalog.models import ProductVariant
 from classes.models import Course, ClassSession
+from .cart import Cart
 
 @require_POST
 def cart_add(request, item_type, item_id):
@@ -20,9 +22,11 @@ def cart_add(request, item_type, item_id):
         # Get quantity from form, default to 1
         quantity = int(request.POST.get('quantity', 1))
         cart.add(item=item, item_type=item_type, quantity=quantity)
+        item_name = getattr(item, 'title', None) or getattr(item.product, 'name', 'Item') if hasattr(item, 'product') else 'Item'
+        messages.success(request, f"Added {item_name} to your cart.")
         
     # Redirect back to where they came from (or fallback to cart)
-    next_url = request.POST.get('next', 'cart:cart_detail')
+    next_url = request.POST.get('next') or request.META.get('HTTP_REFERER', 'cart:cart_detail')
     return redirect(next_url)
 
 @require_POST

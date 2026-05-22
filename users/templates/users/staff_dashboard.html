@@ -3,117 +3,754 @@
 {% block title %}Staff Dashboard - The Cooking Nurse{% endblock %}
 
 {% block content %}
-<div class="page-container py-10 min-h-[80vh]">
-    <div class="flex justify-between items-end mb-8 border-b border-outline-variant pb-4">
+<div class="page-container py-10 min-h-[85vh] max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 border-b border-outline-variant/30 pb-6">
         <div>
-            <h1 class="font-display-lg text-primary">Staff Dashboard</h1>
-            <p class="text-on-surface-variant">Rapid Inventory & Booking Management</p>
+            <h1 class="font-display-lg text-primary bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent">Staff Management Console</h1>
+            <p class="text-on-surface-variant font-medium">Configure inventory, courses, client relations & global site content</p>
         </div>
-        <div class="flex gap-4">
-            <a href="/admin/" class="btn-accent text-sm py-2 px-4" target="_blank">Full Database Admin</a>
-            <a href="{% url 'users:logout' %}" class="btn-primary text-sm py-2 px-4">Logout</a>
+        <div class="flex items-center gap-4">
+            <a href="{% url 'users:logout' %}" class="btn-primary text-sm py-2.5 px-6 rounded-full font-semibold shadow-level-1 hover:shadow-level-2 transition-all">Logout</a>
         </div>
     </div>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="bg-primary-fixed text-on-primary-fixed p-4 rounded-md mb-8 shadow-sm font-bold">
-                {{ message }}
+    <!-- ANALYTICS CARDS GRID -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+        <!-- Revenue Card -->
+        <div class="glass-panel p-5 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-lg flex items-center gap-4 shadow-level-1 hover:shadow-level-2 transition-all">
+            <div class="p-3.5 bg-primary/10 rounded-xl text-primary">
+                <span class="material-symbols-outlined text-3xl">payments</span>
             </div>
-        {% endfor %}
-    {% endif %}
+            <div>
+                <span class="text-xs text-on-surface-variant font-bold uppercase tracking-wider block">Total Sales</span>
+                <span class="text-xl font-bold font-display text-primary">UGX {{ total_revenue|floatformat:"0" }}</span>
+            </div>
+        </div>
 
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-12">
-        
-        <!-- Rapid Inventory Manager -->
-        <div>
-            <div class="card p-6">
-                <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined">inventory_2</span> Fresh Pickens Stock
+        <!-- Low Stock Card -->
+        <div class="glass-panel p-5 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-lg flex items-center gap-4 shadow-level-1 hover:shadow-level-2 transition-all">
+            <div class="p-3.5 {% if low_stock_count > 0 %}bg-accent/15 text-accent{% else %}bg-primary/10 text-primary{% endif %} rounded-xl">
+                <span class="material-symbols-outlined text-3xl">warning_amber</span>
+            </div>
+            <div>
+                <span class="text-xs text-on-surface-variant font-bold uppercase tracking-wider block">Low Stock Alert</span>
+                <span class="text-xl font-bold font-display {% if low_stock_count > 0 %}text-accent{% else %}text-primary{% endif %}">{{ low_stock_count }} items</span>
+            </div>
+        </div>
+
+        <!-- Upcoming bookings -->
+        <div class="glass-panel p-5 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-lg flex items-center gap-4 shadow-level-1 hover:shadow-level-2 transition-all">
+            <div class="p-3.5 bg-primary/10 rounded-xl text-primary">
+                <span class="material-symbols-outlined text-3xl">local_activity</span>
+            </div>
+            <div>
+                <span class="text-xs text-on-surface-variant font-bold uppercase tracking-wider block">Timetable Sessions</span>
+                <span class="text-xl font-bold font-display text-primary">{{ upcoming_seats.count }} active</span>
+            </div>
+        </div>
+
+        <!-- Subscriber count -->
+        <div class="glass-panel p-5 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-lg flex items-center gap-4 shadow-level-1 hover:shadow-level-2 transition-all">
+            <div class="p-3.5 bg-primary/10 rounded-xl text-primary">
+                <span class="material-symbols-outlined text-3xl">mail</span>
+            </div>
+            <div>
+                <span class="text-xs text-on-surface-variant font-bold uppercase tracking-wider block">Subscribers</span>
+                <span class="text-xl font-bold font-display text-primary">{{ subscribers_count }} emails</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABS NAVIGATION -->
+    <div class="inline-flex flex-wrap p-2 rounded-3xl bg-surface/30 backdrop-blur-md border border-white/40 shadow-sm gap-2 mb-8 w-full md:w-auto">
+        <button onclick="openTab('tab-analytics')" id="btn-tab-analytics" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Analytics & Orders</button>
+        <button onclick="openTab('tab-inventory')" id="btn-tab-inventory" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Inventory (Products)</button>
+        <button onclick="openTab('tab-classes')" id="btn-tab-classes" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Classes Timetable</button>
+        <button onclick="openTab('tab-rentals')" id="btn-tab-rentals" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Studio Rentals</button>
+        <button onclick="openTab('tab-users')" id="btn-tab-users" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">User Access Roles</button>
+        <button onclick="openTab('tab-newsletter')" id="btn-tab-newsletter" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Subscribers</button>
+        <button onclick="openTab('tab-site')" id="btn-tab-site" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Site Settings</button>
+    </div>
+
+    <!-- TAB: ANALYTICS & ORDERS -->
+    <div id="tab-analytics" class="tab-content hidden space-y-6">
+        <div class="glass-panel p-6 rounded-3xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-level-2">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-headline-md text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined">receipt_long</span> All Client Transactions
                 </h2>
-                <form method="POST">
-                    {% csrf_token %}
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead>
-                                <tr class="border-b border-outline-variant text-on-surface-variant">
-                                    <th class="pb-2 font-label-md">Product</th>
-                                    <th class="pb-2 font-label-md">Variant</th>
-                                    <th class="pb-2 font-label-md">Current Stock</th>
-                                    <th class="pb-2 font-label-md w-24">Update</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for variant in variants %}
-                                {% if variant.product.product_type == 'physical' %}
-                                <tr class="border-b border-surface-variant hover:bg-surface-bright">
-                                    <td class="py-3 font-bold">{{ variant.product.name }}</td>
-                                    <td class="py-3">{{ variant.name }}</td>
-                                    <td class="py-3">
-                                        {% if variant.stock <= 5 %}
-                                            <span class="text-error font-bold">{{ variant.stock }}</span>
-                                        {% else %}
-                                            <span class="text-primary">{{ variant.stock }}</span>
-                                        {% endif %}
-                                    </td>
-                                    <td class="py-3">
-                                        <input type="number" name="variant_{{ variant.id }}" value="{{ variant.stock }}" min="0" class="form-input py-1 px-2 w-full text-center">
-                                    </td>
-                                </tr>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-outline-variant/30 text-on-surface-variant font-bold text-xs uppercase">
+                            <th class="pb-3">Order ID</th>
+                            <th class="pb-3">Client Email</th>
+                            <th class="pb-3">Created On</th>
+                            <th class="pb-3">Total (UGX)</th>
+                            <th class="pb-3 text-center">Status</th>
+                            <th class="pb-3 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant/10">
+                        {% for order in all_orders %}
+                        <tr class="hover:bg-primary/5 transition-colors duration-150">
+                            <td class="py-4 font-bold text-primary">#{{ order.id }}</td>
+                            <td class="py-4">
+                                <div class="font-medium text-on-surface">{{ order.user.first_name }} {{ order.user.last_name }}</div>
+                                <div class="text-xs text-on-surface-variant">{{ order.user.email }}</div>
+                            </td>
+                            <td class="py-4 text-on-surface-variant">{{ order.created_at|date:"M d, Y H:i" }}</td>
+                            <td class="py-4 font-bold">UGX {{ order.total_amount }}</td>
+                            <td class="py-4 text-center">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider
+                                    {% if order.status == 'completed' %}
+                                        bg-primary/10 text-primary
+                                    {% elif order.status == 'paid' or order.status == 'shipped' %}
+                                        bg-tertiary/10 text-tertiary
+                                    {% elif order.status == 'pending' %}
+                                        bg-outline-variant/20 text-on-surface-variant
+                                    {% else %}
+                                        bg-error/10 text-error
+                                    {% endif %}">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="py-4 text-right">
+                                <a href="{% url 'users:order_detail' order.id %}" class="btn-primary text-xs py-1.5 px-4 rounded-full font-bold shadow-sm">
+                                    Manage Delivery
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="py-8 text-center text-on-surface-variant">No client transactions recorded yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: INVENTORY -->
+    <div id="tab-inventory" class="tab-content hidden space-y-6">
+        <div class="glass-panel p-6 rounded-3xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-level-2">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-headline-md text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined">storefront</span> Fresh Pickens Inventory
+                </h2>
+                <div class="flex gap-3">
+                    <a href="{% url 'users:category_add' %}" class="btn-secondary py-2 px-5 rounded-full text-xs font-bold flex items-center gap-2 border border-outline-variant">
+                        <span class="material-symbols-outlined text-sm">category</span> Manage Categories
+                    </a>
+                    <a href="{% url 'users:product_add' %}" class="btn-accent py-2 px-5 rounded-full text-xs font-bold flex items-center gap-2 border border-tertiary">
+                        <span class="material-symbols-outlined text-sm">add</span> Add New Product
+                    </a>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-outline-variant/30 text-on-surface-variant font-bold text-xs uppercase">
+                            <th class="pb-3">Product Info</th>
+                            <th class="pb-3">Type</th>
+                            <th class="pb-3">Category</th>
+                            <th class="pb-3">Variants details (SKU | Price | Stock)</th>
+                            <th class="pb-3 text-center">Status</th>
+                            <th class="pb-3 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant/10 text-on-surface">
+                        {% for product in products %}
+                        <tr class="hover:bg-primary/5 transition-colors duration-150">
+                            <td class="py-4 flex items-center gap-3">
+                                {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-12 h-12 rounded-lg object-cover border border-outline-variant/20 shadow-sm">
+                                {% else %}
+                                <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant border border-outline-variant/20">
+                                    <span class="material-symbols-outlined text-xl">image</span>
+                                </div>
                                 {% endif %}
+                                <div>
+                                    <span class="font-bold text-primary block leading-snug">{{ product.name }}</span>
+                                    <span class="text-xs text-on-surface-variant line-clamp-1 max-w-xs">{{ product.description }}</span>
+                                </div>
+                            </td>
+                            <td class="py-4">
+                                <span class="capitalize text-xs font-semibold px-2.5 py-1 rounded bg-surface-container text-on-surface-variant">{{ product.get_product_type_display }}</span>
+                            </td>
+                            <td class="py-4 text-on-surface-variant font-medium">
+                                {% for cat in product.categories.all %}
+                                    <span class="bg-surface-container px-2 py-0.5 rounded text-xs mr-1">{{ cat.name }}</span>
+                                {% empty %}
+                                    Uncategorized
                                 {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="mt-6 flex justify-end">
-                        <button type="submit" class="btn-primary py-2 px-6">Save Inventory</button>
-                    </div>
-                </form>
+                            </td>
+                            <td class="py-4">
+                                <div class="space-y-1">
+                                    {% for var in product.variants.all %}
+                                    <div class="text-xs flex items-center gap-2">
+                                        <span class="font-bold text-on-surface">{{ var.name }}:</span>
+                                        <span class="text-on-surface-variant">{{ var.sku|default:"No SKU" }}</span>
+                                        <span class="text-primary font-bold">UGX {{ var.price }}</span>
+                                        {% if product.product_type == 'physical' %}
+                                            {% if var.stock <= 5 %}
+                                            <span class="text-error font-bold">(Only {{ var.stock }} left!)</span>
+                                            {% else %}
+                                            <span class="text-primary font-medium">({{ var.stock }} in stock)</span>
+                                            {% endif %}
+                                        {% else %}
+                                        <span class="text-tertiary font-bold">(Digital)</span>
+                                        {% endif %}
+                                    </div>
+                                    {% empty %}
+                                    <span class="text-xs text-error font-semibold flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-xs">error</span> No variants configured!
+                                    </span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td class="py-4 text-center">
+                                {% if product.is_active %}
+                                <span class="text-primary font-bold text-xs bg-primary/10 px-2 py-0.5 rounded">Active</span>
+                                {% else %}
+                                <span class="text-on-surface-variant font-bold text-xs bg-surface-container px-2 py-0.5 rounded">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-4 text-right">
+                                <div class="flex justify-end gap-2">
+                                    <a href="{% url 'users:product_edit' product.id %}" class="btn-primary text-xs py-1.5 px-3 rounded-full font-bold shadow-sm flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-xs">edit</span> Edit
+                                    </a>
+                                    <a href="{% url 'users:product_delete' product.id %}" class="btn-accent py-1.5 px-3 rounded-full text-xs font-bold flex items-center gap-1 border border-tertiary bg-error text-white hover:bg-error/95">
+                                        <span class="material-symbols-outlined text-xs">delete</span> Remove
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="py-8 text-center text-on-surface-variant">No items in the store database.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-
-        <div class="flex flex-col gap-8">
-            <!-- Upcoming Classes -->
-            <div class="card p-6 bg-surface-bright">
-                <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined">event_seat</span> Upcoming Classes
-                </h2>
-                <div class="space-y-4">
-                    {% for session in sessions %}
-                    <div class="flex justify-between items-center border-b border-outline-variant/30 pb-3">
-                        <div>
-                            <span class="font-bold text-on-surface block">{{ session.course.title }}</span>
-                            <span class="text-sm text-on-surface-variant">{{ session.date }} | {{ session.start_time|time:"H:i" }}</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-sm block text-on-surface-variant">Capacity</span>
-                            <span class="font-bold {% if session.is_full %}text-error{% else %}text-primary{% endif %}">
-                                {{ session.attendees_count }} / {{ session.capacity }}
-                            </span>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Recent Orders -->
-            <div class="card p-6">
-                <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined">receipt</span> Recent Orders
-                </h2>
-                <div class="space-y-3">
-                    {% for order in recent_orders %}
-                    <div class="flex justify-between items-center text-sm border border-outline-variant/30 p-2 rounded">
-                        <span class="font-bold">#{{ order.id }} - {{ order.user.first_name }}</span>
-                        <span class="uppercase text-tertiary-container font-bold">{{ order.status }}</span>
-                    </div>
-                    {% empty %}
-                    <p class="text-on-surface-variant text-sm">No orders yet.</p>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
     </div>
+
+    <!-- TAB: CLASSES -->
+    <div id="tab-classes" class="tab-content hidden space-y-6">
+        <div class="glass-panel p-6 rounded-3xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-level-2">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-headline-md text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined">school</span> Cooking Classes & Timetables
+                </h2>
+                <a href="{% url 'users:course_add' %}" class="btn-accent py-2 px-5 rounded-full text-xs font-bold flex items-center gap-2 border border-tertiary">
+                    <span class="material-symbols-outlined text-sm">add</span> Create New Course
+                </a>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-outline-variant/30 text-on-surface-variant font-bold text-xs uppercase">
+                            <th class="pb-3">Course / Class Title</th>
+                            <th class="pb-3">Type</th>
+                            <th class="pb-3">Timetable Sessions (Date | Seats Registered)</th>
+                            <th class="pb-3">Base Price (UGX)</th>
+                            <th class="pb-3 text-center">Status</th>
+                            <th class="pb-3 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant/10 text-on-surface">
+                        {% for course in courses %}
+                        <tr class="hover:bg-primary/5 transition-colors duration-150">
+                            <td class="py-4 flex items-center gap-3">
+                                {% if course.image %}
+                                <img src="{{ course.image.url }}" alt="{{ course.title }}" class="w-12 h-12 rounded-lg object-cover border border-outline-variant/20 shadow-sm">
+                                {% else %}
+                                <div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant border border-outline-variant/20">
+                                    <span class="material-symbols-outlined text-xl">image</span>
+                                </div>
+                                {% endif %}
+                                <div>
+                                    <span class="font-bold text-primary block leading-snug">{{ course.title }}</span>
+                                    <span class="text-xs text-on-surface-variant line-clamp-1 max-w-xs">{{ course.description }}</span>
+                                </div>
+                            </td>
+                            <td class="py-4">
+                                <span class="capitalize text-xs font-semibold px-2.5 py-1 rounded bg-surface-container text-on-surface-variant">{{ course.get_course_type_display }}</span>
+                            </td>
+                            <td class="py-4">
+                                <div class="space-y-1.5">
+                                    {% if course.course_type == 'physical' %}
+                                        {% for session in course.sessions.all %}
+                                        <div class="text-xs flex items-center gap-3">
+                                            <span class="font-semibold text-on-surface-variant">{{ session.date|date:"D, M d" }} at {{ session.start_time|time:"H:i" }}</span>
+                                            <div class="flex items-center gap-1.5">
+                                                <span class="font-bold text-primary">{{ session.attendees_count }}</span>
+                                                <span class="text-outline-variant">/</span>
+                                                <span class="text-on-surface-variant">{{ session.capacity }} booked</span>
+                                            </div>
+                                            {% if session.is_full %}
+                                            <span class="text-xs text-error font-bold px-1.5 py-0.5 rounded bg-error/10">Full!</span>
+                                            {% endif %}
+                                        </div>
+                                        {% empty %}
+                                        <span class="text-xs text-error font-semibold flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-xs">error</span> No session dates scheduled.
+                                        </span>
+                                        {% endfor %}
+                                    {% else %}
+                                    <div class="text-xs text-tertiary font-bold flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm">ondemand_video</span> Pre-recorded Lectures Portal
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="py-4 font-bold text-primary">UGX {{ course.price }}</td>
+                            <td class="py-4 text-center">
+                                {% if course.is_active %}
+                                <span class="text-primary font-bold text-xs bg-primary/10 px-2 py-0.5 rounded">Active</span>
+                                {% else %}
+                                <span class="text-on-surface-variant font-bold text-xs bg-surface-container px-2 py-0.5 rounded">Inactive</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-4 text-right">
+                                <div class="flex justify-end gap-2">
+                                    <a href="{% url 'users:course_edit' course.id %}" class="btn-primary text-xs py-1.5 px-3 rounded-full font-bold shadow-sm flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-xs">edit</span> Edit Timetable
+                                    </a>
+                                    <a href="{% url 'users:course_delete' course.id %}" class="btn-accent py-1.5 px-3 rounded-full text-xs font-bold flex items-center gap-1 border border-tertiary bg-error text-white hover:bg-error/95">
+                                        <span class="material-symbols-outlined text-xs">delete</span> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="py-8 text-center text-on-surface-variant">No classes in the timetable.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- TAB: RENTALS -->
+    <div id="tab-rentals" class="tab-content hidden space-y-6">
+        <div class="glass-panel p-6 rounded-3xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-level-2">
+            <h2 class="font-headline-md text-primary mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined">kitchen</span> Studio Rental Requests
+            </h2>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-outline-variant/30 text-on-surface-variant font-bold text-xs uppercase">
+                            <th class="pb-3">Customer</th>
+                            <th class="pb-3">Requested Slot</th>
+                            <th class="pb-3">Purpose</th>
+                            <th class="pb-3">Price (UGX)</th>
+                            <th class="pb-3 text-center">Status</th>
+                            <th class="pb-3 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant/10 text-on-surface">
+                        {% for booking in studio_bookings %}
+                        <tr class="hover:bg-primary/5 transition-colors duration-150">
+                            <td class="py-4">
+                                <div class="font-bold text-on-surface">{{ booking.user.first_name }} {{ booking.user.last_name }}</div>
+                                <div class="text-xs text-on-surface-variant font-semibold">{{ booking.user.email }}</div>
+                            </td>
+                            <td class="py-4">
+                                <div class="font-semibold text-primary">{{ booking.date|date:"D, M d Y" }}</div>
+                                <div class="text-xs text-on-surface-variant">{{ booking.start_time|time:"H:i" }} - {{ booking.end_time|time:"H:i" }}</div>
+                            </td>
+                            <td class="py-4 text-on-surface-variant italic max-w-[200px] truncate">
+                                {{ booking.purpose }}
+                            </td>
+                            <td class="py-4 font-bold text-tertiary">
+                                {% if booking.total_price %}
+                                    UGX {{ booking.total_price }}
+                                {% else %}
+                                    <span class="text-xs text-on-surface-variant italic">Offline Quote</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-4 text-center">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider
+                                    {% if booking.status == 'paid' %}
+                                        bg-primary/10 text-primary
+                                    {% elif booking.status == 'approved' %}
+                                        bg-tertiary/10 text-tertiary
+                                    {% elif booking.status == 'pending' %}
+                                        bg-outline-variant/20 text-on-surface-variant
+                                    {% else %}
+                                        bg-error/10 text-error
+                                    {% endif %}">
+                                    {{ booking.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="py-4 text-right">
+                                <div class="flex justify-end gap-2">
+                                    <form action="" method="POST" class="inline">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="studio_booking_status">
+                                        <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                                        
+                                        {% if booking.status == 'pending' %}
+                                        <button type="submit" name="status" value="approved" class="btn-primary text-xs py-1.5 px-3 rounded-full font-bold shadow-sm inline-flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-[14px]">check</span> Approve
+                                        </button>
+                                        <button type="submit" name="status" value="cancelled" class="btn-accent py-1.5 px-3 rounded-full text-xs font-bold inline-flex items-center gap-1 border border-tertiary bg-error text-white hover:bg-error/95">
+                                            <span class="material-symbols-outlined text-[14px]">close</span> Cancel
+                                        </button>
+                                        {% elif booking.status == 'approved' %}
+                                        <button type="submit" name="status" value="paid" class="btn-primary-mustard-glow text-xs py-1.5 px-3 rounded-full font-bold shadow-sm inline-flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-[14px]">payments</span> Mark Paid
+                                        </button>
+                                        <button type="submit" name="status" value="cancelled" class="btn-accent py-1.5 px-3 rounded-full text-xs font-bold inline-flex items-center gap-1 border border-tertiary bg-error text-white hover:bg-error/95">
+                                            <span class="material-symbols-outlined text-[14px]">close</span> Cancel
+                                        </button>
+                                        {% elif booking.status == 'paid' %}
+                                        <span class="text-xs text-primary font-bold bg-primary/10 px-2.5 py-1 rounded-full flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">check_circle</span> Confirmed & Paid</span>
+                                        {% else %}
+                                        <span class="text-xs text-on-surface-variant font-medium bg-surface-container px-2.5 py-1 rounded-full flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">cancel</span> Cancelled Request</span>
+                                        {% endif %}
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="py-8 text-center text-on-surface-variant">No studio rental requests found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: USER ROLES -->
+    <div id="tab-users" class="tab-content hidden space-y-6">
+        <div class="glass-panel p-6 rounded-3xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-level-2">
+            <h2 class="font-headline-md text-primary mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined">group</span> Registered User Directory & Roles
+            </h2>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-outline-variant/30 text-on-surface-variant font-bold text-xs uppercase">
+                            <th class="pb-3">User Profile</th>
+                            <th class="pb-3">Date Joined</th>
+                            <th class="pb-3 text-center">Custom Dashboard privileges</th>
+                            <th class="pb-3 text-center">Account Status</th>
+                            <th class="pb-3 text-right">Quick Admin Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant/10 text-on-surface">
+                        {% for usr in users %}
+                        <tr class="hover:bg-primary/5 transition-colors duration-150">
+                            <td class="py-4">
+                                <div class="font-bold text-on-surface">{{ usr.first_name }} {{ usr.last_name|default:"" }}</div>
+                                <div class="text-xs text-on-surface-variant font-semibold">{{ usr.email }}</div>
+                                {% if usr.phone_number %}
+                                <div class="text-xs text-on-surface-variant">{{ usr.phone_number }}</div>
+                                {% endif %}
+                            </td>
+                            <td class="py-4 text-on-surface-variant">{{ usr.date_joined|date:"M d, Y" }}</td>
+                            <td class="py-4 text-center font-bold">
+                                {% if usr.is_superuser %}
+                                <span class="text-tertiary bg-tertiary/10 px-3 py-1 rounded-full text-xs uppercase tracking-wider">Superuser Developer</span>
+                                {% elif usr.is_staff %}
+                                <span class="text-primary bg-primary/10 px-3 py-1 rounded-full text-xs uppercase tracking-wider">Staff Administrator</span>
+                                {% else %}
+                                <span class="text-on-surface-variant bg-surface-container px-3 py-1 rounded-full text-xs uppercase tracking-wider">Normal Customer</span>
+                                {% endif %}
+                            </td>
+                            <td class="py-4 text-center font-semibold">
+                                {% if usr.is_active %}
+                                <span class="text-primary text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm icon-fill">circle</span> Active
+                                </span>
+                                {% else %}
+                                <span class="text-error text-xs flex items-center justify-center gap-1">
+                                    <span class="material-symbols-outlined text-sm icon-fill">circle</span> Blocked
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="py-4 text-right">
+                                <div class="flex justify-end gap-2">
+                                    {% if not usr.is_superuser %}
+                                    <button type="button" onclick="confirmRoleToggle('{% url 'users:toggle_user_staff' usr.id %}', '{{ usr.email|escapejs }}', {% if usr.is_staff %}true{% else %}false{% endif %})" class="btn-primary text-xs py-1.5 px-3 rounded-full font-bold shadow-sm flex items-center gap-1 {% if usr.is_staff %}bg-outline-variant text-on-surface{% endif %}">
+                                        <span class="material-symbols-outlined text-xs">admin_panel_settings</span> 
+                                        {% if usr.is_staff %}Revoke Staff{% else %}Make Staff{% endif %}
+                                    </button>
+                                    
+                                    <!-- Toggle Active -->
+                                    <a href="{% url 'users:toggle_user_active' usr.id %}" class="btn-accent py-1.5 px-3 rounded-full text-xs font-bold flex items-center gap-1 border border-tertiary {% if usr.is_active %}bg-error text-white hover:bg-error/95{% else %}bg-primary text-white hover:bg-primary/95{% endif %}">
+                                        <span class="material-symbols-outlined text-xs">block</span>
+                                        {% if usr.is_active %}Block{% else %}Unblock{% endif %}
+                                    </a>
+                                    {% else %}
+                                    <span class="text-xs text-on-surface-variant italic">Developer account protected</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="py-8 text-center text-on-surface-variant">No user profiles in the database.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: NEWSLETTER SUBSCRIBERS -->
+    <div id="tab-newsletter" class="tab-content hidden space-y-6">
+        <div class="glass-panel p-6 rounded-3xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-level-2">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="font-headline-md text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined">mail_outline</span> Newsletter Mailing List
+                </h2>
+                <!-- Copy Emails Action -->
+                <button onclick="copySubscribers()" class="btn-primary py-2 px-5 rounded-full text-xs font-bold flex items-center gap-2 border shadow-sm">
+                    <span class="material-symbols-outlined text-sm">content_copy</span> Copy All Emails
+                </button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse">
+                    <thead>
+                        <tr class="border-b border-outline-variant/30 text-on-surface-variant font-bold text-xs uppercase">
+                            <th class="pb-3">Mailing Email Address</th>
+                            <th class="pb-3">Subscribed On Date</th>
+                            <th class="pb-3 text-right">Mailing Control</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-outline-variant/10 text-on-surface" id="subscribers-tbody">
+                        {% for sub in subscribers %}
+                        <tr class="hover:bg-primary/5 transition-colors duration-150">
+                            <td class="py-4 font-bold text-primary sub-email">{{ sub.email }}</td>
+                            <td class="py-4 text-on-surface-variant font-medium">{{ sub.subscribed_at|date:"M d, Y H:i" }}</td>
+                            <td class="py-4 text-right">
+                                <a href="{% url 'users:newsletter_delete' sub.id %}" class="btn-accent py-1.5 px-4 rounded-full text-xs font-bold border border-tertiary bg-error text-white hover:bg-error/95">
+                                    Remove Email
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="py-8 text-center text-on-surface-variant">No active mailing list subscriptions.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB: SITE GLOBAL CONTENT -->
+    <div id="tab-site" class="tab-content hidden space-y-6">
+        <div class="glass-panel p-6 rounded-3xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-level-2 max-w-3xl">
+            <h2 class="font-headline-md text-primary mb-6 flex items-center gap-2">
+                <span class="material-symbols-outlined">settings</span> Global Settings
+            </h2>
+            
+            <form method="POST" action="{% url 'users:staff_dashboard' %}" class="space-y-6" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="update_settings">
+                
+                {% if settings_form.errors %}
+                <div class="bg-error-container text-on-error-container p-4 rounded-xl text-sm mb-6">
+                    Please correct the errors below.
+                </div>
+                {% endif %}
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Hero Settings -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Hero Section</h3>
+                        
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">Hero Text</label>
+                            {{ settings_form.hero_text }}
+                        </div>
+                        
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">Hero Video (.mp4)</label>
+                            {{ settings_form.hero_video }}
+                            {% if settings.hero_video %}
+                            <p class="text-xs text-on-surface-variant">Current: <a href="{{ settings.hero_video.url }}" class="text-primary hover:underline" target="_blank">{{ settings.hero_video.name }}</a></p>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">Fallback Hero Image</label>
+                            {{ settings_form.hero_image }}
+                            {% if settings.hero_image %}
+                            <p class="text-xs text-on-surface-variant">Current: <a href="{{ settings.hero_image.url }}" class="text-primary hover:underline" target="_blank">{{ settings.hero_image.name }}</a></p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Other Settings -->
+                    <div class="space-y-4">
+                        <h3 class="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Global Content</h3>
+                        
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-label-md text-primary font-bold">The Cooking Nurse's Note</label>
+                            {{ settings_form.nurses_note }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-outline-variant/30 flex justify-end">
+                    <button type="submit" class="btn-primary py-2.5 px-8 rounded-full font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[20px]">save</span> Save Settings
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Glassmorphic Security Confirmation Modal -->
+    <div id="security-confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-all duration-300">
+        <div class="glass-panel max-w-md w-full p-8 rounded-3xl border border-white/40 bg-surface/95 shadow-2xl relative mx-4 transform scale-95 transition-transform duration-300" id="security-confirm-card">
+            <!-- Close Button -->
+            <button onclick="hideSecurityModal()" class="absolute top-4 right-4 text-on-surface-variant hover:text-primary transition-colors focus:outline-none">
+                <span class="material-symbols-outlined text-[20px] font-bold">close</span>
+            </button>
+            
+            <div class="text-center">
+                <div class="w-16 h-16 bg-accent/15 rounded-full flex items-center justify-center mx-auto mb-4 text-accent animate-pulse">
+                    <span class="material-symbols-outlined text-3xl text-error">security</span>
+                </div>
+                
+                <h3 class="font-display-md text-primary mb-2 text-xl font-bold">Confirm Role Change</h3>
+                <p class="text-on-surface-variant text-sm mb-6 leading-relaxed">
+                    You are about to <span id="confirm-action-type" class="font-bold text-error"></span> administrative staff privileges for user:
+                    <br>
+                    <span id="confirm-user-email" class="font-bold text-primary block mt-1 text-base"></span>
+                    <br>
+                    This grants/revokes their direct administrative access to catalog inventory, course scheduling, billing queues, and subscribers mailing list.
+                </p>
+                
+                <div class="flex gap-4">
+                    <button onclick="hideSecurityModal()" class="w-1/2 bg-surface-container hover:bg-surface-container/80 text-on-surface py-3 rounded-full font-bold transition-all text-sm active:scale-95">
+                        Cancel
+                    </button>
+                    <a id="confirm-action-btn" href="" class="w-1/2 btn-primary py-3 rounded-full font-bold shadow-md text-sm flex items-center justify-center">
+                        Confirm
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+{% block extra_scripts %}
+<script>
+    function openTab(tabId) {
+        // Hide all contents
+        document.querySelectorAll('.tab-content').forEach(el => {
+            el.classList.add('hidden');
+        });
+        
+        // Remove active styles from all buttons
+        document.querySelectorAll('.tab-btn').forEach(el => {
+            el.className = "tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary";
+        });
+        
+        // Show current tab content
+        const targetTab = document.getElementById(tabId);
+        if (targetTab) {
+            targetTab.classList.remove('hidden');
+        }
+        
+        // Add active classes to clicked button
+        const targetBtn = document.getElementById('btn-' + tabId);
+        if (targetBtn) {
+            targetBtn.className = "tab-btn px-5 py-2.5 rounded-2xl font-bold text-xs transition-all duration-300 bg-primary text-white shadow-level-1 hover:shadow-level-2";
+        }
+        
+        // Persist tab via URL query parameter so page reloads don't disrupt flow
+        const url = new URL(window.location);
+        url.searchParams.set('tab', tabId);
+        window.history.pushState({}, '', url);
+    }
+
+    // Initialize Active Tab from URL params or default
+    document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        let tabParam = urlParams.get('tab') || '{{ active_tab }}';
+        
+        // Fallback checks
+        if (!document.getElementById(tabParam)) {
+            tabParam = 'tab-analytics';
+        }
+        openTab(tabParam);
+    });
+
+    // Copy Subscribers Action
+    function copySubscribers() {
+        const emails = [];
+        document.querySelectorAll('.sub-email').forEach(el => {
+            emails.push(el.textContent.trim());
+        });
+        if (emails.length === 0) {
+            alert("No subscribers in the list!");
+            return;
+        }
+        const emailStr = emails.join(', ');
+        navigator.clipboard.writeText(emailStr).then(() => {
+            alert("Copied " + emails.length + " subscriber emails to clipboard!");
+        }).catch(err => {
+            console.error("Clipboard copy failed", err);
+            alert("Emails list: " + emailStr);
+        });
+    }
+
+    // Role Toggling Security Confirmation
+    function confirmRoleToggle(url, email, isStaff) {
+        const modal = document.getElementById('security-confirm-modal');
+        const card = document.getElementById('security-confirm-card');
+        const typeSpan = document.getElementById('confirm-action-type');
+        const emailSpan = document.getElementById('confirm-user-email');
+        const actionBtn = document.getElementById('confirm-action-btn');
+        
+        typeSpan.innerText = isStaff ? "REVOKE" : "GRANT";
+        emailSpan.innerText = email;
+        actionBtn.href = url;
+        
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+        }, 10);
+    }
+
+    function hideSecurityModal() {
+        const modal = document.getElementById('security-confirm-modal');
+        const card = document.getElementById('security-confirm-card');
+        card.classList.remove('scale-100');
+        card.classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 150);
+    }
+</script>
+{% endblock %}
 {% endblock %}

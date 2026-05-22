@@ -6,4 +6,5 @@ app_name = 'portfolio'
 urlpatterns = [
     path('', views.home, name='home'),
     path('newsletter/subscribe/', views.newsletter_subscribe, name='newsletter_subscribe'),
+    path('studio-rental/', views.studio_rental, name='studio_rental'),
 ]

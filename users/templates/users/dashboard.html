@@ -4,18 +4,39 @@
 
 {% block content %}
 <div class="page-container py-10 min-h-[70vh]">
-    <div class="flex justify-between items-end mb-8 border-b border-outline-variant pb-4">
-        <div>
-            <h1 class="font-display-lg text-primary">My Dashboard</h1>
-            <p class="text-on-surface-variant">Welcome back, {{ request.user.first_name|default:request.user.email }}</p>
+    <div class="glass-panel p-6 rounded-3xl border border-outline-variant/30 text-center mb-8 bg-surface/60 backdrop-blur-lg shadow-level-1">
+        <div class="w-20 h-20 mx-auto bg-primary/10 rounded-full flex items-center justify-center text-primary mb-4 shadow-inner">
+            <span class="material-symbols-outlined text-[40px]">account_circle</span>
         </div>
-        <a href="{% url 'users:logout' %}" class="btn-accent text-sm py-2 px-4">Logout</a>
+        <h1 class="font-display-md text-primary">{{ request.user.first_name|default:"Your Profile" }}</h1>
+        <p class="text-on-surface-variant font-medium text-sm">{{ request.user.email }}</p>
+        
+        <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {% if request.user.is_staff %}
+            <a href="{% url 'users:staff_dashboard' %}" class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-tertiary/10 text-tertiary hover:bg-tertiary/20 transition-all border border-tertiary/30 shadow-sm">
+                <span class="material-symbols-outlined text-[28px]">admin_panel_settings</span>
+                <span class="font-bold text-xs tracking-wider uppercase">Admin Portal</span>
+            </a>
+            {% endif %}
+            <a href="#orders" class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-primary/5 text-primary hover:bg-primary/10 transition-all border border-primary/20 shadow-sm">
+                <span class="material-symbols-outlined text-[28px]">receipt_long</span>
+                <span class="font-bold text-xs tracking-wider uppercase">Orders</span>
+            </a>
+            <a href="#downloads" class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-primary/5 text-primary hover:bg-primary/10 transition-all border border-primary/20 shadow-sm">
+                <span class="material-symbols-outlined text-[28px]">cloud_download</span>
+                <span class="font-bold text-xs tracking-wider uppercase">Downloads</span>
+            </a>
+            <a href="{% url 'users:logout' %}" class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-error/5 text-error hover:bg-error/10 transition-all border border-error/20 shadow-sm">
+                <span class="material-symbols-outlined text-[28px]">logout</span>
+                <span class="font-bold text-xs tracking-wider uppercase">Logout</span>
+            </a>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         
         <!-- Order History -->
-        <div class="card p-6">
+        <div id="orders" class="card p-6">
             <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
                 <span class="material-symbols-outlined">receipt_long</span> Order History
             </h2>
@@ -47,7 +68,7 @@
         </div>
 
         <!-- Digital Goods & Access -->
-        <div class="flex flex-col gap-8">
+        <div id="downloads" class="flex flex-col gap-8">
             <div class="card p-6 bg-primary-fixed/10 border-primary-fixed">
                 <h2 class="font-headline-md text-primary mb-4 flex items-center gap-2">
                     <span class="material-symbols-outlined">cloud_download</span> Digital Downloads

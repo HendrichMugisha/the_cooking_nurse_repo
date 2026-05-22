@@ -30,11 +30,12 @@ class CookingNurseEndToEndTests(TestCase):
 
         # 4. Create Products & Variants
         self.p_tomatoes = Product.objects.create(
-            category=self.cat_groceries,
             name="Heirloom Tomato Harvest",
             product_type="physical",
             description="Sustainably grown organic tomatoes."
         )
+        self.p_tomatoes.categories.add(self.cat_groceries)
+        
         self.v_tomatoes_1kg = ProductVariant.objects.create(
             product=self.p_tomatoes, name="1 Kg Box", price=12000, stock=50
         )
@@ -43,21 +44,21 @@ class CookingNurseEndToEndTests(TestCase):
         )
 
         self.p_ghee = Product.objects.create(
-            category=self.cat_groceries,
             name="Pure Artisanal Ghee",
             product_type="physical",
             description="Traditional clarified butter."
         )
+        self.p_ghee.categories.add(self.cat_groceries)
         self.v_ghee_500ml = ProductVariant.objects.create(
             product=self.p_ghee, name="500ml Jar", price=25000, stock=20
         )
 
         self.p_cookbook = Product.objects.create(
-            category=self.cat_digital,
             name="The Everyday Magic Cookbook",
             product_type="digital",
             description="A complete digital guide."
         )
+        self.p_cookbook.categories.add(self.cat_digital)
         self.v_cookbook_download = ProductVariant.objects.create(
             product=self.p_cookbook, name="Digital Download", price=50000, stock=999
         )
@@ -95,8 +96,7 @@ class CookingNurseEndToEndTests(TestCase):
             title="Artisanal Sourdough & Gut Health",
             course_type="online",
             description="Online sourdough course.",
-            price=85000,
-            video_url="https://vimeo.com/placeholder"
+            price=85000
         )
 
         # Clients for testing
@@ -252,7 +252,7 @@ class CookingNurseEndToEndTests(TestCase):
             'phone_number': '+256701111111',
             'city': 'Kampala',
             'neighborhood': 'Kololo',
-            'street_address': 'Plot 4, Acacia Ave'
+            'landmark_or_building': 'Plot 4, Acacia Ave'
         })
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'An account with this email already exists.')
@@ -270,7 +270,7 @@ class CookingNurseEndToEndTests(TestCase):
             'phone_number': '+256701222222',
             'city': 'Kampala',
             'neighborhood': 'Bukoto',
-            'street_address': 'Plot 10, Bukoto St'
+            'landmark_or_building': 'Plot 10, Bukoto St'
         })
         # Verify it redirects to success page
         new_order = Order.objects.get(user__email='new_guest@test.com')
@@ -292,7 +292,7 @@ class CookingNurseEndToEndTests(TestCase):
             'phone_number': '+256701333333',
             'city': 'Kampala',
             'neighborhood': 'Kololo',
-            'street_address': 'Acacia'
+            'landmark_or_building': 'Acacia'
         })
         
         # Check if client session now contains user ID
@@ -301,7 +301,7 @@ class CookingNurseEndToEndTests(TestCase):
         # Verify access to dashboard without login prompt
         response = self.client_unauth.get(reverse('users:dashboard'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Welcome back, Auto')
+        self.assertContains(response, 'Auto')
 
     def test_14_logged_in_checkout_behavior(self):
         """Test 14: Logged-in users skip credentials step at checkout."""
@@ -326,7 +326,7 @@ class CookingNurseEndToEndTests(TestCase):
             status='pending',
             city='Kampala',
             neighborhood='Kiswa',
-            street_address='Acre Road'
+            landmark_or_building='Acre Road'
         )
         OrderItem.objects.create(
             order=order,
@@ -398,7 +398,7 @@ class CookingNurseEndToEndTests(TestCase):
             'phone_number': '+256701555555',
             'city': 'Kampala',
             'neighborhood': 'Nakasero',
-            'street_address': 'Plot 12'
+            'landmark_or_building': 'Plot 12'
         })
         
         # Verify variant stock is deducted
@@ -415,7 +415,7 @@ class CookingNurseEndToEndTests(TestCase):
         response = admin_client.post(reverse('users:staff_dashboard'), {
             f'variant_{self.v_tomatoes_1kg.id}': 77
         })
-        self.assertRedirects(response, reverse('users:staff_dashboard'))
+        self.assertRedirects(response, reverse('users:staff_dashboard') + '?tab=tab-inventory')
         
         # Verify in DB
         self.v_tomatoes_1kg.refresh_from_db()
@@ -493,7 +493,6 @@ class CookingNurseEndToEndTests(TestCase):
         response_purchased = self.client_auth.get(reverse('classes:online_class_player', args=[self.course_sourdough.slug]))
         self.assertEqual(response_purchased.status_code, 200)
         self.assertContains(response_purchased, 'Artisanal Sourdough &amp; Gut Health')
-        self.assertContains(response_purchased, 'mixkit-cooking-in-a-modern-kitchen')
 
     def test_24_checkout_map_coordinates_persistence(self):
         """Test 24: Persisting Kampala delivery Leaflet map coordinates during checkout."""
@@ -504,7 +503,7 @@ class CookingNurseEndToEndTests(TestCase):
         response = self.client_auth.post(reverse('orders:checkout'), {
             'city': 'Kampala',
             'neighborhood': 'Nakasero',
-            'street_address': 'Plot 10, Kyadondo Road',
+            'landmark_or_building': 'Plot 10, Kyadondo Road',
             'delivery_notes': 'Please drop at security gate.',
             'latitude': '0.319523',
             'longitude': '32.576123'
