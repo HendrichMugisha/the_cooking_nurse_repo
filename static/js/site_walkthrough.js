@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 popover: {
                     title: 'Welcome, Ritah! ✨',
-                    description: 'This is a continuous 20-step interactive walkthrough spanning 3 pages (Home -> Login -> Dashboard). As a Registered Nurse and Culinary Chef, this unified digital platform combines your personal brand, booking engine for classes, and your \'Fresh Pickens\' grocery shop into one powerful workspace. Let\'s begin!',
+                    description: 'This is a continuous 30-step interactive walkthrough spanning 3 pages (Home -> Login -> Dashboard). As a Registered Nurse and Culinary Chef, this unified digital platform combines your personal brand, booking engine for classes, and your \'Fresh Pickens\' grocery shop into one powerful workspace. Let\'s begin!',
                     position: 'center'
                 }
             },
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 element: '#bento-studio-rental',
                 popover: {
-                    title: 'Kitchen Studio Hiring 📸',
+                    title: 'Kitchen Studio Renting 📸',
                     description: 'Allows clients to calculate provisional hourly quotes and book the sensory kitchen studio for food photography, masterclasses, pro video shoots, or private dining.',
                     side: 'top',
                     align: 'center'
@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (currentPath.includes(dashboardUrl)) {
         pageContext = 'dashboard';
         localSteps = [
-            // Step 11: Welcome Admin
+            // local index 0 (Global Step 11)
             {
                 popover: {
                     title: 'Welcome to the Staff Dashboard! 👑',
@@ -190,9 +190,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     position: 'center'
                 }
             },
-            // Step 12: Analytics Summary Card Grid
+            // local index 1 (Global Step 12)
             {
-                element: '.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4',
+                element: window.innerWidth < 768 ? '.grid > div:nth-child(1)' : '.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-4',
                 popover: {
                     title: 'Real-time Operations Analytics 📊',
                     description: 'Summarizes key performance indicators (KPIs) in real-time. Note: Total Revenue generated (in UGX) strictly counts fully completed and paid orders only, explicitly ignoring abandoned carts for accuracy!',
@@ -200,13 +200,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     align: 'center'
                 }
             },
-            // Step 13: Analytics & Orders Tab Content
+            // local index 2 (Global Step 13)
             {
-                element: '#tab-analytics',
+                element: '#btn-tab-analytics',
                 popover: {
                     title: 'Transactions & Delivery Hub 💳',
-                    description: 'Shows details of all physical and digital checkout transactions. Administrators can inspect client invoices, billing info, and manage order fulfillment statuses.',
-                    side: 'top',
+                    description: 'This tab shows details of all physical and digital checkout transactions.',
+                    side: 'bottom',
                     align: 'center'
                 },
                 onHighlighted: () => {
@@ -214,12 +214,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (tabBtn) tabBtn.click();
                 }
             },
-            // Step 14: Inventory Tab
+            // local index 3 (Global Step 14)
+            {
+                element: window.innerWidth < 768 ? '#tab-analytics' : '#tab-analytics table',
+                popover: {
+                    title: 'Client Transactions Log 📜',
+                    description: 'Every client order is recorded here. Click the "Manage Delivery" button to process an order, update its status from "Pending" to "Shipped" or "Completed", and trigger automated client notification emails!',
+                    side: 'top',
+                    align: 'center'
+                }
+            },
+            // local index 4 (Global Step 15)
             {
                 element: '#btn-tab-inventory',
                 popover: {
                     title: 'Bespoke Storefront Inventory 📦',
-                    description: 'Clicking here opens the Fresh Pickens Catalog. You can add new products and manage variant SKUs (e.g., 500ml vs 1L Jar). Stock variants automatically deduct upon checkout to prevent over-selling!',
+                    description: 'Clicking here opens the Fresh Pickens Catalog manager.',
                     side: 'bottom',
                     align: 'center'
                 },
@@ -228,12 +238,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (tabBtn) tabBtn.click();
                 }
             },
-            // Step 15: Classes Timetable Tab
+            // local index 5 (Global Step 16)
+            {
+                element: '#tab-inventory .flex.gap-3',
+                popover: {
+                    title: 'Store Creation Engine 🏗️',
+                    description: 'Quickly create new Grocery Categories (like "Organic Spices") or add entirely New Products to your public storefront.',
+                    side: 'bottom',
+                    align: 'start'
+                }
+            },
+            // local index 6 (Global Step 17)
+            {
+                element: window.innerWidth < 768 ? '#tab-inventory' : '#tab-inventory table th:nth-child(4)',
+                popover: {
+                    title: 'Variant & Stock Guardian 🛡️',
+                    description: 'This column monitors variants (e.g. 500ml vs 1L). Crucially, stock variants deduct automatically on public checkout to prevent over-selling. Low stock triggers the red alert card above!',
+                    side: 'bottom',
+                    align: 'center'
+                }
+            },
+            // local index 7 (Global Step 18)
             {
                 element: '#btn-tab-classes',
                 popover: {
-                    title: 'Classes Scheduler & Slots 🗓️',
-                    description: 'Allows rapid scheduling of hands-on physical classes, defining date, start/end times, and setting custom attendee capacity thresholds. Also handles links to online video lessons.',
+                    title: 'Classes Scheduler 🗓️',
+                    description: 'Manage physical and digital cooking class portals.',
                     side: 'bottom',
                     align: 'center'
                 },
@@ -242,12 +272,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (tabBtn) tabBtn.click();
                 }
             },
-            // Step 16: Studio Rentals Tab
+            // local index 8 (Global Step 19)
+            {
+                element: '#tab-classes .btn-accent',
+                popover: {
+                    title: 'Launch a New Masterclass 🎓',
+                    description: 'Create a new course payload—upload a vibrant cover image, set the base price in UGX, and configure it as either a Physical Studio Class or a Digital Video Course!',
+                    side: 'bottom',
+                    align: 'center'
+                }
+            },
+            // local index 9 (Global Step 20)
+            {
+                element: window.innerWidth < 768 ? '#tab-classes' : '#tab-classes table th:nth-child(3)',
+                popover: {
+                    title: 'Capacity Overbooking Prevention 🚦',
+                    description: 'Physical classes require session dates. The system tracks "Seats Registered" against "Capacity" strictly. If a slot hits capacity, it locks immediately showing a "Full!" badge on the public UI.',
+                    side: 'bottom',
+                    align: 'center'
+                }
+            },
+            // local index 10 (Global Step 21)
             {
                 element: '#btn-tab-rentals',
                 popover: {
                     title: 'Studio Rental Requests 📸',
-                    description: 'Lists all provisional bookings submitted from the home page. Admins can review requested dates, purpose, hourly quotes, approve slots, and mark them as fully paid.',
+                    description: 'Manage incoming kitchen hiring quotes.',
                     side: 'bottom',
                     align: 'center'
                 },
@@ -256,12 +306,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (tabBtn) tabBtn.click();
                 }
             },
-            // Step 17: User Access Roles Tab
+            // local index 11 (Global Step 22)
+            {
+                element: window.innerWidth < 768 ? '#tab-rentals' : '#tab-rentals table th:nth-child(6)',
+                popover: {
+                    title: 'Workflow State Machine 🔄',
+                    description: 'Control the booking lifecycle! A pending request can be "Approved", then transition to "Mark Paid". This updates the internal CRM status and locks the studio calendar.',
+                    side: 'bottom',
+                    align: 'end'
+                }
+            },
+            // local index 12 (Global Step 23)
             {
                 element: '#btn-tab-users',
                 popover: {
-                    title: 'Registered Users Directory 👥',
-                    description: 'A secure CRM repository of all registered customers. Ritah can inspect join dates, search contacts, assign admin privileges, or block fraudulent customer accounts.',
+                    title: 'Registered Users CRM 👥',
+                    description: 'A secure repository of all registered customers and staff.',
                     side: 'bottom',
                     align: 'center'
                 },
@@ -270,12 +330,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (tabBtn) tabBtn.click();
                 }
             },
-            // Step 18: Newsletter Tab
+            // local index 13 (Global Step 24)
+            {
+                element: window.innerWidth < 768 ? '#tab-users' : '#tab-users table th:nth-child(5)',
+                popover: {
+                    title: 'Granular Privilege Escalation 🔐',
+                    description: 'From here, Ritah can elevate trusted employees to "Staff" so they can access this dashboard, or instantly "Block" abusive or fraudulent customer accounts from accessing the storefront.',
+                    side: 'bottom',
+                    align: 'end'
+                }
+            },
+            // local index 14 (Global Step 25)
             {
                 element: '#btn-tab-newsletter',
                 popover: {
                     title: 'Subscribers Mailing List ✉️',
-                    description: 'Shows all organic newsletter subscriptions. Click the \'Copy All Emails\' button to easily copy emails to your clipboard and instantly paste them directly into Mailchimp or AWS SES!',
+                    description: 'Organic lead aggregation.',
                     side: 'bottom',
                     align: 'center'
                 },
@@ -284,12 +354,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (tabBtn) tabBtn.click();
                 }
             },
-            // Step 19: Site Settings Tab
+            // local index 15 (Global Step 26)
+            {
+                element: '#tab-newsletter button',
+                popover: {
+                    title: '1-Click CRM Export 📋',
+                    description: 'Easily "Copy All Emails" to your clipboard and paste them directly into your preferred bulk emailing tool (Mailchimp, AWS SES, or Brevo) for marketing campaigns!',
+                    side: 'bottom',
+                    align: 'end'
+                }
+            },
+            // local index 16 (Global Step 27)
             {
                 element: '#btn-tab-site',
                 popover: {
                     title: 'Global Site Settings ⚙️',
-                    description: 'Your site global content editor. From here, you can easily manage the settings, tags, images, and other general parameters across the entire platform with no coding required.',
+                    description: 'Your no-code frontend editor.',
                     side: 'bottom',
                     align: 'center'
                 },
@@ -298,12 +378,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (tabBtn) tabBtn.click();
                 }
             },
-            // Step 20: Concluding Modal
+            // local index 17 (Global Step 28)
             {
+                element: '#tab-site .grid > div:nth-child(1)',
                 popover: {
-                    title: 'Walkthrough Complete! 🎉',
-                    description: 'You\'ve successfully explored every single feature of the Cooking Nurse web asset! From direct public reservations, e-commerce storefront, to unified admin dashboard CRUD controllers. Click \'Finish\' to complete the tour!',
-                    position: 'center'
+                    title: 'Cinematic Hero Controller 🎬',
+                    description: 'Instantly swap the home page background video (.mp4) or the looping typewriter keywords without ever touching a line of code. It injects directly into the production templates!',
+                    side: 'top',
+                    align: 'start'
+                }
+            },
+            // local index 18 (Global Step 29)
+            {
+                element: '#tab-site button[type="submit"]',
+                popover: {
+                    title: 'Save and Deploy! 🚀',
+                    description: 'Hitting save instantly updates the frontend for all global traffic! This concludes our deep dive into your powerful new workspace. Enjoy!',
+                    side: 'top',
+                    align: 'center'
                 }
             }
         ];
@@ -316,6 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
             allowClose: true,
             animate: true,
             overlayColor: 'rgba(15, 23, 42, 0.7)', // rich dark backdrop overlay
+            stagePadding: window.innerWidth < 768 ? 5 : 10, // tighter padding on mobile
             steps: localSteps,
             onDestroyed: () => {
                 // If closed/exited, reset active states
@@ -350,7 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 // Page 3 transitions (dashboard completes):
-                if (pageContext === 'dashboard' && activeIndex === 9) {
+                if (pageContext === 'dashboard' && activeIndex === 18) {
                     clearTourState();
                     driverObj.destroy();
                     updateFabVisibility();
@@ -401,7 +494,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 localTargetIndex = savedStep - 8;
                 updateFabVisibility();
                 driverObj.drive(localTargetIndex);
-            } else if (pageContext === 'dashboard' && savedStep >= 11 && savedStep <= 20) {
+            } else if (pageContext === 'dashboard' && savedStep >= 11 && savedStep <= 29) {
                 localTargetIndex = savedStep - 11;
                 updateFabVisibility();
                 // Ensure initial analytics tab is loaded
