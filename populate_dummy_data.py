@@ -25,29 +25,29 @@ def populate():
 
     print("Creating Products & Variants...")
     p1 = Product.objects.create(
-        category=cat_groceries,
         name="Heirloom Tomato Harvest",
         product_type="physical",
         description="Sustainably grown, sun-ripened organic tomatoes from our heritage vines. Perfect for slicing, roasting, or enjoying fresh with sea salt."
     )
+    p1.categories.add(cat_groceries)
     ProductVariant.objects.create(product=p1, name="1 Kg Box", price=12000, stock=50)
     ProductVariant.objects.create(product=p1, name="2 Kg Box", price=22000, stock=30)
 
     p2 = Product.objects.create(
-        category=cat_groceries,
         name="Pure Artisanal Ghee",
         product_type="physical",
         description="Traditional, clarified butter made from grass-fed cows. Perfect for authentic local dishes."
     )
+    p2.categories.add(cat_groceries)
     ProductVariant.objects.create(product=p2, name="500ml Jar", price=25000, stock=20)
     ProductVariant.objects.create(product=p2, name="1L Jar", price=45000, stock=15)
 
     p3 = Product.objects.create(
-        category=cat_digital,
         name="The Everyday Magic Cookbook",
         product_type="digital",
         description="A complete digital guide to making 50 quick, healthy, and delicious meals."
     )
+    p3.categories.add(cat_digital)
     ProductVariant.objects.create(product=p3, name="Digital Download", price=50000, stock=999)
 
     print("Creating Courses & Sessions...")
