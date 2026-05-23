@@ -97,24 +97,38 @@ def staff_dashboard(request):
             return redirect('/users/staff-dashboard/?tab=tab-inventory')
             
         elif action == 'update_settings':
-            settings_form = SiteSettingsForm(request.POST, request.FILES, instance=settings)
-            pricing_form = StudioRentalPricingForm(request.POST, instance=pricing)
-            if settings_form.is_valid() and pricing_form.is_valid():
-                try:
+            import traceback as tb
+            import sys
+            try:
+                print("\n[DEBUG] ==== update_settings POST received ====", file=sys.stderr)
+                print(f"[DEBUG] FILES keys: {list(request.FILES.keys())}", file=sys.stderr)
+                print(f"[DEBUG] Building SiteSettingsForm...", file=sys.stderr)
+                settings_form = SiteSettingsForm(request.POST, request.FILES, instance=settings)
+                pricing_form = StudioRentalPricingForm(request.POST, instance=pricing)
+                print(f"[DEBUG] Running settings_form.is_valid()...", file=sys.stderr)
+                settings_valid = settings_form.is_valid()
+                print(f"[DEBUG] settings_form.is_valid() = {settings_valid}", file=sys.stderr)
+                if not settings_valid:
+                    print(f"[DEBUG] settings_form errors: {settings_form.errors}", file=sys.stderr)
+                pricing_valid = pricing_form.is_valid()
+                print(f"[DEBUG] pricing_form.is_valid() = {pricing_valid}", file=sys.stderr)
+                if settings_valid and pricing_valid:
+                    print(f"[DEBUG] Calling settings_form.save()...", file=sys.stderr)
                     settings_form.save()
+                    print(f"[DEBUG] settings_form.save() succeeded. Calling pricing_form.save()...", file=sys.stderr)
                     pricing_form.save()
+                    print(f"[DEBUG] All saves succeeded!", file=sys.stderr)
                     messages.success(request, "Site settings and studio pricing updated successfully!")
                     return redirect('/users/staff-dashboard/?tab=tab-site')
-                except Exception as e:
-                    import traceback
-                    import sys
-                    print("\n" + "="*50, file=sys.stderr)
-                    print("CRITICAL ERROR DURING SITE SETTINGS UPLOAD:", file=sys.stderr)
-                    traceback.print_exc()
-                    print("="*50 + "\n", file=sys.stderr)
-                    messages.error(request, f"System error during upload: {str(e)}. Check Render Logs.")
-            else:
-                messages.error(request, "Failed to update settings. Please check the form errors.")
+                else:
+                    messages.error(request, "Failed to update settings. Please check the form errors.")
+            except Exception as e:
+                print("\n[DEBUG] !!!!!!!!!! CRASH IN update_settings !!!!!!!!!!!", file=sys.stderr)
+                print(f"[DEBUG] Error type: {type(e).__name__}", file=sys.stderr)
+                print(f"[DEBUG] Error message: {str(e)}", file=sys.stderr)
+                tb.print_exc(file=sys.stderr)
+                print("[DEBUG] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", file=sys.stderr)
+                raise
 
         elif action == 'studio_booking_status':
             booking_id = request.POST.get('booking_id')
