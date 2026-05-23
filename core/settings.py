@@ -170,7 +170,7 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 if 'CLOUDINARY_URL' in os.environ:
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+    DEFAULT_FILE_STORAGE = 'core.storage_backends.AutoMediaCloudinaryStorage'
 
 # Authentication Backends
 AUTHENTICATION_BACKENDS = [
