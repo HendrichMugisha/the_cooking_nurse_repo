@@ -1,8 +1,9 @@
 from django.db import models
+from core.storage_backends import select_video_storage, select_raw_storage
 
 class SiteSettings(models.Model):
     hero_text = models.CharField(max_length=255, default="Turn Everyday Cooking into Everyday Magic!")
-    hero_video = models.FileField(upload_to='site/', blank=True, null=True, help_text="Upload an mp4 video for the hero background")
+    hero_video = models.FileField(upload_to='site/', blank=True, null=True, storage=select_video_storage, help_text="Upload an mp4 video for the hero background")
     hero_image = models.ImageField(upload_to='site/', blank=True, null=True, help_text="Fallback hero image (used if video fails or on mobile)")
     nurses_note = models.TextField(default="Tomatoes are rich in Lycopene...", help_text="Note to include in digital downloads and about section")
     
@@ -49,7 +50,7 @@ class SiteSettings(models.Model):
         return "".join(c for c in self.whatsapp_number if c.isdigit())
 
     # Newsletter lead magnet
-    newsletter_lead_magnet = models.FileField(upload_to='site/lead_magnets/', blank=True, null=True,
+    newsletter_lead_magnet = models.FileField(upload_to='site/lead_magnets/', blank=True, null=True, storage=select_raw_storage,
         help_text="Upload a free PDF to offer subscribers as incentive")
     newsletter_lead_magnet_title = models.CharField(max_length=200, blank=True, default="Free Wholesome Recipe Guide")
 

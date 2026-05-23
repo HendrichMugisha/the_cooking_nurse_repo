@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from core.storage_backends import select_video_storage
 
 class Course(models.Model):
     CLASS_TYPES = (
@@ -17,7 +18,7 @@ class Course(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=0, help_text="Price in UGX")
 
     # Only used if course_type is 'online'
-    video = models.FileField(upload_to='course_videos/', blank=True, null=True, help_text="Upload the class video file (e.g. mp4)")
+    video = models.FileField(upload_to='course_videos/', blank=True, null=True, storage=select_video_storage, help_text="Upload the class video file (e.g. mp4)")
 
     is_active = models.BooleanField(default=True)
 

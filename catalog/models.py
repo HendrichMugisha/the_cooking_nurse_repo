@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from core.storage_backends import select_raw_storage
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -37,7 +38,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/', blank=True, null=True)
     
     # Only used if product_type is 'digital'
-    digital_file = models.FileField(upload_to='digital_products/', blank=True, null=True)
+    digital_file = models.FileField(upload_to='digital_products/', blank=True, null=True, storage=select_raw_storage)
     
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
