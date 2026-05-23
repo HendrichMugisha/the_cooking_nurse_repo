@@ -100,10 +100,19 @@ def staff_dashboard(request):
             settings_form = SiteSettingsForm(request.POST, request.FILES, instance=settings)
             pricing_form = StudioRentalPricingForm(request.POST, instance=pricing)
             if settings_form.is_valid() and pricing_form.is_valid():
-                settings_form.save()
-                pricing_form.save()
-                messages.success(request, "Site settings and studio pricing updated successfully!")
-                return redirect('/users/staff-dashboard/?tab=tab-site')
+                try:
+                    settings_form.save()
+                    pricing_form.save()
+                    messages.success(request, "Site settings and studio pricing updated successfully!")
+                    return redirect('/users/staff-dashboard/?tab=tab-site')
+                except Exception as e:
+                    import traceback
+                    import sys
+                    print("\n" + "="*50, file=sys.stderr)
+                    print("CRITICAL ERROR DURING SITE SETTINGS UPLOAD:", file=sys.stderr)
+                    traceback.print_exc()
+                    print("="*50 + "\n", file=sys.stderr)
+                    messages.error(request, f"System error during upload: {str(e)}. Check Render Logs.")
             else:
                 messages.error(request, "Failed to update settings. Please check the form errors.")
 
@@ -162,11 +171,20 @@ def product_create_or_edit(request, pk=None):
         form = ProductForm(request.POST, request.FILES, instance=product)
         formset = ProductVariantFormSet(request.POST, instance=product)
         if form.is_valid() and formset.is_valid():
-            saved_product = form.save()
-            formset.instance = saved_product
-            formset.save()
-            messages.success(request, f"Product '{saved_product.name}' saved successfully!")
-            return redirect('/users/staff-dashboard/?tab=tab-inventory')
+            try:
+                saved_product = form.save()
+                formset.instance = saved_product
+                formset.save()
+                messages.success(request, f"Product '{saved_product.name}' saved successfully!")
+                return redirect('/users/staff-dashboard/?tab=tab-inventory')
+            except Exception as e:
+                import traceback
+                import sys
+                print("\n" + "="*50, file=sys.stderr)
+                print("CRITICAL ERROR DURING PRODUCT UPLOAD:", file=sys.stderr)
+                traceback.print_exc()
+                print("="*50 + "\n", file=sys.stderr)
+                messages.error(request, f"System error during product upload: {str(e)}. Check Render Logs.")
         else:
             messages.error(request, "Failed to save product. Please check the errors below.")
     else:
