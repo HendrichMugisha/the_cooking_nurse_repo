@@ -67,17 +67,19 @@ class CourseForm(StyledModelForm):
     def clean_video(self):
         video = self.cleaned_data.get('video')
         if video:
-            if not video.name.lower().endswith('.mp4'):
+            if hasattr(video, 'name') and video.name and not video.name.lower().endswith('.mp4'):
                 raise ValidationError("Only .mp4 video files are allowed.")
-            if video.size > 500 * 1024 * 1024: # 500MB limit for courses
-                raise ValidationError("Course video file size cannot exceed 500MB.")
+            if hasattr(video, 'file') and hasattr(video.file, 'size'):
+                if video.size > 500 * 1024 * 1024: # 500MB limit for courses
+                    raise ValidationError("Course video file size cannot exceed 500MB.")
         return video
         
     def clean_image(self):
         image = self.cleaned_data.get('image')
         if image:
-            if image.size > 5 * 1024 * 1024: # 5MB limit
-                raise ValidationError("Image file size cannot exceed 5MB.")
+            if hasattr(image, 'file') and hasattr(image.file, 'size'):
+                if image.size > 5 * 1024 * 1024: # 5MB limit
+                    raise ValidationError("Image file size cannot exceed 5MB.")
         return image
 
 class ClassSessionForm(StyledModelForm):
@@ -142,17 +144,19 @@ class SiteSettingsForm(StyledModelForm):
     def clean_hero_video(self):
         video = self.cleaned_data.get('hero_video')
         if video:
-            if not video.name.lower().endswith('.mp4'):
+            if hasattr(video, 'name') and video.name and not video.name.lower().endswith('.mp4'):
                 raise ValidationError("Only .mp4 video files are allowed.")
-            if video.size > 50 * 1024 * 1024: # 50MB limit
-                raise ValidationError("Video file size cannot exceed 50MB.")
+            if hasattr(video, 'file') and hasattr(video.file, 'size'):
+                if video.size > 50 * 1024 * 1024: # 50MB limit
+                    raise ValidationError("Video file size cannot exceed 50MB.")
         return video
         
     def clean_hero_image(self):
         image = self.cleaned_data.get('hero_image')
         if image:
-            if image.size > 5 * 1024 * 1024: # 5MB limit
-                raise ValidationError("Image file size cannot exceed 5MB.")
+            if hasattr(image, 'file') and hasattr(image.file, 'size'):
+                if image.size > 5 * 1024 * 1024: # 5MB limit
+                    raise ValidationError("Image file size cannot exceed 5MB.")
         return image
 
 class StudioRentalPricingForm(StyledModelForm):
