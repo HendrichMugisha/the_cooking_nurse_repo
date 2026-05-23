@@ -70,9 +70,12 @@ def staff_dashboard(request):
     Forms for settings are directly processed here.
     """
     settings = SiteSettings.get_settings()
+    from classes.models import StudioRentalPricing
+    pricing = StudioRentalPricing.load()
     
-    from .forms import SiteSettingsForm
+    from .forms import SiteSettingsForm, StudioRentalPricingForm
     settings_form = SiteSettingsForm(instance=settings)
+    pricing_form = StudioRentalPricingForm(instance=pricing)
     
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -95,12 +98,14 @@ def staff_dashboard(request):
             
         elif action == 'update_settings':
             settings_form = SiteSettingsForm(request.POST, request.FILES, instance=settings)
-            if settings_form.is_valid():
+            pricing_form = StudioRentalPricingForm(request.POST, instance=pricing)
+            if settings_form.is_valid() and pricing_form.is_valid():
                 settings_form.save()
-                messages.success(request, "Site settings updated successfully!")
+                pricing_form.save()
+                messages.success(request, "Site settings and studio pricing updated successfully!")
                 return redirect('/users/staff-dashboard/?tab=tab-site')
             else:
-                messages.error(request, "Failed to update settings. Please check the form.")
+                messages.error(request, "Failed to update settings. Please check the form errors.")
 
         elif action == 'studio_booking_status':
             booking_id = request.POST.get('booking_id')
@@ -139,6 +144,7 @@ def staff_dashboard(request):
         'studio_bookings': studio_bookings,
         'settings': settings,
         'settings_form': settings_form,
+        'pricing_form': pricing_form,
         'total_revenue': total_rev,
         'low_stock_count': low_stock,
         'upcoming_seats': upcoming_seats,

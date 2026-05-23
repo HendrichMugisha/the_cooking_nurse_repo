@@ -10,6 +10,10 @@ from catalog.models import Category, Product, ProductVariant
 from classes.models import Course, ClassSession
 
 def populate():
+    if Product.objects.exists():
+        print("Data already exists. Skipping dummy data population to avoid duplication.")
+        return
+
     print("Clearing old data...")
     Category.objects.all().delete()
     Product.objects.all().delete()

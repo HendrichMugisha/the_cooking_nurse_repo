@@ -124,6 +124,7 @@ class CustomUserCreationForm(UserCreationForm):
             field.widget.attrs['class'] = css_classes
 
 from portfolio.models import SiteSettings
+from classes.models import StudioRentalPricing
 from django.core.exceptions import ValidationError
 
 class SiteSettingsForm(StyledModelForm):
@@ -132,6 +133,7 @@ class SiteSettingsForm(StyledModelForm):
         fields = [
             'hero_text', 'hero_video', 'hero_image', 'nurses_note',
             'hero_loop_words', 'nurse_name', 'nurse_bio', 'nurse_portrait',
+            'nurse_subtitle', 'homepage_about_title', 'homepage_about_subtitle',
             'youtube_url', 'instagram_url', 'tiktok_url', 'featured_youtube_embed_url',
             'newsletter_lead_magnet', 'newsletter_lead_magnet_title',
             'digital_library_image', 'cooking_classes_image', 'studio_rental_image'
@@ -152,6 +154,16 @@ class SiteSettingsForm(StyledModelForm):
             if image.size > 5 * 1024 * 1024: # 5MB limit
                 raise ValidationError("Image file size cannot exceed 5MB.")
         return image
+
+class StudioRentalPricingForm(StyledModelForm):
+    class Meta:
+        model = StudioRentalPricing
+        fields = ['hourly_rate', 'min_hours']
+        widgets = {
+            'hourly_rate': forms.NumberInput(attrs={'placeholder': 'Price per hour in UGX'}),
+            'min_hours': forms.NumberInput(attrs={'placeholder': 'Minimum booking hours required'}),
+        }
+
 
 from classes.models import StudioBooking
 from datetime import datetime, date

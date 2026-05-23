@@ -614,6 +614,20 @@
                         <p class="text-[10px] text-primary mt-1 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">image</span> <a href="{{ settings.hero_image.url }}" class="hover:underline" target="_blank">{{ settings.hero_image.name }}</a></p>
                         {% endif %}
                     </div>
+
+                    <div class="border-t border-outline-variant/20 pt-4 mt-2 flex flex-col gap-4">
+                        <h4 class="font-bold text-primary text-xs uppercase tracking-wider">Experience Section (Pillars)</h4>
+                        
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-bold text-slate-700 text-xs">Pillars Section Title</label>
+                            {{ settings_form.homepage_about_title }}
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-bold text-slate-700 text-xs">Pillars Section Subtitle</label>
+                            {{ settings_form.homepage_about_subtitle }}
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Nurse Profile Card -->
@@ -638,6 +652,11 @@
                         {% if settings.nurse_portrait %}
                         <p class="text-[10px] text-primary mt-1 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">portrait</span> <a href="{{ settings.nurse_portrait.url }}" class="hover:underline" target="_blank">{{ settings.nurse_portrait.name }}</a></p>
                         {% endif %}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Meet The Chef Section Subtitle</label>
+                        {{ settings_form.nurse_subtitle }}
                     </div>
                     
                     <div class="flex flex-col gap-1.5">
@@ -690,6 +709,23 @@
                         {% if settings.newsletter_lead_magnet %}
                         <p class="text-[10px] text-primary mt-1 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">description</span> <a href="{{ settings.newsletter_lead_magnet.url }}" class="hover:underline" target="_blank">{{ settings.newsletter_lead_magnet.name }}</a></p>
                         {% endif %}
+                    </div>
+                </div>
+
+                <!-- Studio Rental Pricing Card -->
+                <div class="glass-panel p-6 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-sm flex flex-col gap-4">
+                    <h3 class="font-bold text-primary border-b border-outline-variant/20 pb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-base">payments</span> Studio Rental Pricing & Rules
+                    </h3>
+                    
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Hourly Rate (UGX)</label>
+                        {{ pricing_form.hourly_rate }}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Minimum Booking Hours</label>
+                        {{ pricing_form.min_hours }}
                     </div>
                 </div>
 

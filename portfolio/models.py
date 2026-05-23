@@ -14,6 +14,20 @@ class SiteSettings(models.Model):
     nurse_name = models.CharField(max_length=100, blank=True, default="The Cooking Nurse")
     nurse_bio = models.TextField(blank=True, default="", help_text="Short bio for the Meet the Nurse section")
     nurse_portrait = models.ImageField(upload_to='site/', blank=True, null=True, help_text="Portrait photo")
+    nurse_subtitle = models.TextField(
+        default="Discover the healing culinary philosophy, medical nutrition background, and heart-led mission of the nurse blending clinical science with sensory kitchen joy.",
+        help_text="Introductory subtitle for the Meet the Chef section"
+    )
+
+    # Dynamic Landing Page Sections text
+    homepage_about_title = models.CharField(
+        max_length=255, default="Experience The Cooking Nurse",
+        help_text="Title for the Experience section"
+    )
+    homepage_about_subtitle = models.TextField(
+        default="Step into a sensory kitchen designed to feed your soul, strengthen your body, and inspire your everyday meals.",
+        help_text="Subtitle/description for the Experience section"
+    )
 
     # Social media links
     youtube_url = models.URLField(blank=True, default="")
