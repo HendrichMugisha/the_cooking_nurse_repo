@@ -8,6 +8,18 @@ if 'CLOUDINARY_URL' in os.environ:
     class AutoMediaCloudinaryStorage(MediaCloudinaryStorage):
         RESOURCE_TYPE = 'auto'
 
+        def url(self, name):
+            url = super().url(name)
+            if url and '/auto/upload/' in url:
+                ext = os.path.splitext(name)[1].lower()
+                if ext in ['.mp4', '.mov', '.avi', '.webm']:
+                    url = url.replace('/auto/upload/', '/video/upload/')
+                elif ext in ['.pdf', '.zip', '.csv', '.doc', '.docx']:
+                    url = url.replace('/auto/upload/', '/raw/upload/')
+                else:
+                    url = url.replace('/auto/upload/', '/image/upload/')
+            return url
+
         def _save(self, name, content):
             print(f"\n[UPLOAD] ===== Cloudinary Upload Starting =====", file=sys.stderr)
             print(f"[UPLOAD] File name: {name}", file=sys.stderr)
