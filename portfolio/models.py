@@ -30,11 +30,23 @@ class SiteSettings(models.Model):
     )
 
     # Social media links
-    youtube_url = models.URLField(blank=True, default="")
+    facebook_url = models.URLField(blank=True, default="", help_text="Facebook profile URL")
+    twitter_url = models.URLField(blank=True, default="", help_text="Twitter / X profile URL")
     instagram_url = models.URLField(blank=True, default="")
     tiktok_url = models.URLField(blank=True, default="")
+    youtube_url = models.URLField(blank=True, default="")
+    whatsapp_number = models.CharField(
+        max_length=50, default="+256771790290",
+        help_text="WhatsApp phone number (including country code, e.g. +256771790290)"
+    )
     featured_youtube_embed_url = models.URLField(blank=True, default="",
         help_text="Paste a YouTube video URL to embed (e.g. https://youtube.com/watch?v=...)")
+
+    @property
+    def whatsapp_number_clean(self):
+        if not self.whatsapp_number:
+            return "256771790290"
+        return "".join(c for c in self.whatsapp_number if c.isdigit())
 
     # Newsletter lead magnet
     newsletter_lead_magnet = models.FileField(upload_to='site/lead_magnets/', blank=True, null=True,
@@ -54,7 +66,9 @@ class SiteSettings(models.Model):
         
     @classmethod
     def get_settings(cls):
-        obj, created = cls.objects.get_or_create(id=1)
+        obj = cls.objects.first()
+        if not obj:
+            obj = cls.objects.create(id=1)
         return obj
 
 class NewsletterSubscriber(models.Model):

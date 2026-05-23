@@ -14,7 +14,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             'fields': ('nurse_name', 'nurse_bio', 'nurse_portrait'),
         }),
         ('Social Media & Video', {
-            'fields': ('youtube_url', 'instagram_url', 'tiktok_url', 'featured_youtube_embed_url'),
+            'fields': ('facebook_url', 'twitter_url', 'instagram_url', 'tiktok_url', 'youtube_url', 'whatsapp_number', 'featured_youtube_embed_url'),
             'description': 'For "Featured YouTube Embed URL", paste any standard YouTube video link (e.g. https://www.youtube.com/watch?v=XXXXXXXXXXX). The system will automatically extract the video ID.',
         }),
         ('Newsletter & Lead Magnet', {

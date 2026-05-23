@@ -28,12 +28,42 @@
         -webkit-backdrop-filter: blur(24px);
         border: 1px solid rgba(255, 255, 255, 0.08);
     }
+
+    /* Bento Grid Card - Premium Styling & Permanent Brand Gradient Borders */
+    .bento-card {
+        background: #ffffff;
+        border-radius: 1.5rem;
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 1px solid transparent; /* transparent to allocate space for the gradient border */
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+    }
+
+    .bento-card::before {
+        content: '';
+        position: absolute;
+        inset: 0; /* exactly matches card boundaries to avoid overflow:hidden clipping */
+        border-radius: 1.5rem;
+        padding: 1.5px; /* border thickness */
+        background: linear-gradient(135deg, #0B5B2E 0%, #C69C08 50%, #A91B0D 100%);
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 1; /* permanently visible */
+        pointer-events: none;
+        z-index: 10; /* sits on top of card content */
+    }
+
+    .bento-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px -15px rgba(11, 91, 46, 0.18); /* glowing shadow tinted with primary brand color on hover */
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <!-- CINEMATIC HERO SECTION (Full Screen) -->
-<div class="relative w-full min-h-screen overflow-hidden flex flex-col justify-center items-center">
+<div id="hero-section" class="relative w-full min-h-screen overflow-hidden flex flex-col justify-center items-center">
 
     <!-- Background Cinematic Video or Fallback Image -->
     <div class="absolute inset-0 -z-20 bg-slate-950">
@@ -69,7 +99,7 @@
         <!-- Two-Phase Typewriter Title -->
         <h1
             class="font-display-lg text-3xl md:text-5xl lg:text-6xl leading-[1.1] font-black text-slate-200 hero-text-shadow tracking-tight min-h-[140px] md:min-h-[160px] flex flex-col justify-center items-center">
-            <span id="static-title-part" class="block">Turn Everyday Cooking into</span>
+            <span id="static-title-part" class="block brand-text-gradient font-black typewriter-on-scroll">Turn Everyday Cooking into</span>
             <span id="typewriter-hook"
                 class="text-tertiary font-extrabold inline-block border-r-4 border-tertiary pr-1 select-none"></span>
         </h1>
@@ -122,7 +152,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:items-stretch items-start">
 
             <!-- 1. FRESH PICKENS -->
-            <div
+            <div id="bento-fresh-pickens"
                 class="col-span-1 bento-card p-8 flex flex-col justify-between group scroll-reveal relative bg-white overflow-hidden">
                 <!-- Glowing corner accent -->
                 <div
@@ -288,7 +318,7 @@
             </div>
 
             <!-- 2. CLASSES: Tall (Live Cooking Workshops & Booking) -->
-            <div
+            <div id="bento-cooking-classes"
                 class="col-span-1 bento-card p-8 flex flex-col justify-between group scroll-reveal relative bg-white overflow-hidden">
                 <div
                     class="absolute -right-16 -bottom-16 w-48 h-48 bg-tertiary/10 rounded-full blur-3xl group-hover:bg-tertiary/20 transition-all duration-500">
@@ -377,7 +407,7 @@
             </div>
 
             <!-- 3. COOKBOOKS: Full Width Horizontal Card -->
-            <div
+            <div id="bento-digital-library"
                 class="col-span-1 lg:col-span-2 bento-card p-8 flex flex-col lg:flex-row gap-8 group scroll-reveal relative bg-white overflow-hidden">
                 <div
                     class="absolute -right-16 -bottom-16 w-48 h-48 bg-accent/5 rounded-full blur-3xl group-hover:bg-accent/10 transition-all duration-500">
@@ -439,7 +469,7 @@
             </div>
 
             <!-- 4. STUDIO RENTAL: Full Width Horizontal Card -->
-            <div
+            <div id="bento-studio-rental"
                 class="col-span-1 lg:col-span-2 bento-card p-8 flex flex-col group scroll-reveal relative bg-white overflow-hidden">
                 <div
                     class="absolute -right-16 -bottom-16 w-48 h-48 bg-slate-900/5 rounded-full blur-3xl group-hover:bg-slate-900/10 transition-all duration-500">
@@ -628,7 +658,7 @@
                 <!-- Social media link pills -->
                 <div class="flex items-center gap-3 mt-4">
                     <!-- Facebook -->
-                    <a href="https://facebook.com" target="_blank"
+                    <a href="{{ settings.facebook_url|default:'https://facebook.com' }}" target="_blank"
                         class="w-10 h-10 rounded-full bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-all flex justify-center items-center shadow-sm"
                         aria-label="Facebook">
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -638,12 +668,32 @@
                     </a>
 
                     <!-- Twitter / X -->
-                    <a href="https://twitter.com" target="_blank"
+                    <a href="{{ settings.twitter_url|default:'https://twitter.com' }}" target="_blank"
                         class="w-10 h-10 rounded-full bg-black/10 text-black hover:bg-black hover:text-white transition-all flex justify-center items-center shadow-sm"
                         aria-label="Twitter">
                         <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
                             <path
                                 d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                        </svg>
+                    </a>
+
+                    <!-- Instagram -->
+                    <a href="{{ settings.instagram_url|default:'https://instagram.com' }}" target="_blank"
+                        class="w-10 h-10 rounded-full bg-[#E1306C]/10 text-[#E1306C] hover:bg-[#E1306C] hover:text-white transition-all flex justify-center items-center shadow-sm"
+                        aria-label="Instagram">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
+                        </svg>
+                    </a>
+
+                    <!-- TikTok -->
+                    <a href="{{ settings.tiktok_url|default:'https://tiktok.com' }}" target="_blank"
+                        class="w-10 h-10 rounded-full bg-[#00f2fe]/10 text-[#00f2fe] hover:bg-slate-900 hover:text-white transition-all flex justify-center items-center shadow-sm"
+                        aria-label="TikTok">
+                        <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                            <path
+                                d="M12.525.01c1.306-.022 2.613-.008 3.914-.012.08 1.544.75 3.006 1.894 4.072a7.352 7.352 0 0 0 4.103 1.93v3.834c-1.298-.013-2.585-.366-3.702-1.037-.624-.378-1.18-.87-1.637-1.455-.022 2.631.01 5.263-.016 7.893-.05 2.197-.84 4.38-2.396 5.922a7.994 7.994 0 0 1-5.748 2.339 8.04 8.04 0 0 1-7.854-6.31 8.03 8.03 0 0 1 4.542-8.796c.49-.247 1.02-.423 1.564-.526.002 1.344-.002 2.69.002 4.033-.42.12-.823.32-1.169.602a3.957 3.957 0 0 0-1.44 2.868c-.024 1.332.66 2.61 1.777 3.328a3.978 3.978 0 0 0 4.887-.394 3.954 3.954 0 0 0 1.258-2.906c.018-4.996-.008-9.992.012-14.988z" />
                         </svg>
                     </a>
 
@@ -658,7 +708,7 @@
                     </a>
 
                     <!-- WhatsApp -->
-                    <a href="https://wa.me/256700000000" target="_blank"
+                    <a href="https://wa.me/{{ settings.whatsapp_number_clean }}" target="_blank"
                         class="w-10 h-10 rounded-full bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all flex justify-center items-center shadow-sm"
                         aria-label="WhatsApp">
                         <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -680,6 +730,7 @@
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen
                         loading="lazy"
+                        referrerpolicy="strict-origin-when-cross-origin"
                         title="Featured Video">
                     </iframe>
                 </div>
@@ -721,7 +772,7 @@
 </div>
 
 <!-- PREMIUM NEWSLETTER CTA (WITH LEAD MAGNET) -->
-<div class="relative w-full py-24 z-20 overflow-hidden bg-slate-950">
+<div class="relative w-full py-24 z-20 overflow-hidden bg-slate-950" id="footer-newsletter">
     <!-- Cinematic Background Image -->
     <div class="absolute inset-0 -z-10">
         <img src="https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"

@@ -134,7 +134,7 @@ class SiteSettingsForm(StyledModelForm):
             'hero_text', 'hero_video', 'hero_image', 'nurses_note',
             'hero_loop_words', 'nurse_name', 'nurse_bio', 'nurse_portrait',
             'nurse_subtitle', 'homepage_about_title', 'homepage_about_subtitle',
-            'youtube_url', 'instagram_url', 'tiktok_url', 'featured_youtube_embed_url',
+            'facebook_url', 'twitter_url', 'instagram_url', 'tiktok_url', 'youtube_url', 'whatsapp_number', 'featured_youtube_embed_url',
             'newsletter_lead_magnet', 'newsletter_lead_magnet_title',
             'digital_library_image', 'cooking_classes_image', 'studio_rental_image'
         ]

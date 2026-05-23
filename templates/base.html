@@ -48,6 +48,129 @@
             padding-bottom: env(safe-area-inset-bottom, 16px);
         }
     </style>
+    <!-- Driver.js Library (Guided Walkthrough) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/driver.js@1.0.1/dist/driver.js.iife.js"></script>
+    <style>
+        /* Custom Driver.js Styling Overrides - Premium Glassmorphic Theme */
+        .driver-popover {
+            border-radius: 1.25rem !important;
+            border: 2px solid #C69C08 !important; /* Mustard Gold Border */
+            box-shadow: 0 20px 40px -15px rgba(11, 91, 46, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1) inset !important;
+            background: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+            padding: 1.25rem !important;
+            font-family: 'Outfit', sans-serif !important;
+            max-width: 320px !important;
+        }
+        .driver-popover-title {
+            font-family: 'Outfit', sans-serif !important;
+            font-size: 1.15rem !important;
+            font-weight: 800 !important;
+            color: #0B5B2E !important; /* Forest Green Text */
+            margin-bottom: 0.5rem !important;
+            line-height: 1.3 !important;
+        }
+        .driver-popover-description {
+            font-family: 'Inter', sans-serif !important;
+            font-size: 0.85rem !important;
+            line-height: 1.5 !important;
+            color: #334155 !important; /* Slate 700 */
+        }
+        .driver-popover-footer {
+            margin-top: 1rem !important;
+            display: flex !important;
+            justify-content: flex-end !important;
+            gap: 0.5rem !important;
+        }
+        .driver-popover-navigation-btns button {
+            border-radius: 9999px !important;
+            font-family: 'Outfit', sans-serif !important;
+            font-weight: 700 !important;
+            font-size: 0.725rem !important;
+            padding: 0.4rem 0.9rem !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            cursor: pointer !important;
+        }
+        .driver-popover-next-btn {
+            background: linear-gradient(135deg, #0B5B2E 0%, #C69C08 100%) !important; /* Brand Gradient */
+            color: white !important;
+            border: none !important;
+            box-shadow: 0 4px 12px rgba(11, 91, 46, 0.2) !important;
+        }
+        .driver-popover-next-btn:hover {
+            filter: brightness(1.1) !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 6px 16px rgba(11, 91, 46, 0.3) !important;
+        }
+        .driver-popover-prev-btn {
+            background: #f1f5f9 !important;
+            color: #475569 !important;
+            border: 1px solid #e2e8f0 !important;
+            text-shadow: none !important;
+        }
+        .driver-popover-prev-btn:hover {
+            background: #e2e8f0 !important;
+        }
+        .driver-popover-close-btn {
+            color: #A91B0D !important;
+            font-weight: 700 !important;
+        }
+        .driver-popover-progress-text {
+            font-size: 0.75rem !important;
+            color: #64748b !important;
+            font-weight: 600 !important;
+        }
+        /* Highlight border effect */
+        .driver-active-element {
+            box-shadow: 0 0 0 4px rgba(198, 156, 8, 0.4) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        /* Floating Tour FAB Button - Vanilla CSS to bypass Tailwind compilation constraints */
+        #tour-fab-container {
+            position: fixed;
+            bottom: 6rem; /* bottom-24 */
+            right: 1.5rem; /* right-6 */
+            z-index: 99999 !important; /* ensure it is above everything! */
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @media (min-width: 768px) {
+            #tour-fab-container {
+                bottom: 2rem; /* bottom-8 */
+                right: 2rem; /* right-8 */
+            }
+        }
+        #start-tour-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 9999px;
+            background: linear-gradient(135deg, #0B5B2E 0%, #C69C08 100%);
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px -5px rgba(11, 91, 46, 0.4);
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #start-tour-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px -5px rgba(11, 91, 46, 0.5);
+        }
+        #start-tour-btn:active {
+            transform: scale(0.95);
+        }
+        #start-tour-btn span {
+            color: #ffffff !important;
+        }
+    </style>
     {% block extra_head %}{% endblock %}
 </head>
 
@@ -163,7 +286,7 @@
             <div class="flex flex-col gap-2 w-full md:w-auto md:min-w-[280px]">
                 <span class="font-label-md text-primary uppercase tracking-wider text-xs font-bold">Culinary
                     Newsletter</span>
-                <form action="{% url 'portfolio:newsletter_subscribe' %}" method="POST" class="flex gap-2">
+                <form id="footer-newsletter" action="{% url 'portfolio:newsletter_subscribe' %}" method="POST" class="flex gap-2">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}">
                     <input type="email" name="email" required placeholder="Enter your email"
@@ -232,6 +355,27 @@
             }
         });
     </script>
+
+    <!-- Guided Tour Floating Button -->
+    <div id="tour-fab-container">
+        <button id="start-tour-btn">
+            <span class="material-symbols-outlined">explore</span>
+            <span>Guided Tour</span>
+        </button>
+    </div>
+
+    <!-- Pass Django status dynamically to our walkthrough JS -->
+    <script>
+        window.userIsStaff = {% if user.is_staff %}true{% else %}false{% endif %};
+        window.userIsAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+        window.homeUrl = "{% url 'portfolio:home' %}";
+        window.loginUrl = "{% url 'users:login' %}";
+        window.logoutUrl = "{% url 'users:logout' %}";
+        window.dashboardUrl = "{% url 'users:staff_dashboard' %}";
+    </script>
+
+    <!-- Custom Walkthrough Logic Script -->
+    <script src="{% static 'js/site_walkthrough.js' %}?v=5"></script>
 
     {% block extra_scripts %}{% endblock %}
 </body>

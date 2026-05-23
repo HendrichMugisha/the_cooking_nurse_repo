@@ -26,7 +26,7 @@
             <div class="space-y-4 mb-8">
                 <div class="flex flex-col gap-1.5">
                     <label class="font-label-md text-primary font-bold">Email</label>
-                    <input type="text" name="username" class="form-input w-full p-2.5 bg-surface-container-high border border-outline-variant rounded-lg text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200" required>
+                    <input type="text" name="username" id="login-email" class="form-input w-full p-2.5 bg-surface-container-high border border-outline-variant rounded-lg text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200" required>
                 </div>
                 <div class="flex flex-col gap-1.5">
                     <label class="font-label-md text-primary font-bold">Password</label>
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn-primary w-full py-3 rounded-full font-bold shadow-level-1 hover:shadow-level-2 transition-all flex justify-center items-center gap-2 mb-6">
+            <button type="submit" id="login-submit" class="btn-primary w-full py-3 rounded-full font-bold shadow-level-1 hover:shadow-level-2 transition-all flex justify-center items-center gap-2 mb-6">
                 Log In
                 <span class="material-symbols-outlined">login</span>
             </button>

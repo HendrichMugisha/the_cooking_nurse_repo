@@ -195,7 +195,7 @@ class CookingNurseEndToEndTests(TestCase):
         """Test 8: Badge count reflects total items."""
         # Cart starts at 0
         response = self.client_unauth.get(reverse('portfolio:home'))
-        self.assertContains(response, '>0<')
+        self.assertRegex(response.content.decode('utf-8'), r'flex items-center justify-center">\s*0\s*</span>')
         
         # Add 3 items
         self.client_unauth.post(reverse('cart:cart_add', args=['variant', self.v_tomatoes_1kg.id]), {'quantity': 1})
@@ -203,7 +203,7 @@ class CookingNurseEndToEndTests(TestCase):
         self.client_unauth.post(reverse('cart:cart_add', args=['session', self.session_masterclass.id]), {'quantity': 1})
         
         response = self.client_unauth.get(reverse('portfolio:home'))
-        self.assertContains(response, '>3<')
+        self.assertRegex(response.content.decode('utf-8'), r'flex items-center justify-center">\s*3\s*</span>')
 
     def test_09_cart_math_and_removal(self):
         """Test 9: Removing item works and recalculates total price correctly."""
@@ -516,3 +516,59 @@ class CookingNurseEndToEndTests(TestCase):
         # Verify coordinates were correctly saved in the database
         self.assertEqual(float(new_order.latitude), 0.319523)
         self.assertEqual(float(new_order.longitude), 32.576123)
+
+    # ==========================================
+    # GROUP 7: PORTFOLIO & SOCIAL SHOWCASE
+    # ==========================================
+
+    def test_25_youtube_video_showcase_rendering(self):
+        """Test 25: Extracting and rendering YouTube video IDs in iframe embeds."""
+        from portfolio.models import SiteSettings
+        from portfolio.views import _extract_youtube_video_id
+        
+        # 1. Test video ID extraction utility with various common YouTube URL formats
+        test_cases = [
+            ("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "dQw4w9WgXcQ"),
+            ("https://youtube.com/watch?v=dQw4w9WgXcQ", "dQw4w9WgXcQ"),
+            ("https://youtu.be/dQw4w9WgXcQ", "dQw4w9WgXcQ"),
+            ("https://youtu.be/dQw4w9WgXcQ?si=l65e8oD86g", "dQw4w9WgXcQ"),
+            ("https://www.youtube.com/embed/dQw4w9WgXcQ", "dQw4w9WgXcQ"),
+            ("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ", "dQw4w9WgXcQ"),
+            ("https://www.youtube.com/live/dQw4w9WgXcQ", "dQw4w9WgXcQ"),
+            ("https://youtube.com/live/dQw4w9WgXcQ?feature=share", "dQw4w9WgXcQ"),
+            ("https://www.youtube.com/v/dQw4w9WgXcQ", "dQw4w9WgXcQ"),
+            ("https://www.youtube.com/shorts/dQw4w9WgXcQ", "dQw4w9WgXcQ"),
+            ("https://www.youtube.com/watch?feature=player_embedded&v=dQw4w9WgXcQ", "dQw4w9WgXcQ"),
+            ("dQw4w9WgXcQ", "dQw4w9WgXcQ"),
+            ("  dQw4w9WgXcQ  ", "dQw4w9WgXcQ"),
+            ("", None),
+            (None, None),
+            ("https://google.com", None),
+        ]
+        
+        for url, expected_id in test_cases:
+            self.assertEqual(_extract_youtube_video_id(url), expected_id, f"Failed for URL: {url}")
+
+        # 2. Verify that the homepage view correctly extracts the ID and renders the iframe
+        settings = SiteSettings.get_settings()
+        
+        # Test Case A: Valid YouTube URL -> iframe should be rendered
+        settings.featured_youtube_embed_url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        settings.save()
+        
+        response = self.client_unauth.get(reverse('portfolio:home'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['youtube_video_id'], "dQw4w9WgXcQ")
+        self.assertContains(response, 'https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0')
+        self.assertContains(response, '<iframe')
+        
+        # Test Case B: Empty/Invalid URL -> Fallback aesthetic overlay should be rendered instead
+        settings.featured_youtube_embed_url = ""
+        settings.save()
+        
+        response_fallback = self.client_unauth.get(reverse('portfolio:home'))
+        self.assertEqual(response_fallback.status_code, 200)
+        self.assertIsNone(response_fallback.context['youtube_video_id'])
+        self.assertNotContains(response_fallback, 'https://www.youtube.com/embed/')
+        self.assertNotContains(response_fallback, '<iframe')
+        self.assertContains(response_fallback, 'Culinary Wellness Insights')

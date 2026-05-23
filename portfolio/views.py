@@ -15,7 +15,7 @@ def _extract_youtube_video_id(url):
     if not url:
         return None
     patterns = [
-        r'(?:youtube\.com/watch\?v=|youtube\.com/embed/|youtu\.be/|youtube\.com/v/|youtube\.com/shorts/)([a-zA-Z0-9_-]{11})',
+        r'(?:youtube(?:-nocookie)?\.com/watch\?v=|youtube(?:-nocookie)?\.com/embed/|youtube(?:-nocookie)?\.com/live/|youtu\.be/|youtube(?:-nocookie)?\.com/v/|youtube(?:-nocookie)?\.com/shorts/)([a-zA-Z0-9_-]{11})',
         r'[?&]v=([a-zA-Z0-9_-]{11})',
     ]
     for pattern in patterns:
