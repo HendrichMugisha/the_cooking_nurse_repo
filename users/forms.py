@@ -139,7 +139,22 @@ class SiteSettingsForm(StyledModelForm):
             'newsletter_lead_magnet', 'newsletter_lead_magnet_title',
             'digital_library_image', 'cooking_classes_image', 'studio_rental_image'
         ]
-        
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # These fields have model-level defaults so they should not be
+        # required at the form level — a blank submission should be valid.
+        optional_fields = [
+            'whatsapp_number', 'facebook_url', 'twitter_url', 'instagram_url',
+            'tiktok_url', 'youtube_url', 'featured_youtube_embed_url',
+            'hero_loop_words', 'nurse_name', 'nurse_bio', 'nurse_subtitle',
+            'homepage_about_title', 'homepage_about_subtitle',
+            'newsletter_lead_magnet_title', 'nurses_note', 'hero_text',
+        ]
+        for field_name in optional_fields:
+            if field_name in self.fields:
+                self.fields[field_name].required = False
+
     def clean_hero_video(self):
         video = self.cleaned_data.get('hero_video')
         if video and isinstance(video, UploadedFile):
