@@ -27,6 +27,11 @@ class SiteSettings(models.Model):
         help_text="Upload a free PDF to offer subscribers as incentive")
     newsletter_lead_magnet_title = models.CharField(max_length=200, blank=True, default="Free Wholesome Recipe Guide")
 
+    # Landing Page Card Images
+    digital_library_image = models.ImageField(upload_to='site/cards/', blank=True, null=True, help_text="Image for the Digital Library card")
+    cooking_classes_image = models.ImageField(upload_to='site/cards/', blank=True, null=True, help_text="Image for the Cooking Classes card")
+    studio_rental_image = models.ImageField(upload_to='site/cards/', blank=True, null=True, help_text="Image for the Studio Rental card")
+
     class Meta:
         verbose_name_plural = "Site Settings"
 

@@ -21,7 +21,8 @@ def cart_add(request, item_type, item_id):
     if item:
         # Get quantity from form, default to 1
         quantity = int(request.POST.get('quantity', 1))
-        cart.add(item=item, item_type=item_type, quantity=quantity)
+        update_quantity = request.POST.get('update_quantity', 'False') == 'True'
+        cart.add(item=item, item_type=item_type, quantity=quantity, update_quantity=update_quantity)
         item_name = getattr(item, 'title', None) or getattr(item.product, 'name', 'Item') if hasattr(item, 'product') else 'Item'
         messages.success(request, f"Added {item_name} to your cart.")
         

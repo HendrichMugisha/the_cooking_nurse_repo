@@ -1,26 +1,31 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}The Cooking Nurse{% endblock %}</title>
-    
+
     <!-- Tailwind Compiled CSS -->
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{% static 'images/brand_logo.svg' %}">
 
-    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/brand_logo.png' %}">
+
+
     <!-- Google Fonts: Outfit, Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
     <!-- FIX: Correct Material Symbols Outlined Link & CSS overrides -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+
     <style>
         /* Force the browser to use the icon font for this class */
         .material-symbols-outlined {
@@ -34,40 +39,59 @@
             white-space: nowrap;
             direction: ltr;
         }
-        .icon-fill { font-variation-settings: 'FILL' 1; }
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 16px); }
+
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col relative pb-20 md:pb-0">
+
+<body
+    class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col relative pb-20 md:pb-0">
 
     <!-- DESKTOP TOP NAV BAR -->
-    <div id="desktop-navbar" class="fixed top-4 left-0 w-full z-50 hidden md:block transition-transform duration-300 ease-in-out transform">
+    <div id="desktop-navbar"
+        class="fixed top-4 left-0 w-full z-50 hidden md:block transition-transform duration-300 ease-in-out transform">
         <nav class="max-w-container-max mx-auto px-margin-desktop">
             <div class="glass-panel rounded-full flex justify-between items-center px-6 py-3">
                 <!-- Brand Logo -->
                 <a href="{% url 'portfolio:home' %}" class="flex items-center gap-3 group">
-                    <img alt="The Cooking Nurse Logo" class="h-10 object-contain drop-shadow-sm transition-transform group-hover:scale-105" src="{% static 'images/brand_logo.svg' %}"/>
+                    <img alt="The Cooking Nurse Logo"
+                        class="h-10 object-contain drop-shadow-sm transition-transform group-hover:scale-105"
+                        src="{% static 'images/brand_logo.png' %}" />
                 </a>
-                
+
                 <!-- Navigation Links -->
                 <div class="flex items-center gap-8">
                     <!-- Uses the global CSS classes we defined -->
-                    <a class="{% if request.resolver_match.url_name == 'home' %}nav-link-active{% else %}nav-link{% endif %}" href="{% url 'portfolio:home' %}">Home</a>
-                    <a class="{% if request.resolver_match.url_name == 'class_timetable' %}nav-link-active{% else %}nav-link{% endif %}" href="{% url 'classes:class_timetable' %}">Classes</a>
-                    <a class="{% if request.resolver_match.url_name == 'product_list' %}nav-link-active{% else %}nav-link{% endif %}" href="{% url 'catalog:product_list' %}">Fresh Pickens</a>
+                    <a class="{% if request.resolver_match.url_name == 'home' %}nav-link-active{% else %}nav-link{% endif %}"
+                        href="{% url 'portfolio:home' %}">Home</a>
+                    <a class="{% if request.resolver_match.url_name == 'class_timetable' %}nav-link-active{% else %}nav-link{% endif %}"
+                        href="{% url 'classes:class_timetable' %}">Classes</a>
+                    <a class="{% if request.resolver_match.url_name == 'product_list' %}nav-link-active{% else %}nav-link{% endif %}"
+                        href="{% url 'catalog:product_list' %}">Fresh Pickens</a>
                     {% if user.is_staff %}
-                    <a class="{% if request.resolver_match.url_name == 'staff_dashboard' %}nav-link-active{% else %}nav-link font-bold text-accent{% endif %}" href="{% url 'users:staff_dashboard' %}">Staff Dashboard</a>
+                    <a class="{% if request.resolver_match.url_name == 'staff_dashboard' %}nav-link-active{% else %}nav-link font-bold text-accent{% endif %}"
+                        href="{% url 'users:staff_dashboard' %}">Staff Dashboard</a>
                     {% endif %}
                 </div>
-                
+
                 <!-- Trailing Icons -->
                 <div class="flex items-center gap-4 text-primary">
-                    <a href="{% url 'cart:cart_detail' %}" class="hover:bg-primary/10 transition-colors active:scale-95 duration-150 p-2 rounded-full relative">
+                    <a href="{% url 'cart:cart_detail' %}"
+                        class="hover:bg-primary/10 transition-colors active:scale-95 duration-150 p-2 rounded-full relative">
                         <span class="material-symbols-outlined">shopping_cart</span>
-                        <span class="absolute top-0 right-0 bg-accent text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">{{ cart|length }}</span>
+                        <span
+                            class="absolute top-0 right-0 bg-accent text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                            {{ cart|length }}</span>
                     </a>
-                    <a href="{% url 'users:dashboard' %}" class="hover:bg-primary/10 transition-colors active:scale-95 duration-150 p-2 rounded-full">
+                    <a href="{% url 'users:dashboard' %}"
+                        class="hover:bg-primary/10 transition-colors active:scale-95 duration-150 p-2 rounded-full">
                         <span class="material-symbols-outlined">account_circle</span>
                     </a>
                 </div>
@@ -76,90 +100,115 @@
     </div>
 
     <!-- MOBILE TOP APP BAR -->
-    <header class="md:hidden w-full top-0 sticky glass-panel flex justify-between items-center px-margin-mobile py-3 z-40 border-b border-white/20">
+    <header
+        class="md:hidden w-full top-0 sticky glass-panel flex justify-between items-center px-margin-mobile py-3 z-40 border-b border-white/20">
         <a href="{% url 'portfolio:home' %}" class="flex items-center gap-2">
-            <img alt="The Cooking Nurse Logo" class="h-8 object-contain drop-shadow-sm" src="{% static 'images/brand_logo.svg' %}"/>
+            <img alt="The Cooking Nurse Logo" class="h-8 object-contain drop-shadow-sm"
+                src="{% static 'images/brand_logo.png' %}" />
         </a>
-        <a href="{% url 'cart:cart_detail' %}" aria-label="Cart" class="text-primary hover:text-accent transition-colors active:scale-95 p-2 rounded-full relative">
+        <a href="{% url 'cart:cart_detail' %}" aria-label="Cart"
+            class="text-primary hover:text-accent transition-colors active:scale-95 p-2 rounded-full relative">
             <span class="material-symbols-outlined" style="font-size: 24px;">shopping_cart</span>
-            <span class="absolute top-0 right-0 bg-accent text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">{{ cart|length }}</span>
+            <span
+                class="absolute top-0 right-0 bg-accent text-white text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                {{ cart|length }}</span>
         </a>
     </header>
 
     <!-- MAIN CONTENT AREA -->
     <div class="flex-grow flex flex-col pt-4 md:pt-24">
         {% if messages %}
-        <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full mt-4">
+        <!-- Toast Notification Container (Top Right) -->
+        <div
+            class="fixed top-20 md:top-24 right-4 md:right-8 z-50 flex flex-col gap-3 pointer-events-none w-full max-w-sm">
             {% for message in messages %}
-            <div class="p-4 mb-4 rounded-lg shadow-sm font-bold flex items-center justify-between gap-4 transition-all duration-300 {% if message.tags == 'success' %}bg-primary-fixed text-on-primary-fixed{% elif message.tags == 'error' %}bg-error-container text-on-error-container{% else %}bg-surface-container-high text-on-surface{% endif %}" role="alert" id="msg-{{ forloop.counter }}">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined">
-                        {% if message.tags == 'success' %}check_circle{% elif message.tags == 'error' %}error{% else %}info{% endif %}
+            <div class="pointer-events-auto p-4 rounded-xl shadow-lg font-bold flex items-center justify-between gap-4 transition-all duration-300 {% if message.tags == 'success' %}bg-primary text-white border-l-4 border-tertiary{% elif message.tags == 'error' %}bg-accent text-white border-l-4 border-rose-300{% else %}bg-slate-800 text-white{% endif %}"
+                role="alert" id="msg-{{ forloop.counter }}">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-xl">
+                        {% if message.tags == 'success' %}check_circle{% elif message.tags == 'error' %}error{% else
+                        %}info{% endif %}
                     </span>
-                    <span class="text-sm">{{ message }}</span>
+                    <span class="text-sm leading-tight">{{ message }}</span>
                 </div>
-                <button type="button" class="cursor-pointer hover:opacity-75" onclick="document.getElementById('msg-{{ forloop.counter }}').remove();">
-                    <span class="material-symbols-outlined text-sm">close</span>
+                <button type="button" onclick="this.closest('[role=\'alert\']').remove()"
+                    class="p-1 hover:bg-white/20 rounded-md transition-colors shrink-0 text-white flex items-center justify-center">
+                    <span class="material-symbols-outlined text-lg">close</span>
                 </button>
             </div>
             {% endfor %}
         </div>
         {% endif %}
-        
+
         {% block content %}
         {% endblock %}
     </div>
 
     <!-- GLOBAL FOOTER -->
     <footer class="bg-surface-container-low border-t border-outline-variant w-full mt-auto hidden md:block">
-        <div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop py-8 max-w-container-max mx-auto gap-8">
+        <div
+            class="flex flex-col md:flex-row justify-between items-center px-margin-desktop py-8 max-w-container-max mx-auto gap-8">
             <div class="flex flex-col gap-2">
                 <span class="font-headline-md text-headline-md text-primary">The Cooking Nurse</span>
-                <span class="text-xs text-on-surface-variant max-w-xs">Integrating culinary science with delicious, rustic cooking arts.</span>
+                <span class="text-xs text-on-surface-variant max-w-xs">Integrating culinary science with delicious,
+                    rustic cooking arts.</span>
             </div>
-            
+
             <nav class="flex flex-wrap justify-center gap-x-8 gap-y-4">
                 <a class="nav-link" href="#">Sustainability</a>
                 <a class="nav-link" href="#">Wholesale</a>
                 <a class="nav-link" href="#">Contact</a>
             </nav>
-            
+
             <div class="flex flex-col gap-2 w-full md:w-auto md:min-w-[280px]">
-                <span class="font-label-md text-primary uppercase tracking-wider text-xs font-bold">Culinary Newsletter</span>
+                <span class="font-label-md text-primary uppercase tracking-wider text-xs font-bold">Culinary
+                    Newsletter</span>
                 <form action="{% url 'portfolio:newsletter_subscribe' %}" method="POST" class="flex gap-2">
                     {% csrf_token %}
                     <input type="hidden" name="next" value="{{ request.path }}">
-                    <input type="email" name="email" required placeholder="Enter your email" class="form-input py-1.5 px-3 text-xs flex-grow rounded bg-white border border-outline-variant">
+                    <input type="email" name="email" required placeholder="Enter your email"
+                        class="form-input py-1.5 px-3 text-xs flex-grow rounded bg-white border border-outline-variant">
                     <button type="submit" class="btn-primary py-1.5 px-4 text-xs font-bold shrink-0">Subscribe</button>
                 </form>
             </div>
         </div>
-        <div class="border-t border-outline-variant/30 py-4 px-margin-desktop text-center text-xs text-on-surface-variant max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+        <div
+            class="border-t border-outline-variant/30 py-4 px-margin-desktop text-center text-xs text-on-surface-variant max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
             <span>© 2026 The Cooking Nurse. All rights reserved.</span>
-            <a href="{% url 'users:login' %}" class="text-on-surface-variant/50 hover:text-primary transition-colors">Admin / Staff Login</a>
+            <a href="{% url 'users:login' %}"
+                class="text-on-surface-variant/50 hover:text-primary transition-colors">Admin / Staff Login</a>
         </div>
     </footer>
 
     <!-- MOBILE APP-STYLE BOTTOM TAB BAR -->
-    <nav class="fixed bottom-0 left-0 right-0 w-full z-[100] flex justify-around items-center px-2 py-3 pb-[calc(12px+env(safe-area-inset-bottom))] glass-panel shadow-[0_-10px_40px_rgba(0,0,0,0.1)] rounded-t-3xl border-t border-white/20 md:hidden bg-surface/90 backdrop-blur-xl">
-        
-        <a class="{% if request.resolver_match.url_name == 'home' %}mobile-tab-active{% else %}mobile-tab{% endif %}" href="{% url 'portfolio:home' %}">
-            <span class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'home' %}icon-fill{% endif %}">home</span>
+    <nav
+        class="fixed bottom-0 left-0 right-0 w-full z-[100] flex justify-around items-center px-2 py-3 pb-[calc(12px+env(safe-area-inset-bottom))] glass-panel shadow-[0_-10px_40px_rgba(0,0,0,0.1)] rounded-t-3xl border-t border-white/20 md:hidden bg-surface/90 backdrop-blur-xl">
+
+        <a class="{% if request.resolver_match.url_name == 'home' %}mobile-tab-active{% else %}mobile-tab{% endif %}"
+            href="{% url 'portfolio:home' %}">
+            <span
+                class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'home' %}icon-fill{% endif %}">home</span>
             <span class="font-label-sm">Home</span>
         </a>
-        
-        <a class="{% if request.resolver_match.url_name == 'product_list' %}mobile-tab-active{% else %}mobile-tab{% endif %}" href="{% url 'catalog:product_list' %}">
-            <span class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'product_list' %}icon-fill{% endif %}">shopping_bag</span>
+
+        <a class="{% if request.resolver_match.url_name == 'product_list' %}mobile-tab-active{% else %}mobile-tab{% endif %}"
+            href="{% url 'catalog:product_list' %}">
+            <span
+                class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'product_list' %}icon-fill{% endif %}">shopping_bag</span>
             <span class="font-label-sm">Shop</span>
         </a>
-        
-        <a class="{% if request.resolver_match.url_name == 'class_timetable' %}mobile-tab-active{% else %}mobile-tab{% endif %}" href="{% url 'classes:class_timetable' %}">
-            <span class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'class_timetable' %}icon-fill{% endif %}">school</span>
+
+        <a class="{% if request.resolver_match.url_name == 'class_timetable' %}mobile-tab-active{% else %}mobile-tab{% endif %}"
+            href="{% url 'classes:class_timetable' %}">
+            <span
+                class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'class_timetable' %}icon-fill{% endif %}">school</span>
             <span class="font-label-sm">Classes</span>
         </a>
-        
-        <a class="{% if request.resolver_match.url_name == 'dashboard' %}mobile-tab-active{% else %}mobile-tab{% endif %}" href="{% url 'users:dashboard' %}">
-            <span class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'dashboard' %}icon-fill{% endif %}">account_circle</span>
+
+        <a class="{% if request.resolver_match.url_name == 'dashboard' %}mobile-tab-active{% else %}mobile-tab{% endif %}"
+            href="{% url 'users:dashboard' %}">
+            <span
+                class="material-symbols-outlined mb-1 {% if request.resolver_match.url_name == 'dashboard' %}icon-fill{% endif %}">account_circle</span>
             <span class="font-label-sm">You</span>
         </a>
     </nav>
@@ -186,5 +235,5 @@
 
     {% block extra_scripts %}{% endblock %}
 </body>
-</html>
 
+</html>

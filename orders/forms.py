@@ -12,6 +12,7 @@ class CheckoutForm(forms.Form):
     phone_number = forms.CharField(max_length=20, required=False, widget=forms.TextInput(attrs={'class': 'form-input'}))
 
     # Shipping fields
+    street_address = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'e.g. 123 Main St, Plot 4'}), required=False)
     city = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-input'}))
     neighborhood = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-input'}))
     landmark_or_building = forms.CharField(max_length=255, widget=forms.TextInput(attrs={'class': 'form-input'}))

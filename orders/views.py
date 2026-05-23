@@ -36,6 +36,7 @@ def checkout(request):
             order = Order.objects.create(
                 user=user,
                 total_amount=cart.get_total_price(),
+                street_address=form.cleaned_data.get('street_address'),
                 city=form.cleaned_data['city'],
                 neighborhood=form.cleaned_data['neighborhood'],
                 landmark_or_building=form.cleaned_data['landmark_or_building'],

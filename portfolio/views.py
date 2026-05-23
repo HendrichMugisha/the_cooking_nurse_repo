@@ -8,6 +8,26 @@ from classes.models import ClassSession, StudioRentalPricing
 from catalog.models import Product
 from .models import NewsletterSubscriber, SiteSettings
 
+import re
+
+def _extract_youtube_video_id(url):
+    """Extract an 11-character YouTube video ID from any common YouTube URL format."""
+    if not url:
+        return None
+    patterns = [
+        r'(?:youtube\.com/watch\?v=|youtube\.com/embed/|youtu\.be/|youtube\.com/v/|youtube\.com/shorts/)([a-zA-Z0-9_-]{11})',
+        r'[?&]v=([a-zA-Z0-9_-]{11})',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, url)
+        if match:
+            return match.group(1)
+    # Last resort: if the entire string is an 11-char ID
+    stripped = url.strip()
+    if re.match(r'^[a-zA-Z0-9_-]{11}$', stripped):
+        return stripped
+    return None
+
 def home(request):
     settings = SiteSettings.get_settings()
     next_session = ClassSession.objects.filter(
@@ -33,6 +53,9 @@ def home(request):
     # Check and pop session variable for lead magnet download
     download_lead_magnet = request.session.pop('download_lead_magnet', False)
 
+    # Extract YouTube video ID server-side (avoids all client-side parsing/escaping issues)
+    youtube_video_id = _extract_youtube_video_id(settings.featured_youtube_embed_url)
+
     context = {
         'settings': settings,
         'next_session': next_session,
@@ -42,6 +65,7 @@ def home(request):
         'studio_pricing': studio_pricing,
         'loop_words_json': json.dumps(loop_words),
         'download_lead_magnet': download_lead_magnet,
+        'youtube_video_id': youtube_video_id,
     }
     return render(request, 'portfolio/home.html', context)
 

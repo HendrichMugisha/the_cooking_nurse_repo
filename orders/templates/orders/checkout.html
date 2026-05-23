@@ -126,6 +126,12 @@
                         
                         {{ form.latitude }}
                         {{ form.longitude }}
+
+                        <div class="mb-6">
+                            <label class="block font-label-md text-primary mb-1">Street Address (Manual Fallback)</label>
+                            <p class="text-xs text-on-surface-variant mb-2">If you cannot pin your location on the map below, please provide your exact street address here.</p>
+                            {{ form.street_address }}
+                        </div>
                         
                         <div class="mt-6 mb-6">
                             <label class="block font-label-md text-primary mb-2">Pin Delivery Location (Drag or Click to set precise delivery point in Kampala)</label>

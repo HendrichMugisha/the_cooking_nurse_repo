@@ -17,6 +17,7 @@ class Order(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=0, default=0)
     
     # Structured Delivery Fields (Ready for API integration later)
+    street_address = models.CharField(max_length=255, blank=True, null=True, help_text="Fallback text address")
     city = models.CharField(max_length=100, blank=True, null=True)
     neighborhood = models.CharField(max_length=100, blank=True, null=True)
     landmark_or_building = models.CharField(max_length=255, blank=True, null=True)

@@ -42,36 +42,36 @@
 
         <!-- Upcoming bookings -->
         <div class="glass-panel p-5 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-lg flex items-center gap-4 shadow-level-1 hover:shadow-level-2 transition-all">
-            <div class="p-3.5 bg-primary/10 rounded-xl text-primary">
+            <div class="p-3.5 bg-tertiary/20 rounded-xl text-tertiary">
                 <span class="material-symbols-outlined text-3xl">local_activity</span>
             </div>
             <div>
                 <span class="text-xs text-on-surface-variant font-bold uppercase tracking-wider block">Timetable Sessions</span>
-                <span class="text-xl font-bold font-display text-primary">{{ upcoming_seats.count }} active</span>
+                <span class="text-xl font-bold font-display text-tertiary">{{ upcoming_seats.count }} active</span>
             </div>
         </div>
 
         <!-- Subscriber count -->
         <div class="glass-panel p-5 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-lg flex items-center gap-4 shadow-level-1 hover:shadow-level-2 transition-all">
-            <div class="p-3.5 bg-primary/10 rounded-xl text-primary">
+            <div class="p-3.5 bg-tertiary/20 rounded-xl text-tertiary">
                 <span class="material-symbols-outlined text-3xl">mail</span>
             </div>
             <div>
                 <span class="text-xs text-on-surface-variant font-bold uppercase tracking-wider block">Subscribers</span>
-                <span class="text-xl font-bold font-display text-primary">{{ subscribers_count }} emails</span>
+                <span class="text-xl font-bold font-display text-tertiary">{{ subscribers_count }} emails</span>
             </div>
         </div>
     </div>
 
     <!-- TABS NAVIGATION -->
-    <div class="inline-flex flex-wrap p-2 rounded-3xl bg-surface/30 backdrop-blur-md border border-white/40 shadow-sm gap-2 mb-8 w-full md:w-auto">
-        <button onclick="openTab('tab-analytics')" id="btn-tab-analytics" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Analytics & Orders</button>
-        <button onclick="openTab('tab-inventory')" id="btn-tab-inventory" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Inventory (Products)</button>
-        <button onclick="openTab('tab-classes')" id="btn-tab-classes" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Classes Timetable</button>
-        <button onclick="openTab('tab-rentals')" id="btn-tab-rentals" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Studio Rentals</button>
-        <button onclick="openTab('tab-users')" id="btn-tab-users" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">User Access Roles</button>
-        <button onclick="openTab('tab-newsletter')" id="btn-tab-newsletter" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Subscribers</button>
-        <button onclick="openTab('tab-site')" id="btn-tab-site" class="tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary">Site Settings</button>
+    <div class="inline-flex p-2 rounded-3xl bg-surface/30 backdrop-blur-md border border-white/40 shadow-sm gap-2 mb-8 w-full md:w-auto overflow-x-auto whitespace-nowrap hide-scrollbar">
+        <button onclick="openTab('tab-analytics')" id="btn-tab-analytics" class="tab-btn shrink-0 px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-tertiary/20 hover:text-tertiary">Analytics & Orders</button>
+        <button onclick="openTab('tab-inventory')" id="btn-tab-inventory" class="tab-btn shrink-0 px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-tertiary/20 hover:text-tertiary">Inventory (Products)</button>
+        <button onclick="openTab('tab-classes')" id="btn-tab-classes" class="tab-btn shrink-0 px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-tertiary/20 hover:text-tertiary">Classes Timetable</button>
+        <button onclick="openTab('tab-rentals')" id="btn-tab-rentals" class="tab-btn shrink-0 px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-tertiary/20 hover:text-tertiary">Studio Rentals</button>
+        <button onclick="openTab('tab-users')" id="btn-tab-users" class="tab-btn shrink-0 px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-tertiary/20 hover:text-tertiary">User Access Roles</button>
+        <button onclick="openTab('tab-newsletter')" id="btn-tab-newsletter" class="tab-btn shrink-0 px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-tertiary/20 hover:text-tertiary">Subscribers</button>
+        <button onclick="openTab('tab-site')" id="btn-tab-site" class="tab-btn shrink-0 px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-tertiary/20 hover:text-tertiary">Site Settings</button>
     </div>
 
     <!-- TAB: ANALYTICS & ORDERS -->
@@ -563,132 +563,171 @@
 
     <!-- TAB: SITE GLOBAL CONTENT -->
     <div id="tab-site" class="tab-content hidden space-y-6">
-        <div class="glass-panel p-6 rounded-3xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-level-2 max-w-3xl">
-            <h2 class="font-headline-md text-primary mb-6 flex items-center gap-2">
-                <span class="material-symbols-outlined">settings</span> Global Settings
-            </h2>
+        <form method="POST" action="{% url 'users:staff_dashboard' %}" class="space-y-6 max-w-5xl" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="update_settings">
             
-            <form method="POST" action="{% url 'users:staff_dashboard' %}" class="space-y-6" enctype="multipart/form-data">
-                {% csrf_token %}
-                <input type="hidden" name="action" value="update_settings">
-                
-                {% if settings_form.errors %}
-                <div class="bg-error-container text-on-error-container p-4 rounded-xl text-sm mb-6">
-                    Please correct the errors below.
-                </div>
-                {% endif %}
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Hero Settings -->
-                    <div class="space-y-4">
-                        <h3 class="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Hero Section</h3>
-                        
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Hero Text</label>
-                            {{ settings_form.hero_text }}
-                        </div>
+            <div class="flex items-center justify-between mb-4 glass-panel p-4 rounded-2xl border border-outline-variant/30 bg-surface/60">
+                <h2 class="font-headline-md text-primary flex items-center gap-2">
+                    <span class="material-symbols-outlined">settings</span> Global Site Settings
+                </h2>
+                <button type="submit" class="btn-primary py-2.5 px-8 rounded-full font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[20px]">save</span> Save Settings
+                </button>
+            </div>
 
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Hero Loop Words (Comma separated)</label>
-                            {{ settings_form.hero_loop_words }}
-                        </div>
-                        
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Hero Video (.mp4)</label>
-                            {{ settings_form.hero_video }}
-                            {% if settings.hero_video %}
-                            <p class="text-xs text-on-surface-variant">Current: <a href="{{ settings.hero_video.url }}" class="text-primary hover:underline" target="_blank">{{ settings.hero_video.name }}</a></p>
-                            {% endif %}
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Fallback Hero Image</label>
-                            {{ settings_form.hero_image }}
-                            {% if settings.hero_image %}
-                            <p class="text-xs text-on-surface-variant">Current: <a href="{{ settings.hero_image.url }}" class="text-primary hover:underline" target="_blank">{{ settings.hero_image.name }}</a></p>
-                            {% endif %}
-                        </div>
+            {% if settings_form.errors %}
+            <div class="bg-error-container text-on-error-container p-4 rounded-xl text-sm mb-6 shadow-sm border border-error">
+                Please correct the errors below.
+            </div>
+            {% endif %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Hero Settings Card -->
+                <div class="glass-panel p-6 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-sm flex flex-col gap-4">
+                    <h3 class="font-bold text-primary border-b border-outline-variant/20 pb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-base">smart_display</span> Hero Section
+                    </h3>
+                    
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Hero Text</label>
+                        {{ settings_form.hero_text }}
                     </div>
 
-                    <!-- Nurse Profile Settings -->
-                    <div class="space-y-4">
-                        <h3 class="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Meet the Nurse</h3>
-                        
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Nurse Name</label>
-                            {{ settings_form.nurse_name }}
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Nurse Bio</label>
-                            {{ settings_form.nurse_bio }}
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Nurse Portrait</label>
-                            {{ settings_form.nurse_portrait }}
-                            {% if settings.nurse_portrait %}
-                            <p class="text-xs text-on-surface-variant">Current: <a href="{{ settings.nurse_portrait.url }}" class="text-primary hover:underline" target="_blank">{{ settings.nurse_portrait.name }}</a></p>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">The Cooking Nurse's Note (Store/Downloads)</label>
-                            {{ settings_form.nurses_note }}
-                        </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Hero Loop Words (Comma separated)</label>
+                        {{ settings_form.hero_loop_words }}
+                    </div>
+                    
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Hero Video (.mp4)</label>
+                        {{ settings_form.hero_video }}
+                        {% if settings.hero_video %}
+                        <p class="text-[10px] text-primary mt-1 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">movie</span> <a href="{{ settings.hero_video.url }}" class="hover:underline" target="_blank">{{ settings.hero_video.name }}</a></p>
+                        {% endif %}
                     </div>
 
-                    <!-- Social Media Settings -->
-                    <div class="space-y-4 md:col-span-2 lg:col-span-1">
-                        <h3 class="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Social Links & Media</h3>
-                        
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">YouTube URL</label>
-                            {{ settings_form.youtube_url }}
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Instagram URL</label>
-                            {{ settings_form.instagram_url }}
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">TikTok URL</label>
-                            {{ settings_form.tiktok_url }}
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Featured YouTube Embed URL</label>
-                            {{ settings_form.featured_youtube_embed_url }}
-                        </div>
-                    </div>
-
-                    <!-- Newsletter Settings -->
-                    <div class="space-y-4 md:col-span-2 lg:col-span-1">
-                        <h3 class="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Newsletter Integration</h3>
-                        
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Lead Magnet Title (e.g. Free Recipe Guide)</label>
-                            {{ settings_form.newsletter_lead_magnet_title }}
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label class="font-label-md text-primary font-bold">Lead Magnet File (PDF)</label>
-                            {{ settings_form.newsletter_lead_magnet }}
-                            {% if settings.newsletter_lead_magnet %}
-                            <p class="text-xs text-on-surface-variant">Current: <a href="{{ settings.newsletter_lead_magnet.url }}" class="text-primary hover:underline" target="_blank">{{ settings.newsletter_lead_magnet.name }}</a></p>
-                            {% endif %}
-                        </div>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Fallback Hero Image</label>
+                        {{ settings_form.hero_image }}
+                        {% if settings.hero_image %}
+                        <p class="text-[10px] text-primary mt-1 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">image</span> <a href="{{ settings.hero_image.url }}" class="hover:underline" target="_blank">{{ settings.hero_image.name }}</a></p>
+                        {% endif %}
                     </div>
                 </div>
 
-                <div class="pt-4 border-t border-outline-variant/30 flex justify-end">
-                    <button type="submit" class="btn-primary py-2.5 px-8 rounded-full font-bold flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[20px]">save</span> Save Settings
-                    </button>
+                <!-- Nurse Profile Card -->
+                <div class="glass-panel p-6 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-sm flex flex-col gap-4">
+                    <h3 class="font-bold text-primary border-b border-outline-variant/20 pb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-base">face</span> Meet the Nurse
+                    </h3>
+                    
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Nurse Name</label>
+                        {{ settings_form.nurse_name }}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Nurse Bio</label>
+                        {{ settings_form.nurse_bio }}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Nurse Portrait</label>
+                        {{ settings_form.nurse_portrait }}
+                        {% if settings.nurse_portrait %}
+                        <p class="text-[10px] text-primary mt-1 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">portrait</span> <a href="{{ settings.nurse_portrait.url }}" class="hover:underline" target="_blank">{{ settings.nurse_portrait.name }}</a></p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">The Cooking Nurse's Note (Store/Downloads)</label>
+                        {{ settings_form.nurses_note }}
+                    </div>
                 </div>
-            </form>
-        </div>
+
+                <!-- Social Links Card -->
+                <div class="glass-panel p-6 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-sm flex flex-col gap-4">
+                    <h3 class="font-bold text-primary border-b border-outline-variant/20 pb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-base">share</span> Social Links & Media
+                    </h3>
+                    
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">YouTube URL</label>
+                        {{ settings_form.youtube_url }}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Instagram URL</label>
+                        {{ settings_form.instagram_url }}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">TikTok URL</label>
+                        {{ settings_form.tiktok_url }}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Featured YouTube Embed URL</label>
+                        {{ settings_form.featured_youtube_embed_url }}
+                    </div>
+                </div>
+
+                <!-- Newsletter Card -->
+                <div class="glass-panel p-6 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-sm flex flex-col gap-4">
+                    <h3 class="font-bold text-primary border-b border-outline-variant/20 pb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-base">drafts</span> Newsletter Integration
+                    </h3>
+                    
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Lead Magnet Title (e.g. Free Recipe Guide)</label>
+                        {{ settings_form.newsletter_lead_magnet_title }}
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="font-bold text-slate-700 text-xs">Lead Magnet File (PDF)</label>
+                        {{ settings_form.newsletter_lead_magnet }}
+                        {% if settings.newsletter_lead_magnet %}
+                        <p class="text-[10px] text-primary mt-1 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">description</span> <a href="{{ settings.newsletter_lead_magnet.url }}" class="hover:underline" target="_blank">{{ settings.newsletter_lead_magnet.name }}</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Landing Page Imagery Card -->
+                <div class="glass-panel p-6 rounded-2xl border border-outline-variant/30 bg-surface/60 backdrop-blur-xl shadow-sm flex flex-col gap-4 md:col-span-2">
+                    <h3 class="font-bold text-primary border-b border-outline-variant/20 pb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
+                        <span class="material-symbols-outlined text-base">wallpaper</span> Landing Page Bento Images
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-bold text-slate-700 text-xs">Cooking Classes Card Image</label>
+                            {{ settings_form.cooking_classes_image }}
+                            {% if settings.cooking_classes_image %}
+                            <p class="text-[10px] text-primary mt-1 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">image</span> <a href="{{ settings.cooking_classes_image.url }}" class="hover:underline" target="_blank">{{ settings.cooking_classes_image.name }}</a></p>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-bold text-slate-700 text-xs">Digital Library Card Image</label>
+                            {{ settings_form.digital_library_image }}
+                            {% if settings.digital_library_image %}
+                            <p class="text-[10px] text-primary mt-1 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">image</span> <a href="{{ settings.digital_library_image.url }}" class="hover:underline" target="_blank">{{ settings.digital_library_image.name }}</a></p>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="font-bold text-slate-700 text-xs">Studio Rental Card Image</label>
+                            {{ settings_form.studio_rental_image }}
+                            {% if settings.studio_rental_image %}
+                            <p class="text-[10px] text-primary mt-1 font-medium flex items-center gap-1"><span class="material-symbols-outlined text-xs">image</span> <a href="{{ settings.studio_rental_image.url }}" class="hover:underline" target="_blank">{{ settings.studio_rental_image.name }}</a></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </form>
     </div>
 
     <!-- Glassmorphic Security Confirmation Modal -->
@@ -727,29 +766,32 @@
 
 </div>
 
+{% endblock %}
+
 {% block extra_scripts %}
 <script>
     function openTab(tabId) {
-        // Hide all contents
+        // Hide all tabs
         document.querySelectorAll('.tab-content').forEach(el => {
             el.classList.add('hidden');
         });
         
-        // Remove active styles from all buttons
+        // Reset all buttons
         document.querySelectorAll('.tab-btn').forEach(el => {
-            el.className = "tab-btn px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-primary/10 hover:text-primary";
+            el.className = "tab-btn shrink-0 px-5 py-2.5 rounded-2xl font-semibold text-xs transition-all duration-300 text-on-surface-variant hover:bg-tertiary/20 hover:text-tertiary";
         });
         
-        // Show current tab content
+        // Show target tab
         const targetTab = document.getElementById(tabId);
         if (targetTab) {
             targetTab.classList.remove('hidden');
+            targetTab.classList.add('animate-fade-in');
         }
         
-        // Add active classes to clicked button
+        // Style active button (switching from primary to slate/tertiary aesthetic)
         const targetBtn = document.getElementById('btn-' + tabId);
         if (targetBtn) {
-            targetBtn.className = "tab-btn px-5 py-2.5 rounded-2xl font-bold text-xs transition-all duration-300 bg-primary text-white shadow-level-1 hover:shadow-level-2";
+            targetBtn.className = "tab-btn shrink-0 px-5 py-2.5 rounded-2xl font-bold text-xs transition-all duration-300 bg-slate-800 text-white shadow-level-1 hover:shadow-level-2";
         }
         
         // Persist tab via URL query parameter so page reloads don't disrupt flow
@@ -818,5 +860,4 @@
         }, 150);
     }
 </script>
-{% endblock %}
 {% endblock %}
