@@ -159,18 +159,18 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# Use WhiteNoise static files storage if it is installed in the environment
-try:
-    import whitenoise
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-except ImportError:
-    pass
-
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 if 'CLOUDINARY_URL' in os.environ:
-    DEFAULT_FILE_STORAGE = 'core.storage_backends.AutoMediaCloudinaryStorage'
+    STORAGES = {
+        "default": {
+            "BACKEND": "core.storage_backends.AutoMediaCloudinaryStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
 # Authentication Backends
 AUTHENTICATION_BACKENDS = [
